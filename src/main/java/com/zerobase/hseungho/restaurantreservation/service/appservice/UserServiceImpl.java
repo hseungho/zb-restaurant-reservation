@@ -13,8 +13,13 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public boolean checkIdAvailable(String userId) {
+    public boolean checkUserIdAvailable(String userId) {
         return !userRepository.existsByUserId(userId);
+    }
+
+    @Override
+    public boolean checkNicknameAvailable(String nickname) {
+        return !userRepository.existsByNickname(nickname);
     }
 
 }

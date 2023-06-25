@@ -1,7 +1,7 @@
 package com.zerobase.hseungho.restaurantreservation.service.controller.user;
 
 import com.zerobase.hseungho.restaurantreservation.service.appservice.UserService;
-import com.zerobase.hseungho.restaurantreservation.service.dto.external.user.CheckIdAvailable;
+import com.zerobase.hseungho.restaurantreservation.service.dto.external.user.CheckUsingResourceAvailable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +15,26 @@ public class UserController {
 
     @GetMapping("/sign-up/check-id")
     @ResponseStatus(HttpStatus.OK)
-    public CheckIdAvailable.Response checkIdAvailable(@RequestParam("id") String userId) {
-        return CheckIdAvailable.Response.of(
-                userService.checkIdAvailable(userId)
+    public CheckUsingResourceAvailable.Response checkUserIdAvailable(@RequestParam("id") String userId) {
+        return CheckUsingResourceAvailable.Response.of(
+                userService.checkUserIdAvailable(userId)
         );
     }
+
+    @GetMapping("/sign-up/check-nickname")
+    @ResponseStatus(HttpStatus.OK)
+    public CheckUsingResourceAvailable.Response checkNicknameAvailable(@RequestParam("nickname") String nickname) {
+        return CheckUsingResourceAvailable.Response.of(
+                userService.checkNicknameAvailable(nickname)
+        );
+    }
+
+//    @PostMapping("/sign-up")
+//    @ResponseStatus(HttpStatus.CREATED)
+//    public SignUp.Response signUp(@RequestBody @Validated SignUp.Request request) {
+//        return SignUp.Response.of(
+//                userService.signUp(request)
+//        );
+//    }
 
 }
