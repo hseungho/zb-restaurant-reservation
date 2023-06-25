@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,7 +31,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean checkNicknameAvailable(String nickname) {
-        return !userRepository.existsByNickname(nickname) && nickname.length() < 15;
+        return !userRepository.existsByNickname(nickname);
     }
 
     @Override
@@ -47,6 +48,11 @@ public class UserServiceImpl implements UserService {
     }
 
     private void validateSignUpRequest(SignUp.Request request) {
+        if (!StringUtils.hasText(request.getUserId())
+                || !StringUtils.hasText(request.getPassword())
+                || !StringUtils.hasText(request.getNickname())) {
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_SIGN_UP_BLANK);
+        }
         if (!checkUserIdAvailable(request.getUserId())) {
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_SIGN_UP_USER_ID_DUPLICATED);
         }
@@ -62,10 +68,9 @@ public class UserServiceImpl implements UserService {
     }
 
     private boolean isAvailablePassword(String userId, String password) {
-        String regex = "^(?=.*\\d)(?=.*[~`!@#$%\\^&*()-])(?=.*[a-z])(?=.*[A-Z]).{9,12}$";
+        String regex = "^(?=.*\\d)(?=.*[~`!@#$%\\^&*()-])(?=.*[a-z]).{8,100}$";
         Matcher matcher = Pattern.compile(regex).matcher(password);
-        return matcher.matches() && !password.contains(userId)
-                && !password.contains(" ") && !(password.length() < 8);
+        return matcher.matches() && !password.contains(userId) && !password.contains(" ");
     }
 
 }
