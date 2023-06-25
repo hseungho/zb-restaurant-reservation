@@ -1,5 +1,7 @@
 package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
+import com.zerobase.hseungho.restaurantreservation.global.exception.impl.BadRequestException;
+import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
 import com.zerobase.hseungho.restaurantreservation.service.domain.User;
 import com.zerobase.hseungho.restaurantreservation.service.dto.external.user.SignUp;
 import com.zerobase.hseungho.restaurantreservation.service.dto.internal.user.UserDto;
@@ -46,21 +48,24 @@ public class UserServiceImpl implements UserService {
 
     private void validateSignUpRequest(SignUp.Request request) {
         if (!checkUserIdAvailable(request.getUserId())) {
-            // Cannot use this user id exception
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_SIGN_UP_USER_ID_DUPLICATED);
         }
         if (!checkNicknameAvailable(request.getNickname())) {
-            // Cannot use this nickname exception
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_SIGN_UP_NICKNAME_DUPLICATED);
+        }
+        if (!(request.getNickname().length() < 15)) {
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_SIGN_UP_NICKNAME_LENGTH);
         }
         if (!isAvailablePassword(request.getUserId(), request.getPassword())) {
-            // Cannot use this password exception
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_SIGN_UP_PASSWORD);
         }
     }
 
     private boolean isAvailablePassword(String userId, String password) {
         String regex = "^(?=.*\\d)(?=.*[~`!@#$%\\^&*()-])(?=.*[a-z])(?=.*[A-Z]).{9,12}$";
         Matcher matcher = Pattern.compile(regex).matcher(password);
-
-        return matcher.matches() && !password.contains(userId) && !password.contains(" ");
+        return matcher.matches() && !password.contains(userId)
+                && !password.contains(" ") && !(password.length() < 8);
     }
 
 }
