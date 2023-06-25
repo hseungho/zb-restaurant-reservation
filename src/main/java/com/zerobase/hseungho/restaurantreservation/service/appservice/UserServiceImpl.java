@@ -41,11 +41,11 @@ public class UserServiceImpl implements UserService {
                 request.getNickname()
         );
 
-        return UserDto.fromEntity(newUser);
+        return UserDto.fromEntity(userRepository.save(newUser));
     }
 
     private void validateSignUpRequest(SignUp.Request request) {
-        if (!checkNicknameAvailable(request.getUserId())) {
+        if (!checkUserIdAvailable(request.getUserId())) {
             // Cannot use this user id exception
         }
         if (!checkNicknameAvailable(request.getNickname())) {
