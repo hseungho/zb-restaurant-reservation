@@ -1,5 +1,8 @@
 package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
+import com.zerobase.hseungho.restaurantreservation.service.dto.external.user.SignUp;
+import com.zerobase.hseungho.restaurantreservation.service.dto.internal.user.UserDto;
+
 public interface UserService {
 
     /**
@@ -15,5 +18,12 @@ public interface UserService {
      * @return 사용가능하면 true, 아니라면 false
      */
     boolean checkNicknameAvailable(String nickname);
+
+    /**
+     * 회원가입 메소드.
+     * @param request 회원가입 DTO 클래스
+     * @return 유저 DTO 클래스
+     */
+    UserDto signUp(SignUp.Request request);
 
 }
