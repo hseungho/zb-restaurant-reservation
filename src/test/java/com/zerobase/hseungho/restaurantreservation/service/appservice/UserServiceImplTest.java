@@ -22,25 +22,49 @@ class UserServiceImplTest {
     private UserServiceImpl userService;
 
     @Test
-    @DisplayName("UserService - 아이디 중복확인 정상")
+    @DisplayName("UserService - 아이디 중복확인 사용가능")
     void test_checkIdAvailable_success() {
         // given
         given(userRepository.existsByUserId(anyString()))
                 .willReturn(false);
         // when
-        boolean result = userService.checkIdAvailable("test_id");
+        boolean result = userService.checkUserIdAvailable("test_id");
         // then
         Assertions.assertTrue(result);
     }
 
     @Test
-    @DisplayName("UserService - 아이디 중복확인 실패")
+    @DisplayName("UserService - 아이디 중복확인 사용불가")
     void test_checkIdAvailable_failure() {
         // given
         given(userRepository.existsByUserId(anyString()))
                 .willReturn(true);
         // when
-        boolean result = userService.checkIdAvailable("test_id");
+        boolean result = userService.checkUserIdAvailable("test_id");
+        // then
+        Assertions.assertFalse(result);
+    }
+
+    @Test
+    @DisplayName("userService - 닉네임 중복확인 사용가능")
+    void test_checkNicknameAvailable_success() {
+        // given
+        given(userRepository.existsByNickname(anyString()))
+                .willReturn(false);
+        // when
+        boolean result = userService.checkNicknameAvailable("test_nickname");
+        // then
+        Assertions.assertTrue(result);
+    }
+
+    @Test
+    @DisplayName("userService - 닉네임 중복확인 사용불가")
+    void test_checkNicknameAvailable_failure() {
+        // given
+        given(userRepository.existsByNickname(anyString()))
+                .willReturn(true);
+        // when
+        boolean result = userService.checkNicknameAvailable("test_nickname");
         // then
         Assertions.assertFalse(result);
     }

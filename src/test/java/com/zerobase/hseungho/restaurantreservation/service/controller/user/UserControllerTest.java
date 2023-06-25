@@ -45,11 +45,10 @@ class UserControllerTest {
     
     @Test
     @DisplayName("UserController - 아이디 중복확인 성공 (true)")
-    void test_checkIdAvailable_success_true() throws Exception {
+    void test_checkUserIdAvailable_success_true() throws Exception {
         // given
         final String url = BASIC_API + "/sign-up/check-id?id=mocktest12341234";
-
-        given(userService.checkIdAvailable(anyString()))
+        given(userService.checkUserIdAvailable(anyString()))
                 .willReturn(true);
         // when
         // then
@@ -61,11 +60,40 @@ class UserControllerTest {
 
     @Test
     @DisplayName("UserController - 아이디 중복확인 성공 (false)")
-    void test_checkIdAvailable_success_false() throws Exception {
+    void test_checkUserIdAvailable_success_false() throws Exception {
         // given
         final String url = BASIC_API + "/sign-up/check-id?id=mocktest12341234";
+        given(userService.checkUserIdAvailable(anyString()))
+                .willReturn(false);
+        // when
+        // then
+        mockMvc.perform(get(url)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result").value(false));
+    }
 
-        given(userService.checkIdAvailable(anyString()))
+    @Test
+    @DisplayName("UserController - 닉네임 중복확인 성공 (true)")
+    void test_checkNicknameAvailable_success_true() throws Exception {
+        // given
+        final String url = BASIC_API + "/sign-up/check-nickname?nickname=테스트닉네임입니다";
+        given(userService.checkNicknameAvailable(anyString()))
+                .willReturn(true);
+        // when
+        // then
+        mockMvc.perform(get(url)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result").value(true));
+    }
+
+    @Test
+    @DisplayName("UserController - 닉네임 중복확인 성공 (false)")
+    void test_checkNicknameAvailable_success_false() throws Exception {
+        // given
+        final String url = BASIC_API + "/sign-up/check-nickname?nickname=테스트닉네임입니다";
+        given(userService.checkNicknameAvailable(anyString()))
                 .willReturn(false);
         // when
         // then
