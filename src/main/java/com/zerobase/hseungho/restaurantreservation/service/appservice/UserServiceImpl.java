@@ -1,10 +1,12 @@
 package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
+import com.zerobase.hseungho.restaurantreservation.service.domain.User;
 import com.zerobase.hseungho.restaurantreservation.service.dto.external.user.SignUp;
 import com.zerobase.hseungho.restaurantreservation.service.dto.internal.user.UserDto;
 import com.zerobase.hseungho.restaurantreservation.service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.Matcher;
@@ -16,6 +18,8 @@ import java.util.regex.Pattern;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+    private final PasswordEncoder encoder;
 
     @Override
     public boolean checkUserIdAvailable(String userId) {
@@ -31,7 +35,13 @@ public class UserServiceImpl implements UserService {
     public UserDto signUp(SignUp.Request request) {
         validateSignUpRequest(request);
 
-        return null;
+        User newUser = User.createDefaultEntity(
+                request.getUserId(),
+                encoder.encode(request.getPassword()),
+                request.getNickname()
+        );
+
+        return UserDto.fromEntity(newUser);
     }
 
     private void validateSignUpRequest(SignUp.Request request) {
