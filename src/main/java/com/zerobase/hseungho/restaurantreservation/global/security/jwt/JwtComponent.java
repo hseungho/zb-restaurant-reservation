@@ -1,5 +1,6 @@
-package com.zerobase.hseungho.restaurantreservation.global.security;
+package com.zerobase.hseungho.restaurantreservation.global.security.jwt;
 
+import com.zerobase.hseungho.restaurantreservation.global.security.UserAuthenticationComponent;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class JwtComponent {
     @Value("${spring.jwt.secret}")
     private String secretKey;
 
-    private final UserAuthenticationService userAuthenticationService;
+    private final UserAuthenticationComponent userAuthenticationComponent;
 
     public String generateAccessToken(String id, UserType type) {
         return generateToken(id, type, ACCESS_TOKEN_EXPIRED_TIME);
@@ -58,7 +59,7 @@ public class JwtComponent {
     }
 
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userAuthenticationService.loadUserByUsername(this.getUserId(token));
+        UserDetails userDetails = userAuthenticationComponent.loadUserByUsername(this.getUserId(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 

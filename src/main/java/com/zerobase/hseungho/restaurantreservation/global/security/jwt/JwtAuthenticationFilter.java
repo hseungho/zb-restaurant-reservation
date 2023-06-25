@@ -1,4 +1,4 @@
-package com.zerobase.hseungho.restaurantreservation.global.security;
+package com.zerobase.hseungho.restaurantreservation.global.security.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

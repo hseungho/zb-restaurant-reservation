@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class UserAuthenticationService implements UserDetailsService {
+public class UserAuthenticationComponent implements UserDetailsService {
 
     private final UserRepository userRepository;
 
