@@ -32,7 +32,7 @@ public class SecurityConfiguration {
                 .headers().frameOptions().disable()
                 .and()
                 .authorizeHttpRequests(request ->
-                        request.requestMatchers("/**/sign-up", "/**/login/**", "/**/search").permitAll()
+                        request.requestMatchers("/**/sign-up/**", "/**/login/**", "/**/search/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .logout(Customizer.withDefaults())
