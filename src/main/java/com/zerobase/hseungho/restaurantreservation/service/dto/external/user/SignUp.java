@@ -8,6 +8,7 @@ public class SignUp {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
+    @Builder
     public static class Request {
         private String userId;
         private String password;
