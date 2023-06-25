@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zerobase.hseungho.restaurantreservation.global.config.SecurityConfiguration;
 import com.zerobase.hseungho.restaurantreservation.global.security.jwt.JwtAuthenticationFilter;
 import com.zerobase.hseungho.restaurantreservation.global.util.SeoulDateTime;
-import com.zerobase.hseungho.restaurantreservation.service.controller.UserController;
 import com.zerobase.hseungho.restaurantreservation.service.appservice.UserServiceImpl;
+import com.zerobase.hseungho.restaurantreservation.service.controller.UserController;
 import com.zerobase.hseungho.restaurantreservation.service.dto.external.user.SignUp;
 import com.zerobase.hseungho.restaurantreservation.service.dto.internal.user.UserDto;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
@@ -49,7 +49,7 @@ class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Value("${service.basic-api}")
+    @Value("${service.api.prefix}")
     private String BASIC_API;
     
     @Test

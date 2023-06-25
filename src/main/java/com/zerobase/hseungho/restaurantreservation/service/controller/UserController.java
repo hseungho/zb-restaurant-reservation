@@ -9,13 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("${service.basic-api}")
+@RequestMapping("${service.api.prefix}")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/sign-up/check-id")
+    @GetMapping("${service.api.user.check-id}")
     @ResponseStatus(HttpStatus.OK)
     public CheckUsingResourceAvailable.Response checkUserIdAvailable(@RequestParam("id") String userId) {
         return CheckUsingResourceAvailable.Response.of(
@@ -23,7 +23,7 @@ public class UserController {
         );
     }
 
-    @GetMapping("/sign-up/check-nickname")
+    @GetMapping("${service.api.user.check-nickname}")
     @ResponseStatus(HttpStatus.OK)
     public CheckUsingResourceAvailable.Response checkNicknameAvailable(@RequestParam("nickname") String nickname) {
         return CheckUsingResourceAvailable.Response.of(
@@ -31,7 +31,7 @@ public class UserController {
         );
     }
 
-    @PostMapping("/sign-up")
+    @PostMapping("${service.api.user.sign-up}")
     @ResponseStatus(HttpStatus.CREATED)
     public SignUp.Response signUp(@RequestBody @Valid SignUp.Request request) {
         return SignUp.Response.fromDto(

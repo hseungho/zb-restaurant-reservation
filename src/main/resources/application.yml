@@ -7,4 +7,9 @@ spring:
 
 service:
   version: v1
-  basic-api: /api/${service.version}
+  api:
+    prefix: /api/${service.version}
+    user:
+      check-id: /sign-up/check-id
+      check-nickname: /sign-up/check-nickname
+      sign-up: /sign-up
