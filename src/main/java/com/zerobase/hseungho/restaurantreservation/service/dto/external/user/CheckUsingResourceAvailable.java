@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-public class CheckIdAvailable {
+public class CheckUsingResourceAvailable {
 
     @Getter
     @Setter
