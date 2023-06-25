@@ -1,7 +1,11 @@
 package com.zerobase.hseungho.restaurantreservation.service.domain;
 
+import com.zerobase.hseungho.restaurantreservation.global.util.BaseDateEntity;
+import com.zerobase.hseungho.restaurantreservation.global.util.IdGenerator;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,20 +18,30 @@ import java.util.List;
 
 @Entity(name = "user")
 @Getter
-@NoArgsConstructor
-public class User implements UserDetails {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class User extends BaseDateEntity implements UserDetails {
 
     @Id
-    private String id;
+    private final String id = IdGenerator.generateUUID();
     private String userId;
     private String password;
     private String nickname;
     @Enumerated(EnumType.STRING)
     private UserType type;
     private LocalDateTime loggedInAt;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
+
+    private User(String userId, String password, String nickname, UserType type) {
+        this.userId = userId;
+        this.password = password;
+        this.nickname = nickname;
+        this.type = type;
+    }
+
+    public static User createDefaultEntity(String userId, String password, String nickname) {
+        return new User(userId, password, nickname, UserType.ROLE_CUSTOMER);
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
