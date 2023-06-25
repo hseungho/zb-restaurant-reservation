@@ -1,6 +1,6 @@
 package com.zerobase.hseungho.restaurantreservation.service.domain;
 
-import com.zerobase.hseungho.restaurantreservation.global.util.BaseDateEntity;
+import com.zerobase.hseungho.restaurantreservation.service.domain.base.BaseDateEntity;
 import com.zerobase.hseungho.restaurantreservation.global.util.IdGenerator;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
 import jakarta.persistence.*;

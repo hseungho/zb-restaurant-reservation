@@ -1,5 +1,6 @@
-package com.zerobase.hseungho.restaurantreservation.global.util;
+package com.zerobase.hseungho.restaurantreservation.service.domain.base;
 
+import com.zerobase.hseungho.restaurantreservation.global.util.SeoulDateTime;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
