@@ -6,5 +6,5 @@ spring:
     secret: restaurant-reservation-secret-key-sample
 
 service:
-  version: 1
-  basic-api: /api/v${service.version}
+  version: v1
+  basic-api: /api/${service.version}
