@@ -4,7 +4,7 @@ import com.zerobase.hseungho.restaurantreservation.global.exception.impl.BadRequ
 import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
 import com.zerobase.hseungho.restaurantreservation.service.domain.User;
 import com.zerobase.hseungho.restaurantreservation.service.dto.external.user.SignUp;
-import com.zerobase.hseungho.restaurantreservation.service.dto.internal.user.UserDto;
+import com.zerobase.hseungho.restaurantreservation.service.dto.internal.UserDto;
 import com.zerobase.hseungho.restaurantreservation.service.repository.UserRepository;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
 import org.junit.jupiter.api.Assertions;

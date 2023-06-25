@@ -1,6 +1,6 @@
 package com.zerobase.hseungho.restaurantreservation.service.dto.external.user;
 
-import com.zerobase.hseungho.restaurantreservation.service.dto.internal.user.UserDto;
+import com.zerobase.hseungho.restaurantreservation.service.dto.internal.UserDto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 

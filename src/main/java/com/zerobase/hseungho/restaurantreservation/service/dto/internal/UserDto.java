@@ -1,4 +1,4 @@
-package com.zerobase.hseungho.restaurantreservation.service.dto.internal.user;
+package com.zerobase.hseungho.restaurantreservation.service.dto.internal;
 
 import com.zerobase.hseungho.restaurantreservation.service.domain.User;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
