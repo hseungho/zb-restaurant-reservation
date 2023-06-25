@@ -1,6 +1,7 @@
 package com.zerobase.hseungho.restaurantreservation.service.dto.external.user;
 
 import com.zerobase.hseungho.restaurantreservation.service.dto.internal.user.UserDto;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 public class SignUp {
@@ -10,8 +11,11 @@ public class SignUp {
     @AllArgsConstructor
     @Builder
     public static class Request {
+        @NotBlank
         private String userId;
+        @NotBlank
         private String password;
+        @NotBlank
         private String nickname;
     }
 
