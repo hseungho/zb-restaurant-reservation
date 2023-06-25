@@ -4,3 +4,7 @@ spring:
       matching-strategy: ant_path_matcher
   jwt:
     secret: restaurant-reservation-secret-key-sample
+
+service:
+  version: 1
+  basic-api: /api/v${service.version}
