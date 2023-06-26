@@ -2,7 +2,7 @@ package com.zerobase.hseungho.restaurantreservation.service.domain.user;
 
 import com.zerobase.hseungho.restaurantreservation.global.util.IdGenerator;
 import com.zerobase.hseungho.restaurantreservation.global.util.SeoulDateTime;
-import com.zerobase.hseungho.restaurantreservation.service.domain.base.BaseDateEntity;
+import com.zerobase.hseungho.restaurantreservation.service.domain.base.BaseAuditingEntity;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,7 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class User extends BaseDateEntity implements UserDetails {
+public class User extends BaseAuditingEntity implements UserDetails {
 
     @Id
     private final String id = IdGenerator.generateUUID();
