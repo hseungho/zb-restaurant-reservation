@@ -57,11 +57,11 @@ public class JwtComponent {
     }
 
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userAuthenticationComponent.loadUserByUsername(this.getUserId(token));
+        UserDetails userDetails = userAuthenticationComponent.loadUserByUsername(this.getId(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    public String getUserId(String token) {
+    public String getId(String token) {
         return this.parseClaims(token).getSubject();
     }
 
