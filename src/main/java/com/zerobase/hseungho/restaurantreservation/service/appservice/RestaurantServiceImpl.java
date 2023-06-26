@@ -38,6 +38,8 @@ public class RestaurantServiceImpl implements RestaurantService {
         Restaurant restaurant = Restaurant.create(request, user);
         addMenusIfPresent(restaurant, request);
 
+        this.trie.put(restaurant.getName(), null);
+
         return RestaurantDto.fromEntity(
                 restaurantRepository.save(restaurant)
         );
@@ -45,7 +47,9 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public List<SearchAutocomplete.Response> searchAutoComplete(String keyword) {
-        return null;
+        return this.trie.prefixMap(keyword).keySet().stream()
+                .map(SearchAutocomplete.Response::new)
+                .toList();
     }
 
     private void addMenusIfPresent(Restaurant restaurant, SaveRestaurant.Request request) {
