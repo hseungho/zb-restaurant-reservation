@@ -35,7 +35,12 @@ public class Restaurant extends BaseAuditingEntity {
     private Double rating;
     private LocalDateTime deleteReqAt;
     private LocalDateTime deletedAt;
-    @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
+    @OneToMany(
+            mappedBy = "restaurant",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.PERSIST,
+            orphanRemoval = true
+    )
     private List<Menu> menus = new ArrayList<>();
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
     private List<Review> reviews = new ArrayList<>();
