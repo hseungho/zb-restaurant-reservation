@@ -6,10 +6,10 @@ import com.zerobase.hseungho.restaurantreservation.global.security.jwt.JwtAuthen
 import com.zerobase.hseungho.restaurantreservation.global.util.SeoulDateTime;
 import com.zerobase.hseungho.restaurantreservation.service.appservice.UserServiceImpl;
 import com.zerobase.hseungho.restaurantreservation.service.controller.UserController;
-import com.zerobase.hseungho.restaurantreservation.service.dto.Login;
-import com.zerobase.hseungho.restaurantreservation.service.dto.SignUp;
-import com.zerobase.hseungho.restaurantreservation.service.dto.TokenDto;
-import com.zerobase.hseungho.restaurantreservation.service.dto.UserDto;
+import com.zerobase.hseungho.restaurantreservation.service.dto.user.Login;
+import com.zerobase.hseungho.restaurantreservation.service.dto.user.SignUp;
+import com.zerobase.hseungho.restaurantreservation.service.dto.user.TokenDto;
+import com.zerobase.hseungho.restaurantreservation.service.dto.user.UserDto;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

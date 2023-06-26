@@ -1,9 +1,9 @@
 package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
-import com.zerobase.hseungho.restaurantreservation.service.dto.Login;
-import com.zerobase.hseungho.restaurantreservation.service.dto.SignUp;
-import com.zerobase.hseungho.restaurantreservation.service.dto.TokenDto;
-import com.zerobase.hseungho.restaurantreservation.service.dto.UserDto;
+import com.zerobase.hseungho.restaurantreservation.service.dto.user.Login;
+import com.zerobase.hseungho.restaurantreservation.service.dto.user.SignUp;
+import com.zerobase.hseungho.restaurantreservation.service.dto.user.TokenDto;
+import com.zerobase.hseungho.restaurantreservation.service.dto.user.UserDto;
 
 public interface UserService {
 

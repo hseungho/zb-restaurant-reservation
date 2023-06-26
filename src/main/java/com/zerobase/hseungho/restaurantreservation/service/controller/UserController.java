@@ -1,10 +1,10 @@
 package com.zerobase.hseungho.restaurantreservation.service.controller;
 
 import com.zerobase.hseungho.restaurantreservation.service.appservice.UserService;
-import com.zerobase.hseungho.restaurantreservation.service.dto.CheckUsingResourceAvailable;
-import com.zerobase.hseungho.restaurantreservation.service.dto.Login;
-import com.zerobase.hseungho.restaurantreservation.service.dto.RegisterPartner;
-import com.zerobase.hseungho.restaurantreservation.service.dto.SignUp;
+import com.zerobase.hseungho.restaurantreservation.service.dto.user.CheckUsingResourceAvailable;
+import com.zerobase.hseungho.restaurantreservation.service.dto.user.Login;
+import com.zerobase.hseungho.restaurantreservation.service.dto.user.RegisterPartner;
+import com.zerobase.hseungho.restaurantreservation.service.dto.user.SignUp;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

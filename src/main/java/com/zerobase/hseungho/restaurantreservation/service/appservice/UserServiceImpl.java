@@ -7,10 +7,10 @@ import com.zerobase.hseungho.restaurantreservation.global.security.SecurityHolde
 import com.zerobase.hseungho.restaurantreservation.global.security.jwt.JwtComponent;
 import com.zerobase.hseungho.restaurantreservation.global.util.ValidUtils;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
-import com.zerobase.hseungho.restaurantreservation.service.dto.Login;
-import com.zerobase.hseungho.restaurantreservation.service.dto.SignUp;
-import com.zerobase.hseungho.restaurantreservation.service.dto.TokenDto;
-import com.zerobase.hseungho.restaurantreservation.service.dto.UserDto;
+import com.zerobase.hseungho.restaurantreservation.service.dto.user.Login;
+import com.zerobase.hseungho.restaurantreservation.service.dto.user.SignUp;
+import com.zerobase.hseungho.restaurantreservation.service.dto.user.TokenDto;
+import com.zerobase.hseungho.restaurantreservation.service.dto.user.UserDto;
 import com.zerobase.hseungho.restaurantreservation.service.repository.UserRepository;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
 import lombok.RequiredArgsConstructor;
