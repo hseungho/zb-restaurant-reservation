@@ -4,12 +4,18 @@ import com.zerobase.hseungho.restaurantreservation.global.util.SeoulDateTime;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
 @Getter
 @MappedSuperclass
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
 public class BaseDateEntity {
 
     private LocalDateTime createdAt;
