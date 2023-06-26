@@ -45,9 +45,10 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     private void validateSaveRestaurantRequest(User user, SaveRestaurant.Request request) {
-        if (ValidUtils.hasTexts(request.getName(), request.getAddress(), request.getContactNumber())
-                || ValidUtils.isNonNull(request.getOpenTime(), request.getCloseTime())
-                || ValidUtils.isMin(1, request.getCountOfTables())) {
+        if (!ValidUtils.hasTexts(request.getName(), request.getAddress(), request.getContactNumber())
+                || !ValidUtils.isExactHour(request.getOpenTime().getHour(), request.getCloseTime().getHour())
+                || !ValidUtils.isExactMinute(request.getOpenTime().getMinute(), request.getCloseTime().getMinute())
+                || !ValidUtils.isMin(1, request.getCountOfTables())) {
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_SAVE_RESTAURANT_BLANK);
         }
         if (!user.isPartner()) {

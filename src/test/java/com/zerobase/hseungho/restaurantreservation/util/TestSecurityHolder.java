@@ -6,7 +6,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 
 public class TestSecurityHolder {
-    public static void setSecurityHolderUser(UserType type) {
+    public static User setSecurityHolderUser(UserType type) {
         User user = User.builder()
                 .userId("testid")
                 .password("testpassword1234!")
@@ -16,5 +16,6 @@ public class TestSecurityHolder {
         SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities())
         );
+        return user;
     }
 }

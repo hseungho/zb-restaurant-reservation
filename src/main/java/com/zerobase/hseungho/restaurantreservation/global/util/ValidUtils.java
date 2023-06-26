@@ -30,4 +30,31 @@ public class ValidUtils {
         }
         return true;
     }
+
+    public static boolean isMax(int maxTarget, Integer... args) {
+        for (Integer arg : args) {
+            if (arg > maxTarget) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean isExactHour(Integer... args) {
+        for (Integer arg : args) {
+            if (arg < 0 || arg > 23) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean isExactMinute(Integer... args) {
+        for (Integer arg : args) {
+            if (arg < 0 || arg > 59) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
