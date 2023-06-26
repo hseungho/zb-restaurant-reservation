@@ -2,6 +2,7 @@ package com.zerobase.hseungho.restaurantreservation.service.controller;
 
 import com.zerobase.hseungho.restaurantreservation.service.appservice.UserService;
 import com.zerobase.hseungho.restaurantreservation.service.dto.CheckUsingResourceAvailable;
+import com.zerobase.hseungho.restaurantreservation.service.dto.Login;
 import com.zerobase.hseungho.restaurantreservation.service.dto.SignUp;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,14 @@ public class UserController {
     public SignUp.Response signUp(@RequestBody @Valid SignUp.Request request) {
         return SignUp.Response.fromDto(
                 userService.signUp(request)
+        );
+    }
+
+    @PostMapping("${service.api.user.login}")
+    @ResponseStatus(HttpStatus.OK)
+    public Login.Response login(@RequestBody @Valid Login.Request request) {
+        return Login.Response.fromTokenDto(
+                userService.login(request)
         );
     }
 
