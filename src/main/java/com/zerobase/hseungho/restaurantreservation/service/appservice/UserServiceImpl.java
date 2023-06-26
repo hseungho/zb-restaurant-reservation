@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    private final PasswordEncoder encoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public boolean checkUserIdAvailable(String userId) {
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
 
         User newUser = User.createDefaultEntity(
                 request.getUserId(),
-                encoder.encode(request.getPassword()),
+                passwordEncoder.encode(request.getPassword()),
                 request.getNickname()
         );
 
@@ -57,10 +57,17 @@ public class UserServiceImpl implements UserService {
 
         validateLoginRequest(request, user);
 
+
         return null;
     }
 
     private void validateLoginRequest(Login.Request request, User user) {
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            // miss match password exception
+        }
+        if (!user.isResigned()) {
+            // already resign id exception
+        }
     }
 
     private void validateSignUpRequest(SignUp.Request request) {

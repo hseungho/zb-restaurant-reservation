@@ -42,6 +42,10 @@ public class User extends BaseDateEntity implements UserDetails {
         return new User(userId, password, nickname, UserType.ROLE_CUSTOMER);
     }
 
+    public boolean isResigned() {
+        return deletedAt != null;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(type.name()));
@@ -71,4 +75,5 @@ public class User extends BaseDateEntity implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }
