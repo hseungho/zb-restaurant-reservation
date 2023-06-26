@@ -18,10 +18,8 @@ public class RestaurantDto {
     private String name;
     private String address;
     private String description;
-    private Integer openHour;
-    private Integer openMinute;
-    private Integer closeHour;
-    private Integer closeMinute;
+    private RestaurantTimeDto openTime;
+    private RestaurantTimeDto closeTime;
     private Integer countOfTables;
     private Integer maxPerReservation;
     private String contactNumber;
@@ -39,10 +37,10 @@ public class RestaurantDto {
                 .name(entity.getName())
                 .address(entity.getAddressVO().getAddress())
                 .description(entity.getDescription())
-                .openHour(entity.getRestaurantTimeVO().getOpenHour())
-                .openMinute(entity.getRestaurantTimeVO().getOpenMinute())
-                .closeHour(entity.getRestaurantTimeVO().getCloseHour())
-                .closeMinute(entity.getRestaurantTimeVO().getCloseMinute())
+                .openTime(RestaurantTimeDto.of(
+                        entity.getRestaurantTimeVO().getOpenHour(), entity.getRestaurantTimeVO().getOpenMinute()))
+                .closeTime(RestaurantTimeDto.of(
+                        entity.getRestaurantTimeVO().getCloseHour(), entity.getRestaurantTimeVO().getCloseMinute()))
                 .countOfTables(entity.getCountOfTables())
                 .maxPerReservation(entity.getMaxPerReservation())
                 .contactNumber(entity.getContactNumber())
