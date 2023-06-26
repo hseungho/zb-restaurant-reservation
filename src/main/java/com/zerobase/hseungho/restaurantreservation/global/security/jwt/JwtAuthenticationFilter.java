@@ -3,7 +3,7 @@ package com.zerobase.hseungho.restaurantreservation.global.security.jwt;
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.UnauthorizedException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
 import com.zerobase.hseungho.restaurantreservation.global.security.SecurityHolder;
-import com.zerobase.hseungho.restaurantreservation.service.domain.User;
+import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

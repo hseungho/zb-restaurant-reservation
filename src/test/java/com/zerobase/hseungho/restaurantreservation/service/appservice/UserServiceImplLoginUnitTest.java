@@ -2,7 +2,7 @@ package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
 import com.zerobase.hseungho.restaurantreservation.global.security.jwt.JwtComponent;
 import com.zerobase.hseungho.restaurantreservation.global.util.SeoulDateTime;
-import com.zerobase.hseungho.restaurantreservation.service.domain.User;
+import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
 import com.zerobase.hseungho.restaurantreservation.service.dto.Login;
 import com.zerobase.hseungho.restaurantreservation.service.dto.TokenDto;
 import com.zerobase.hseungho.restaurantreservation.service.repository.UserRepository;

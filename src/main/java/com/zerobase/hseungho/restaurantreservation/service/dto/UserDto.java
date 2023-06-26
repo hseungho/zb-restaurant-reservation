@@ -1,6 +1,6 @@
 package com.zerobase.hseungho.restaurantreservation.service.dto;
 
-import com.zerobase.hseungho.restaurantreservation.service.domain.User;
+import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
 import lombok.*;
 

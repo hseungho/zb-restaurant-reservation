@@ -1,4 +1,4 @@
-package com.zerobase.hseungho.restaurantreservation.service.domain;
+package com.zerobase.hseungho.restaurantreservation.service.domain.user;
 
 import com.zerobase.hseungho.restaurantreservation.global.util.IdGenerator;
 import com.zerobase.hseungho.restaurantreservation.global.util.SeoulDateTime;

@@ -6,7 +6,7 @@ import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorC
 import com.zerobase.hseungho.restaurantreservation.global.security.SecurityHolder;
 import com.zerobase.hseungho.restaurantreservation.global.security.jwt.JwtComponent;
 import com.zerobase.hseungho.restaurantreservation.global.util.ValidUtils;
-import com.zerobase.hseungho.restaurantreservation.service.domain.User;
+import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
 import com.zerobase.hseungho.restaurantreservation.service.dto.Login;
 import com.zerobase.hseungho.restaurantreservation.service.dto.SignUp;
 import com.zerobase.hseungho.restaurantreservation.service.dto.TokenDto;
