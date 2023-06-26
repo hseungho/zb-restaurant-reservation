@@ -1,11 +1,10 @@
-package com.zerobase.hseungho.restaurantreservation.service.controller.user;
+package com.zerobase.hseungho.restaurantreservation.service.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zerobase.hseungho.restaurantreservation.global.config.SecurityConfiguration;
 import com.zerobase.hseungho.restaurantreservation.global.security.jwt.JwtAuthenticationFilter;
 import com.zerobase.hseungho.restaurantreservation.global.util.SeoulDateTime;
 import com.zerobase.hseungho.restaurantreservation.service.appservice.UserServiceImpl;
-import com.zerobase.hseungho.restaurantreservation.service.controller.UserController;
 import com.zerobase.hseungho.restaurantreservation.service.dto.user.Login;
 import com.zerobase.hseungho.restaurantreservation.service.dto.user.SignUp;
 import com.zerobase.hseungho.restaurantreservation.service.dto.user.TokenDto;
