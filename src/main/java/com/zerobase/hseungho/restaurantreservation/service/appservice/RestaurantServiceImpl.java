@@ -6,15 +6,19 @@ import com.zerobase.hseungho.restaurantreservation.global.security.SecurityHolde
 import com.zerobase.hseungho.restaurantreservation.global.util.ValidUtils;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Menu;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Restaurant;
-import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SaveRestaurant;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.RestaurantDto;
+import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SaveRestaurant;
+import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SearchAutocomplete;
 import com.zerobase.hseungho.restaurantreservation.service.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.Trie;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -22,6 +26,7 @@ import org.springframework.util.CollectionUtils;
 public class RestaurantServiceImpl implements RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
+    private final Trie<String, String> trie;
 
     @Override
     @Transactional
@@ -36,6 +41,11 @@ public class RestaurantServiceImpl implements RestaurantService {
         return RestaurantDto.fromEntity(
                 restaurantRepository.save(restaurant)
         );
+    }
+
+    @Override
+    public List<SearchAutocomplete.Response> searchAutoComplete(String keyword) {
+        return null;
     }
 
     private void addMenusIfPresent(Restaurant restaurant, SaveRestaurant.Request request) {
