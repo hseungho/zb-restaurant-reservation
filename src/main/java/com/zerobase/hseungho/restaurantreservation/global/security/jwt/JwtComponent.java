@@ -14,14 +14,12 @@ import org.springframework.util.StringUtils;
 
 import java.util.Date;
 
+import static com.zerobase.hseungho.restaurantreservation.global.constants.TokenConstants.*;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtComponent {
-
-    private static final String CLAIMS_TYPE = "type";
-    private static final long ACCESS_TOKEN_EXPIRED_TIME = 1000 * 60 * 60;
-    private static final long REFRESH_TOKEN_EXPIRED_TIME = 1000 * 60 * 60 * 24 * 30L;
 
     @Value("${spring.jwt.secret}")
     private String secretKey;
@@ -29,16 +27,16 @@ public class JwtComponent {
     private final UserAuthenticationComponent userAuthenticationComponent;
 
     public String generateAccessToken(String id, UserType type) {
-        return generateToken(id, type, ACCESS_TOKEN_EXPIRED_TIME);
+        return TOKEN_PREFIX + generateToken(id, type, ACCESS_TOKEN_EXPIRED_TIME);
     }
 
     public String generateRefreshToken(String id, UserType type) {
-        return generateToken(id, type, REFRESH_TOKEN_EXPIRED_TIME);
+        return TOKEN_PREFIX + generateToken(id, type, REFRESH_TOKEN_EXPIRED_TIME);
     }
 
     private String generateToken(String id, UserType type, long expired) {
         Claims claims = Jwts.claims().setSubject(id);
-        claims.put(CLAIMS_TYPE, type.name());
+        claims.put(CLAIMS_ROLE, type.name());
 
         Date now = new Date();
         Date expiredDate = new Date(now.getTime() + expired);
