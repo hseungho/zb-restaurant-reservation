@@ -3,6 +3,7 @@ package com.zerobase.hseungho.restaurantreservation.service.appservice;
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.BadRequestException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.UnauthorizedException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
+import com.zerobase.hseungho.restaurantreservation.global.security.jwt.JwtComponent;
 import com.zerobase.hseungho.restaurantreservation.global.util.ValidUtils;
 import com.zerobase.hseungho.restaurantreservation.service.domain.User;
 import com.zerobase.hseungho.restaurantreservation.service.dto.Login;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,18 +28,22 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
+    private final JwtComponent jwtComponent;
 
     @Override
+    @Transactional(readOnly = true)
     public boolean checkUserIdAvailable(String userId) {
         return !userRepository.existsByUserId(userId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean checkNicknameAvailable(String nickname) {
         return !userRepository.existsByNickname(nickname);
     }
 
     @Override
+    @Transactional
     public UserDto signUp(SignUp.Request request) {
         validateSignUpRequest(request);
 
@@ -51,22 +57,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public TokenDto login(Login.Request request) {
         User user = userRepository.findByUserId(request.getUserId())
                 .orElseThrow(() -> new UnauthorizedException(ErrorCodeType.UNAUTHORIZED_LOGIN_REQUESTED_VALUE));
 
         validateLoginRequest(request, user);
 
-        
+        user.login();
 
-        return null;
+        return TokenDto.of(
+                jwtComponent.generateAccessToken(user.getId(), user.getType()),
+                jwtComponent.generateRefreshToken(user.getId(), user.getType()),
+                user.getLoggedInAt()
+        );
     }
 
     private void validateLoginRequest(Login.Request request, User user) {
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new UnauthorizedException(ErrorCodeType.UNAUTHORIZED_LOGIN_REQUESTED_VALUE);
         }
-        if (!user.isResigned()) {
+        if (user.isResigned()) {
             throw new UnauthorizedException(ErrorCodeType.UNAUTHORIZED_LOGIN_ALREADY_RESIGNED_USER);
         }
     }

@@ -1,5 +1,6 @@
 package com.zerobase.hseungho.restaurantreservation.service.domain;
 
+import com.zerobase.hseungho.restaurantreservation.global.util.SeoulDateTime;
 import com.zerobase.hseungho.restaurantreservation.service.domain.base.BaseDateEntity;
 import com.zerobase.hseungho.restaurantreservation.global.util.IdGenerator;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
@@ -31,6 +32,9 @@ public class User extends BaseDateEntity implements UserDetails {
     private LocalDateTime loggedInAt;
     private LocalDateTime deletedAt;
 
+    @Transient
+    private Boolean isOnLoginRequest = false;
+
     private User(String userId, String password, String nickname, UserType type) {
         this.userId = userId;
         this.password = password;
@@ -44,6 +48,20 @@ public class User extends BaseDateEntity implements UserDetails {
 
     public boolean isResigned() {
         return deletedAt != null;
+    }
+
+    public void login() {
+        loggedInAt = SeoulDateTime.now();
+        isOnLoginRequest = true;
+    }
+
+    @Override
+    public void preUpdate() {
+        if (isOnLoginRequest) {
+            isOnLoginRequest = false;
+            return;
+        }
+        super.preUpdate();
     }
 
     @Override
