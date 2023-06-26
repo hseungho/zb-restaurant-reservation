@@ -39,9 +39,8 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     private void addMenusIfPresent(Restaurant restaurant, SaveRestaurant.Request request) {
-        if (CollectionUtils.isEmpty(request.getMenus())) {
-            return;
-        }
+        if (CollectionUtils.isEmpty(request.getMenus())) return;
+
         request.getMenus().forEach(e -> restaurant.addMenu(Menu.create(e.getName(), e.getPrice())));
     }
 
