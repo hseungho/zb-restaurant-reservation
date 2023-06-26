@@ -1,7 +1,9 @@
 package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.BadRequestException;
+import com.zerobase.hseungho.restaurantreservation.global.exception.impl.NotFoundException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
+import com.zerobase.hseungho.restaurantreservation.global.util.ValidUtils;
 import com.zerobase.hseungho.restaurantreservation.service.domain.User;
 import com.zerobase.hseungho.restaurantreservation.service.dto.Login;
 import com.zerobase.hseungho.restaurantreservation.service.dto.SignUp;
@@ -12,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -51,13 +52,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public TokenDto login(Login.Request request) {
+        User user = userRepository.findByUserId(request.getUserId())
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER));
+
+        validateLoginRequest(request, user);
+
         return null;
     }
 
+    private void validateLoginRequest(Login.Request request, User user) {
+    }
+
     private void validateSignUpRequest(SignUp.Request request) {
-        if (!StringUtils.hasText(request.getUserId())
-                || !StringUtils.hasText(request.getPassword())
-                || !StringUtils.hasText(request.getNickname())) {
+        if (!ValidUtils.hasTexts(request.getUserId(), request.getPassword(), request.getNickname())) {
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_SIGN_UP_BLANK);
         }
         if (!checkUserIdAvailable(request.getUserId())) {
