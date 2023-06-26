@@ -33,3 +33,5 @@ service:
       sign-up: /sign-up
       login: /login
       register-partner: /user/partner
+    restaurant:
+      save: /restaurant

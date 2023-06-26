@@ -14,7 +14,7 @@ public class RestaurantController {
 
     private final RestaurantService restaurantService;
 
-    @PostMapping("/restaurant")
+    @PostMapping("${service.api.restaurant.save}")
     @ResponseStatus(HttpStatus.CREATED)
     public SaveRestaurant.Response saveRestaurant(@RequestBody @Valid SaveRestaurant.Request request) {
         return SaveRestaurant.Response.fromDto(
