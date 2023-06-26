@@ -35,4 +35,9 @@ public interface UserService {
      */
     TokenDto login(Login.Request request);
 
+    /**
+     * 유저 파트너 등록 메소드.
+     * @return 유저 DTO 클래스
+     */
+    UserDto registerPartner();
 }

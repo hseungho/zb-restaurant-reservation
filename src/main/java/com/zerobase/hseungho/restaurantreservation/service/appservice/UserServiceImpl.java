@@ -73,6 +73,11 @@ public class UserServiceImpl implements UserService {
         );
     }
 
+    @Override
+    public UserDto registerPartner() {
+        return null;
+    }
+
     private void validateLoginRequest(Login.Request request, User user) {
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new UnauthorizedException(ErrorCodeType.UNAUTHORIZED_LOGIN_REQUESTED_VALUE);
