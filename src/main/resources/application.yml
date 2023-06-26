@@ -13,3 +13,4 @@ service:
       check-id: /sign-up/check-id
       check-nickname: /sign-up/check-nickname
       sign-up: /sign-up
+      login: /login
