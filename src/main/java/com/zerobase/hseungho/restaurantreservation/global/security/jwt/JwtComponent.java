@@ -58,7 +58,7 @@ public class JwtComponent {
 
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = userAuthenticationComponent.loadUserByUsername(this.getId(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
     }
 
     public String getId(String token) {
