@@ -23,11 +23,16 @@ public interface UserService {
 
     /**
      * 회원가입 메소드.
-     * @param request 회원가입 DTO 클래스
+     * @param request 회원가입 요청 DTO 클래스
      * @return 유저 DTO 클래스
      */
     UserDto signUp(SignUp.Request request);
 
+    /**
+     * 로그인 메소드.
+     * @param request 로그인 요청 DTO 클래스
+     * @return 토큰 DTO 클래스
+     */
     TokenDto login(Login.Request request);
 
 }
