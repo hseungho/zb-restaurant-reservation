@@ -3,6 +3,7 @@ package com.zerobase.hseungho.restaurantreservation.service.appservice;
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.BadRequestException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.UnauthorizedException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
+import com.zerobase.hseungho.restaurantreservation.global.security.SecurityHolder;
 import com.zerobase.hseungho.restaurantreservation.global.security.jwt.JwtComponent;
 import com.zerobase.hseungho.restaurantreservation.global.util.ValidUtils;
 import com.zerobase.hseungho.restaurantreservation.service.domain.User;
@@ -75,6 +76,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto registerPartner() {
+        User user = SecurityHolder.getUser();
+        
         return null;
     }
 

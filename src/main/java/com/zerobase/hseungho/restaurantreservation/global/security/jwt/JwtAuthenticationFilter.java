@@ -1,5 +1,6 @@
 package com.zerobase.hseungho.restaurantreservation.global.security.jwt;
 
+import com.zerobase.hseungho.restaurantreservation.service.domain.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,6 +35,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (StringUtils.hasText(token) && jwtComponent.validateToken(token)) {
             Authentication authentication = this.jwtComponent.getAuthentication(token);
+
+            if (((User) authentication).isResigned()) {
+                throw new RuntimeException();
+            }
+
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             log.info("[MY-LOG] [LOGIN SUCCESS] -> {}", this.jwtComponent.getUserId(token));
