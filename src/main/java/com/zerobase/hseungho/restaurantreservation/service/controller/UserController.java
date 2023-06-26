@@ -3,8 +3,8 @@ package com.zerobase.hseungho.restaurantreservation.service.controller;
 import com.zerobase.hseungho.restaurantreservation.service.appservice.UserService;
 import com.zerobase.hseungho.restaurantreservation.service.dto.CheckUsingResourceAvailable;
 import com.zerobase.hseungho.restaurantreservation.service.dto.Login;
+import com.zerobase.hseungho.restaurantreservation.service.dto.RegisterPartner;
 import com.zerobase.hseungho.restaurantreservation.service.dto.SignUp;
-import com.zerobase.hseungho.restaurantreservation.service.dto.UserDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -51,8 +51,10 @@ public class UserController {
 
     @PostMapping("${service.api.user.register-partner}")
     @ResponseStatus(HttpStatus.OK)
-    public UserDto registerPartner() {
-        return userService.registerPartner();
+    public RegisterPartner.Response registerPartner() {
+        return RegisterPartner.Response.fromDto(
+                userService.registerPartner()
+        );
     }
 
 }

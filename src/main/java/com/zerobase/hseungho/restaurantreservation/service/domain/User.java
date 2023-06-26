@@ -1,11 +1,13 @@
 package com.zerobase.hseungho.restaurantreservation.service.domain;
 
+import com.zerobase.hseungho.restaurantreservation.global.util.IdGenerator;
 import com.zerobase.hseungho.restaurantreservation.global.util.SeoulDateTime;
 import com.zerobase.hseungho.restaurantreservation.service.domain.base.BaseDateEntity;
-import com.zerobase.hseungho.restaurantreservation.global.util.IdGenerator;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -55,6 +57,14 @@ public class User extends BaseDateEntity implements UserDetails {
         isOnLoginRequest = true;
     }
 
+    public void setType(UserType type) {
+        if (type == null) {
+            return;
+        }
+        this.type = type;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
     @Override
     public void preUpdate() {
         if (isOnLoginRequest) {

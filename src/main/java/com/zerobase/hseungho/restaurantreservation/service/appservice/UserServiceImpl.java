@@ -12,6 +12,7 @@ import com.zerobase.hseungho.restaurantreservation.service.dto.SignUp;
 import com.zerobase.hseungho.restaurantreservation.service.dto.TokenDto;
 import com.zerobase.hseungho.restaurantreservation.service.dto.UserDto;
 import com.zerobase.hseungho.restaurantreservation.service.repository.UserRepository;
+import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -75,10 +76,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto registerPartner() {
         User user = SecurityHolder.getUser();
-        log.info("USER is -> {}", user.getUserId());
-        return null;
+
+        validateRegisterPartnerRequest(user);
+
+        user.setType(UserType.ROLE_PARTNER);
+
+        return UserDto.fromEntity(user);
+    }
+
+    private void validateRegisterPartnerRequest(User user) {
+        if (user.getType() == UserType.ROLE_PARTNER) {
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_PARTNER_ALREADY);
+        }
     }
 
     private void validateLoginRequest(Login.Request request, User user) {
