@@ -1,6 +1,8 @@
 package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
+import com.zerobase.hseungho.restaurantreservation.service.dto.Login;
 import com.zerobase.hseungho.restaurantreservation.service.dto.SignUp;
+import com.zerobase.hseungho.restaurantreservation.service.dto.TokenDto;
 import com.zerobase.hseungho.restaurantreservation.service.dto.UserDto;
 
 public interface UserService {
@@ -25,5 +27,7 @@ public interface UserService {
      * @return 유저 DTO 클래스
      */
     UserDto signUp(SignUp.Request request);
+
+    TokenDto login(Login.Request request);
 
 }

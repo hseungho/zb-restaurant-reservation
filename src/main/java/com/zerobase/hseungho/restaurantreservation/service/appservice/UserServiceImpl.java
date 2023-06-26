@@ -3,7 +3,9 @@ package com.zerobase.hseungho.restaurantreservation.service.appservice;
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.BadRequestException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
 import com.zerobase.hseungho.restaurantreservation.service.domain.User;
+import com.zerobase.hseungho.restaurantreservation.service.dto.Login;
 import com.zerobase.hseungho.restaurantreservation.service.dto.SignUp;
+import com.zerobase.hseungho.restaurantreservation.service.dto.TokenDto;
 import com.zerobase.hseungho.restaurantreservation.service.dto.UserDto;
 import com.zerobase.hseungho.restaurantreservation.service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +47,11 @@ public class UserServiceImpl implements UserService {
         );
 
         return UserDto.fromEntity(userRepository.save(newUser));
+    }
+
+    @Override
+    public TokenDto login(Login.Request request) {
+        return null;
     }
 
     private void validateSignUpRequest(SignUp.Request request) {
