@@ -1,11 +1,25 @@
 package com.zerobase.hseungho.restaurantreservation.service.controller;
 
+import com.zerobase.hseungho.restaurantreservation.service.appservice.RestaurantService;
+import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SaveRestaurant;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("${service.api.prefix}")
 @RequiredArgsConstructor
 public class RestaurantController {
+
+    private final RestaurantService restaurantService;
+
+    @PostMapping("/restaurant")
+    @ResponseStatus(HttpStatus.CREATED)
+    public SaveRestaurant.Response saveRestaurant(@RequestBody @Valid SaveRestaurant.Request request) {
+        return SaveRestaurant.Response.fromDto(
+                restaurantService.save(request)
+        );
+    }
+
 }

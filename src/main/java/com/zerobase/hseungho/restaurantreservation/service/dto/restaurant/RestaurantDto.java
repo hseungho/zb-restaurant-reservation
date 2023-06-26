@@ -1,6 +1,7 @@
 package com.zerobase.hseungho.restaurantreservation.service.dto.restaurant;
 
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Restaurant;
+import com.zerobase.hseungho.restaurantreservation.service.dto.user.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,6 +31,7 @@ public class RestaurantDto {
     private LocalDateTime deletedAt;
     private List<MenuDto> menus;
     private List<ReviewDto> reviews;
+    private UserDto manager;
 
     public static RestaurantDto fromEntity(Restaurant entity) {
         return RestaurantDto.builder()
@@ -51,6 +53,7 @@ public class RestaurantDto {
                 .deletedAt(entity.getDeletedAt())
                 .menus(entity.getMenus().stream().map(MenuDto::fromEntity).toList())
                 .reviews(entity.getReviews().stream().map(ReviewDto::fromEntity).toList())
+                .manager(UserDto.fromEntity(entity.getManager()))
                 .build();
     }
 }

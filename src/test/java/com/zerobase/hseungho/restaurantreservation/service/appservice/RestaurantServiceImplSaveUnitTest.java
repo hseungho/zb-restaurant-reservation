@@ -3,6 +3,7 @@ package com.zerobase.hseungho.restaurantreservation.service.appservice;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.*;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.RestaurantDto;
+import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SaveRestaurant;
 import com.zerobase.hseungho.restaurantreservation.service.repository.RestaurantRepository;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
 import com.zerobase.hseungho.restaurantreservation.util.TestSecurityHolder;
@@ -17,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -35,6 +37,10 @@ public class RestaurantServiceImplSaveUnitTest {
     private final String restName = "매장이름";
     private final String restAddr = "서울 서대문구 증가로 12";
     private final String restDesc = "매장 설명입니다.";
+    private final String menuName1 = "메뉴1";
+    private final Long menuPrice1 = 10000L;
+    private final String menuName2 = "메뉴2";
+    private final Long menuPrice2 = 20000L;
     private final int openHour = 10;
     private final int openMinute = 0;
     private final int closeHour = 22;
@@ -63,6 +69,10 @@ public class RestaurantServiceImplSaveUnitTest {
         Assertions.assertEquals(restAddr, restaurantDto.getAddress());
         Assertions.assertEquals(restDesc, restaurantDto.getDescription());
         Assertions.assertEquals(2, restaurantDto.getMenus().size());
+        restaurantDto.getMenus().forEach(e -> {
+            Assertions.assertTrue((e.getName().equals(menuName1) || e.getName().equals(menuName2)));
+            Assertions.assertTrue((Objects.equals(e.getPrice(), menuPrice1) || Objects.equals(e.getPrice(), menuPrice2)));
+        });
         Assertions.assertEquals(openHour, restaurantDto.getOpenTime().getHour());
         Assertions.assertEquals(openMinute, restaurantDto.getOpenTime().getMinute());
         Assertions.assertEquals(closeHour, restaurantDto.getCloseTime().getHour());
@@ -79,9 +89,9 @@ public class RestaurantServiceImplSaveUnitTest {
                 .description(restDesc)
                 .menus(List.of(
                         SaveRestaurant.SaveMenu.Request.builder()
-                                .name("메뉴1").price(10000L).build(),
+                                .name(menuName1).price(menuPrice1).build(),
                         SaveRestaurant.SaveMenu.Request.builder()
-                                .name("메뉴2").price(20000L).build()
+                                .name(menuName2).price(menuPrice2).build()
                         ))
                 .openTime(SaveRestaurant.SaveRestaurantTime.Request.builder()
                         .hour(openHour).minute(openMinute).build())

@@ -2,6 +2,7 @@ package com.zerobase.hseungho.restaurantreservation.service.domain.restaurant;
 
 import com.zerobase.hseungho.restaurantreservation.service.domain.base.BaseAuditingEntity;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
+import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SaveRestaurant;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
