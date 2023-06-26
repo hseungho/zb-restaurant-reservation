@@ -18,6 +18,7 @@ import org.apache.commons.collections4.Trie;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public List<String> searchAutoComplete(String keyword) {
-        if (keyword == null || keyword.isBlank()) {
+        if (!StringUtils.hasText(keyword)) {
             return List.of();
         }
         return this.trie.prefixMap(keyword).keySet().stream()
