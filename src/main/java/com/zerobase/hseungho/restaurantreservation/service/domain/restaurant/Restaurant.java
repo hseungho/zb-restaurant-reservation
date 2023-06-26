@@ -23,7 +23,7 @@ public class Restaurant extends BaseAuditingEntity {
     private Long id;
     private String name;
     @Embedded
-    private AddressVO addressInfo;
+    private AddressVO addressVO;
     private String description;
     private LocalDateTime openTime;
     private LocalDateTime closeTime;
