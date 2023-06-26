@@ -42,7 +42,7 @@ public class Restaurant extends BaseAuditingEntity {
     @OneToOne
     private User manager;
 
-    public static Restaurant create(SaveRestaurant.Request request) {
+    public static Restaurant create(SaveRestaurant.Request request, User manager) {
         Restaurant restaurant = new Restaurant();
         restaurant.name = request.getName();
         restaurant.addressVO = new AddressVO(request.getAddress(), request.getX(), request.getY());
@@ -54,6 +54,7 @@ public class Restaurant extends BaseAuditingEntity {
         restaurant.countOfTables = request.getCountOfTables();
         restaurant.maxPerReservation = request.getMaxPerReservation();
         restaurant.contactNumber = request.getContactNumber();
+        restaurant.manager = manager;
         return restaurant;
     }
 

@@ -30,7 +30,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         validateSaveRestaurantRequest(user, request);
 
-        Restaurant restaurant = Restaurant.create(request);
+        Restaurant restaurant = Restaurant.create(request, user);
         addMenusIfPresent(restaurant, request);
 
         return RestaurantDto.fromEntity(

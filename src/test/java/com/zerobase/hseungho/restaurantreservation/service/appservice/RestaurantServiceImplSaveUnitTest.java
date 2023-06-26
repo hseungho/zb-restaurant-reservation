@@ -80,6 +80,7 @@ public class RestaurantServiceImplSaveUnitTest {
         Assertions.assertEquals(countOfTables, restaurantDto.getCountOfTables());
         Assertions.assertEquals(maxPerReservation, restaurantDto.getMaxPerReservation());
         Assertions.assertEquals(contactNumber, restaurantDto.getContactNumber());
+        Assertions.assertEquals(user.getUserId(), restaurantDto.getManager().getUserId());
     }
 
     private SaveRestaurant.Request forRequestTest() {
