@@ -1,6 +1,7 @@
 package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.BadRequestException;
+import com.zerobase.hseungho.restaurantreservation.global.exception.impl.NotFoundException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.UnauthorizedException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
 import com.zerobase.hseungho.restaurantreservation.global.security.SecurityHolder;
@@ -78,7 +79,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto registerPartner() {
-        User user = SecurityHolder.getUser();
+        String id = SecurityHolder.getIdOfUser();
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER));
 
         validateRegisterPartnerRequest(user);
 

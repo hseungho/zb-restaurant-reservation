@@ -2,7 +2,6 @@ package com.zerobase.hseungho.restaurantreservation.global.security.jwt;
 
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.UnauthorizedException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
-import com.zerobase.hseungho.restaurantreservation.global.security.SecurityHolder;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -43,7 +42,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            log.info("Security Holder -> {}", SecurityHolder.getUser());
         }
 
         filterChain.doFilter(request, response);

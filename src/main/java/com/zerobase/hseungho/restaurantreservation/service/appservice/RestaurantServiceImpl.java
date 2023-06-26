@@ -1,6 +1,7 @@
 package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.BadRequestException;
+import com.zerobase.hseungho.restaurantreservation.global.exception.impl.NotFoundException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
 import com.zerobase.hseungho.restaurantreservation.global.security.SecurityHolder;
 import com.zerobase.hseungho.restaurantreservation.global.util.ValidUtils;
@@ -9,8 +10,8 @@ import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Res
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.RestaurantDto;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SaveRestaurant;
-import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SearchAutocomplete;
 import com.zerobase.hseungho.restaurantreservation.service.repository.RestaurantRepository;
+import com.zerobase.hseungho.restaurantreservation.service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.Trie;
@@ -25,20 +26,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RestaurantServiceImpl implements RestaurantService {
 
+    private final UserRepository userRepository;
     private final RestaurantRepository restaurantRepository;
     private final Trie<String, String> trie;
 
     @Override
     @Transactional
     public RestaurantDto saveRestaurant(SaveRestaurant.Request request) {
-        User user = SecurityHolder.getUser();
+        String id = SecurityHolder.getIdOfUser();
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER));
 
         validateSaveRestaurantRequest(user, request);
 
         Restaurant restaurant = Restaurant.create(request, user);
         addMenusIfPresent(restaurant, request);
 
-        this.trie.put(restaurant.getName(), null);
+        this.trie.put(restaurant.getName(), restaurant.getName());
 
         return RestaurantDto.fromEntity(
                 restaurantRepository.save(restaurant)
@@ -46,9 +50,13 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public List<SearchAutocomplete.Response> searchAutoComplete(String keyword) {
+    public List<String> searchAutoComplete(String keyword) {
+        if (keyword == null || keyword.isBlank()) {
+            return List.of();
+        }
         return this.trie.prefixMap(keyword).keySet().stream()
-                .map(SearchAutocomplete.Response::new)
+                .sorted()
+                .limit(10)
                 .toList();
     }
 

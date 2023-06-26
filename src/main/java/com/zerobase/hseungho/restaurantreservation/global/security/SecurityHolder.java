@@ -5,8 +5,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 public class SecurityHolder {
 
-    public static User getUser() {
-        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public static String getIdOfUser() {
+        return ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
     }
 
 }

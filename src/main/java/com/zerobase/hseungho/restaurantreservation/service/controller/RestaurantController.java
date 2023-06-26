@@ -2,7 +2,6 @@ package com.zerobase.hseungho.restaurantreservation.service.controller;
 
 import com.zerobase.hseungho.restaurantreservation.service.appservice.RestaurantService;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SaveRestaurant;
-import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SearchAutocomplete;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,7 +19,7 @@ public class RestaurantController {
 
     @PostMapping("${service.api.restaurant.save}")
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasRole('ROLE_PARTNER')")
+    @PreAuthorize("hasRole('PARTNER')")
     public SaveRestaurant.Response saveRestaurant(@RequestBody @Valid SaveRestaurant.Request request) {
         return SaveRestaurant.Response.fromDto(
                 restaurantService.saveRestaurant(request)
@@ -29,7 +28,7 @@ public class RestaurantController {
 
     @GetMapping("${service.api.restaurant.search-auto}")
     @ResponseStatus(HttpStatus.OK)
-    public List<SearchAutocomplete.Response> searchAutocomplete(@RequestParam("keyword") String keyword) {
+    public List<String> searchAutocomplete(@RequestParam("keyword") String keyword) {
         return restaurantService.searchAutoComplete(keyword);
     }
 
