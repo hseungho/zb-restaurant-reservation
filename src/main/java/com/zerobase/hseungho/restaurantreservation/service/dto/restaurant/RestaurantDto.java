@@ -1,11 +1,13 @@
 package com.zerobase.hseungho.restaurantreservation.service.dto.restaurant;
 
+import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Restaurant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -26,5 +28,27 @@ public class RestaurantDto {
     private LocalDateTime updatedAt;
     private LocalDateTime deleteReqAt;
     private LocalDateTime deletedAt;
+    private List<MenuDto> menus;
+    private List<ReviewDto> reviews;
 
+    public static RestaurantDto fromEntity(Restaurant entity) {
+        return RestaurantDto.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .address(entity.getAddressVO().getAddress())
+                .description(entity.getDescription())
+                .openTime(entity.getOpenTime())
+                .closeTime(entity.getCloseTime())
+                .countOfTables(entity.getCountOfTables())
+                .maxPerReservation(entity.getMaxPerReservation())
+                .contactNumber(entity.getContactNumber())
+                .rating(entity.getRating())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
+                .deleteReqAt(entity.getDeleteReqAt())
+                .deletedAt(entity.getDeletedAt())
+                .menus(entity.getMenus().stream().map(MenuDto::fromEntity).toList())
+                .reviews(entity.getReviews().stream().map(ReviewDto::fromEntity).toList())
+                .build();
+    }
 }

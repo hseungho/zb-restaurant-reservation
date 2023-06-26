@@ -1,6 +1,8 @@
 package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
 import com.zerobase.hseungho.restaurantreservation.global.security.SecurityHolder;
+import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Menu;
+import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Restaurant;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.SaveRestaurant;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.RestaurantDto;
@@ -9,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 @Slf4j
 @Service
@@ -24,7 +27,19 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         validateSaveRestaurantRequest(user, request);
 
-        return null;
+        Restaurant restaurant = Restaurant.create(request);
+        addMenusIfPresent(restaurant, request);
+
+        return RestaurantDto.fromEntity(
+                restaurantRepository.save(restaurant)
+        );
+    }
+
+    private void addMenusIfPresent(Restaurant restaurant, SaveRestaurant.Request request) {
+        if (CollectionUtils.isEmpty(request.getMenus())) {
+            return;
+        }
+        request.getMenus().forEach(e -> restaurant.addMenu(Menu.create(e.getName(), e.getPrice())));
     }
 
     private void validateSaveRestaurantRequest(User user, SaveRestaurant.Request request) {
