@@ -1,7 +1,7 @@
 package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.BadRequestException;
-import com.zerobase.hseungho.restaurantreservation.global.exception.impl.NotFoundException;
+import com.zerobase.hseungho.restaurantreservation.global.exception.impl.UnauthorizedException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
 import com.zerobase.hseungho.restaurantreservation.global.util.ValidUtils;
 import com.zerobase.hseungho.restaurantreservation.service.domain.User;
@@ -53,20 +53,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public TokenDto login(Login.Request request) {
         User user = userRepository.findByUserId(request.getUserId())
-                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER));
+                .orElseThrow(() -> new UnauthorizedException(ErrorCodeType.UNAUTHORIZED_LOGIN_REQUESTED_VALUE));
 
         validateLoginRequest(request, user);
 
+        
 
         return null;
     }
 
     private void validateLoginRequest(Login.Request request, User user) {
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            // miss match password exception
+            throw new UnauthorizedException(ErrorCodeType.UNAUTHORIZED_LOGIN_REQUESTED_VALUE);
         }
         if (!user.isResigned()) {
-            // already resign id exception
+            throw new UnauthorizedException(ErrorCodeType.UNAUTHORIZED_LOGIN_ALREADY_RESIGNED_USER);
         }
     }
 
