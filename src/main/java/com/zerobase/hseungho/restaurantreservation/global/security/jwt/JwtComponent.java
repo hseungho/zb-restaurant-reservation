@@ -20,8 +20,8 @@ import java.util.Date;
 public class JwtComponent {
 
     private static final String CLAIMS_TYPE = "type";
-    private static final long ACCESS_TOKEN_EXPIRED_TIME = 1000 * 60 * 60;  // 1 hour
-    private static final long REFRESH_TOKEN_EXPIRED_TIME = 1000 * 60 * 60;  // 1 hour
+    private static final long ACCESS_TOKEN_EXPIRED_TIME = 1000 * 60 * 60;
+    private static final long REFRESH_TOKEN_EXPIRED_TIME = 1000 * 60 * 60 * 24 * 30L;
 
     @Value("${spring.jwt.secret}")
     private String secretKey;
@@ -41,7 +41,7 @@ public class JwtComponent {
         claims.put(CLAIMS_TYPE, type.name());
 
         Date now = new Date();
-        Date expiredDate = new Date(now.getTime() + ACCESS_TOKEN_EXPIRED_TIME);
+        Date expiredDate = new Date(now.getTime() + expired);
 
         return Jwts.builder()
                 .setClaims(claims)
