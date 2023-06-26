@@ -1,7 +1,25 @@
 spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:test;
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    defer-datasource-initialization: true
+
   mvc:
     path-match:
       matching-strategy: ant_path_matcher
+
   jwt:
     secret: restaurant-reservation-secret-key-sample
 
@@ -14,3 +32,4 @@ service:
       check-nickname: /sign-up/check-nickname
       sign-up: /sign-up
       login: /login
+      register-partner: /user/partner

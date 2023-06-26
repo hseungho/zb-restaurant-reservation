@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public TokenDto login(Login.Request request) {
         User user = userRepository.findByUserId(request.getUserId())
-                .orElseThrow(() -> new UnauthorizedException(ErrorCodeType.UNAUTHORIZED_LOGIN_REQUESTED_VALUE));
+                .orElseThrow(() -> new UnauthorizedException(ErrorCodeType.NOT_FOUND_USER));
 
         validateLoginRequest(request, user);
 
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto registerPartner() {
         User user = SecurityHolder.getUser();
-        
+        log.info("USER is -> {}", user.getUserId());
         return null;
     }
 

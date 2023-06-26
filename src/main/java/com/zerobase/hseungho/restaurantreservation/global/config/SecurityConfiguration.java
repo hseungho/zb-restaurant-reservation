@@ -29,7 +29,8 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .httpBasic().disable()
+                .httpBasic()
+                .and()
                 .csrf().disable()
                 .cors().configurationSource(corsConfigurationSource())
                 .and()
@@ -38,11 +39,11 @@ public class SecurityConfiguration {
                 .headers().frameOptions().disable()
                 .and()
                 .authorizeHttpRequests(request ->
-                        request.requestMatchers("/**/sign-up/**", "/**/login/**", "/**/search/**").permitAll()
+                        request.requestMatchers("/**/sign-up/**", "/**/login/**", "/**/search/**", "/h2-console/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(jwtAuthenticationFilter, JwtAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFailureFilter, JwtAuthenticationFilter.class)
                 .logout(Customizer.withDefaults())
                 .build();
     }
