@@ -17,6 +17,9 @@ public enum ErrorCodeType implements ErrorCode {
     BAD_REQUEST_SIGN_UP_NICKNAME_DUPLICATED(HttpStatus.BAD_REQUEST, "이미 존재하는 닉네임입니다."),
     BAD_REQUEST_SIGN_UP_NICKNAME_LENGTH(HttpStatus.BAD_REQUEST, "닉네임은 15자리 미만이어야 합니다."),
     BAD_REQUEST_PARTNER_ALREADY(HttpStatus.BAD_REQUEST, "이미 파트너 등록되어 있는 유저입니다."),
+    BAD_REQUEST_SAVE_RESTAURANT_USER_NOT_PARTNER(HttpStatus.BAD_REQUEST, "파트너가 아닙니다. 파트너 등록을 먼저 해주세요."),
+    BAD_REQUEST_SAVE_RESTAURANT_ALREADY_MANAGER(HttpStatus.BAD_REQUEST, "이미 등록한 매장이 있습니다. 매장은 하나만 등록 가능합니다."),
+    BAD_REQUEST_SAVE_RESTAURANT_BLANK(HttpStatus.BAD_REQUEST, "매장 등록에 필요한 필수 정보를 모두 입력해주세요."),
 
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다."),
 
