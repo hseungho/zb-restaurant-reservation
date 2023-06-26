@@ -26,8 +26,8 @@ public class Restaurant extends BaseAuditingEntity {
     @Embedded
     private AddressVO addressVO;
     private String description;
-    private LocalDateTime openTime;
-    private LocalDateTime closeTime;
+    @Embedded
+    private RestaurantTimeVO restaurantTimeVO;
     private Integer countOfTables;
     private Integer maxPerReservation;
     private String contactNumber;
@@ -46,8 +46,10 @@ public class Restaurant extends BaseAuditingEntity {
         restaurant.name = request.getName();
         restaurant.addressVO = new AddressVO(request.getAddress(), request.getX(), request.getY());
         restaurant.description = request.getDescription();
-        restaurant.openTime = request.getOpenTime();
-        restaurant.closeTime = request.getCloseTime();
+        restaurant.restaurantTimeVO = new RestaurantTimeVO(
+                request.getOpenTime().getHour(), request.getOpenTime().getMinute(),
+                request.getCloseTime().getHour(), request.getCloseTime().getMinute()
+        );
         restaurant.countOfTables = request.getCountOfTables();
         restaurant.maxPerReservation = request.getMaxPerReservation();
         restaurant.contactNumber = request.getContactNumber();
