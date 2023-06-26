@@ -5,6 +5,7 @@ import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SaveRe
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,6 +17,7 @@ public class RestaurantController {
 
     @PostMapping("${service.api.restaurant.save}")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ROLE_PARTNER')")
     public SaveRestaurant.Response saveRestaurant(@RequestBody @Valid SaveRestaurant.Request request) {
         return SaveRestaurant.Response.fromDto(
                 restaurantService.saveRestaurant(request)
