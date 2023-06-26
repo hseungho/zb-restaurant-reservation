@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private void validateRegisterPartnerRequest(User user) {
-        if (user.getType() == UserType.ROLE_PARTNER) {
+        if (user.isPartner()) {
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_PARTNER_ALREADY);
         }
     }

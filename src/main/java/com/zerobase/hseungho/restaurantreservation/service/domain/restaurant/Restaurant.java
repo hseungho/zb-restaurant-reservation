@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "restaurant")
@@ -34,11 +35,29 @@ public class Restaurant extends BaseAuditingEntity {
     private LocalDateTime deleteReqAt;
     private LocalDateTime deletedAt;
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
-    private List<Menu> menus;
+    private List<Menu> menus = new ArrayList<>();
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
-    private List<Review> reviews;
+    private List<Review> reviews = new ArrayList<>();
     @OneToOne
     private User manager;
+
+    public static Restaurant create(SaveRestaurant.Request request) {
+        Restaurant restaurant = new Restaurant();
+        restaurant.name = request.getName();
+        restaurant.addressVO = new AddressVO(request.getAddress(), request.getX(), request.getY());
+        restaurant.description = request.getDescription();
+        restaurant.openTime = request.getOpenTime();
+        restaurant.closeTime = request.getCloseTime();
+        restaurant.countOfTables = request.getCountOfTables();
+        restaurant.maxPerReservation = request.getMaxPerReservation();
+        restaurant.contactNumber = request.getContactNumber();
+        return restaurant;
+    }
+
+    public void addMenu(Menu menu) {
+        menus.add(menu);
+        menu.associate(this);
+    }
 
 
 }

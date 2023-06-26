@@ -22,4 +22,15 @@ public class Menu extends BaseAuditingEntity {
     @ManyToOne
     private Restaurant restaurant;
 
+    public static Menu create(String name, Long price) {
+        Menu menu = new Menu();
+        menu.name = name;
+        menu.price = price;
+        return menu;
+    }
+
+    public void associate(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
+
 }

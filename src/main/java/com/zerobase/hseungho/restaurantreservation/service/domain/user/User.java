@@ -64,6 +64,10 @@ public class User extends BaseAuditingEntity implements UserDetails {
         this.type = type;
     }
 
+    public boolean isPartner() {
+        return type == UserType.ROLE_PARTNER;
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     @Override
     public void preUpdate() {
