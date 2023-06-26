@@ -1,4 +1,4 @@
-package com.zerobase.hseungho.restaurantreservation.service.dto.external.user;
+package com.zerobase.hseungho.restaurantreservation.service.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
