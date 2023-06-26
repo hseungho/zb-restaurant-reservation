@@ -1,0 +1,16 @@
+spring:
+  mvc:
+    path-match:
+      matching-strategy: ant_path_matcher
+  jwt:
+    secret: restaurant-reservation-secret-key-sample
+
+service:
+  version: v1
+  api:
+    prefix: /api/${service.version}
+    user:
+      check-id: /sign-up/check-id
+      check-nickname: /sign-up/check-nickname
+      sign-up: /sign-up
+      login: /login
