@@ -1,6 +1,7 @@
 package com.zerobase.hseungho.restaurantreservation.service.domain.base;
 
 import com.zerobase.hseungho.restaurantreservation.global.util.SeoulDateTime;
+import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -18,13 +19,15 @@ import java.time.LocalDateTime;
 @SuperBuilder
 public class BaseDateEntity {
 
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     @PrePersist
     public void prePersist() {
-        this.createdAt = SeoulDateTime.now();
-        this.updatedAt = SeoulDateTime.now();
+        LocalDateTime now = SeoulDateTime.now();
+        this.createdAt = now;
+        this.updatedAt = now;
     }
 
     @PreUpdate
