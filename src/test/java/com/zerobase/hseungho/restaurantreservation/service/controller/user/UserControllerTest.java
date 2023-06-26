@@ -6,7 +6,9 @@ import com.zerobase.hseungho.restaurantreservation.global.security.jwt.JwtAuthen
 import com.zerobase.hseungho.restaurantreservation.global.util.SeoulDateTime;
 import com.zerobase.hseungho.restaurantreservation.service.appservice.UserServiceImpl;
 import com.zerobase.hseungho.restaurantreservation.service.controller.UserController;
+import com.zerobase.hseungho.restaurantreservation.service.dto.Login;
 import com.zerobase.hseungho.restaurantreservation.service.dto.SignUp;
+import com.zerobase.hseungho.restaurantreservation.service.dto.TokenDto;
 import com.zerobase.hseungho.restaurantreservation.service.dto.UserDto;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
 import org.junit.jupiter.api.DisplayName;
@@ -143,6 +145,38 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.nickname").value("nickname"))
                 .andExpect(jsonPath("$.userType").value(UserType.ROLE_CUSTOMER.name()))
                 .andExpect(jsonPath("$.createdAt").value(now.toString()));
+    }
+
+    @Test
+    @DisplayName("로그인 성공")
+    void test_login_success() throws Exception {
+        // given
+        final String url = BASIC_API + "/login";
+        final LocalDateTime now = SeoulDateTime.now();
+        final String accessToken = "Bearer access-token";
+        final String refreshToken = "Bearer refresh-token";
+
+        given(userService.login(any()))
+                .willReturn(TokenDto.builder()
+                        .accessToken(accessToken)
+                        .refreshToken(refreshToken)
+                        .loggedInAt(now)
+                        .build());
+        // when
+        // then
+        mockMvc.perform(post(url)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(
+                        Login.Request.builder()
+                                .userId("user-id")
+                                .password("password123!")
+                                .build()
+                )))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.accessToken").value(accessToken))
+                .andExpect(jsonPath("$.refreshToken").value(refreshToken))
+                .andExpect(jsonPath("$.loggedInAt").value(now.toString()));
     }
 
 }
