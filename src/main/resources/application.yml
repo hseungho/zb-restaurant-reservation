@@ -28,10 +28,13 @@ service:
   api:
     prefix: /api/${service.version}
     user:
+      prefix: /users
       check-id: /sign-up/check-id
       check-nickname: /sign-up/check-nickname
       sign-up: /sign-up
       login: /login
-      register-partner: /user/partner
+      register-partner: ${service.api.user.prefix}/partner
     restaurant:
-      save: /restaurant
+      prefix: /restaurants
+      save: ${service.api.restaurant.prefix}
+      search-auto: ${service.api.restaurant.prefix}/search/autocomplete
