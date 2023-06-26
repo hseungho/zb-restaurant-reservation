@@ -18,7 +18,7 @@ public class RestaurantController {
     @ResponseStatus(HttpStatus.CREATED)
     public SaveRestaurant.Response saveRestaurant(@RequestBody @Valid SaveRestaurant.Request request) {
         return SaveRestaurant.Response.fromDto(
-                restaurantService.save(request)
+                restaurantService.saveRestaurant(request)
         );
     }
 

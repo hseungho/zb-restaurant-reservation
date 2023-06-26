@@ -25,7 +25,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     @Transactional
-    public RestaurantDto save(SaveRestaurant.Request request) {
+    public RestaurantDto saveRestaurant(SaveRestaurant.Request request) {
         User user = SecurityHolder.getUser();
 
         validateSaveRestaurantRequest(user, request);

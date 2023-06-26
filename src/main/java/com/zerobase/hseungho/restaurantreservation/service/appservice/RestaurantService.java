@@ -5,6 +5,6 @@ import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.Restau
 
 public interface RestaurantService {
 
-    RestaurantDto save(SaveRestaurant.Request request);
+    RestaurantDto saveRestaurant(SaveRestaurant.Request request);
 
 }

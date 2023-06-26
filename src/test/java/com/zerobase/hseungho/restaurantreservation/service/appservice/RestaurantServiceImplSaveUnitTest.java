@@ -60,7 +60,7 @@ public class RestaurantServiceImplSaveUnitTest {
                 .willReturn(forEntityTest(user));
         ArgumentCaptor<Restaurant> captor = ArgumentCaptor.forClass(Restaurant.class);
         // when
-        RestaurantDto restaurantDto = restaurantService.save(forRequestTest());
+        RestaurantDto restaurantDto = restaurantService.saveRestaurant(forRequestTest());
         // then
         verify(restaurantRepository, times(1)).save(captor.capture());
         Assertions.assertNotNull(restaurantDto);
