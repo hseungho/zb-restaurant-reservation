@@ -27,8 +27,8 @@ spring:
     path-match:
       matching-strategy: ant_path_matcher
 
-  jwt:
-    secret: restaurant-reservation-secret-key-sample
+  config:
+    import: secret.yml
 
 service:
   version: v1
