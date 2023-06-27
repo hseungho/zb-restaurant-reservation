@@ -1,7 +1,9 @@
 package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
+import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.IRestaurantDto;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.RestaurantDto;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SaveRestaurant;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -20,5 +22,15 @@ public interface RestaurantService {
      * @return 키워드와 관련된 매장명 리스트
      */
     List<String> searchAutoComplete(String keyword);
+
+    /**
+     * 매장 검색 - 매장명 기준
+     * @param name 검색할 매장명
+     * @param userX 요청자 x 좌표
+     * @param userY 요청자 y 좌표
+     * @param pageable 페이징 객체
+     * @return 매장 DTO 클래스 리스트
+     */
+    List<IRestaurantDto> searchRestaurantByName(String name, String userX, String userY, Pageable pageable);
 
 }

@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.Trie;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -56,8 +57,13 @@ public class RestaurantServiceImpl implements RestaurantService {
                 .toList();
     }
 
+    @Override
+    public List<IRestaurantDto> searchRestaurantByName(String name, String userX, String userY, Pageable pageable) {
+        return null;
+    }
+
     public void test() {
-        Slice<IRestaurantDto> byNameCalculateDistance = restaurantRepository.findByNameCalculateDistance("매장", 34.222, 123.313, PageRequest.of(0, 10, Sort.by("name")));
+        Slice<IRestaurantDto> byNameCalculateDistance = restaurantRepository.findByNameCalculateDistance("매", 34.222, 123.313, PageRequest.of(0, 10, Sort.by("name")));
         System.out.println(byNameCalculateDistance);
     }
 

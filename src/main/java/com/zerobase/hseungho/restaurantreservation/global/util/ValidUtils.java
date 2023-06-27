@@ -4,6 +4,20 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 public class ValidUtils {
+
+    public static boolean isSimilarBetweenText(String x, String y, Double offset) {
+        return similarityBetweenTexts(x, y) > offset;
+    }
+
+    public static double similarityBetweenTexts(String x, String y) {
+        double maxLength = Double.max(x.length(), y.length());
+        if (maxLength > 0) {
+            // 필요한 경우 선택적으로 대소문자를 무시합니다.
+            return (maxLength - org.apache.commons.lang3.StringUtils.getLevenshteinDistance(x, y)) / maxLength;
+        }
+        return 1.0;
+    }
+
     public static boolean isNonNull(Object... args) {
         for (Object arg : args) {
             if (ObjectUtils.isEmpty(arg)) {

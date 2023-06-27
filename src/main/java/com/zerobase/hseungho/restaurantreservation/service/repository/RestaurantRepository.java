@@ -22,8 +22,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
             "r.maxPerReservation, r.contactNumber, r.rating, " +
             "r.createdAt, r.updatedAt, r.deleteReqAt, r.deletedAt " +
             "FROM restaurant r " +
-            "JOIN FETCH r.menus " +
-            "JOIN FETCH r.reviews",
+            "WHERE r.name LIKE :name ",
     nativeQuery = true)
     Slice<IRestaurantDto> findByNameCalculateDistance(String name, Double userX, Double userY, Pageable pageable);
 
