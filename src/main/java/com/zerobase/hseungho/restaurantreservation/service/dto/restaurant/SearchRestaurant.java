@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
@@ -14,10 +15,23 @@ public class SearchRestaurant {
     @Builder
     public static class Response {
         private List<ResponseDocument> documents;
-
-        public static Response fromListDto(List<IRestaurantDto> dtos) {
+        private Integer number;
+        private Integer size;
+        private Integer numberOfElements;
+        private Boolean isFirst;
+        private Boolean isLast;
+        private Boolean hasNext;
+        private Boolean hasPrevious;
+        public static Response fromListDto(Slice<IRestaurantDto> dtos) {
             return Response.builder()
-                    .documents(dtos.stream().map(ResponseDocument::fromDto).toList())
+                    .documents(dtos.getContent().stream().map(ResponseDocument::fromDto).toList())
+                    .number(dtos.getNumber())
+                    .size(dtos.getSize())
+                    .numberOfElements(dtos.getNumberOfElements())
+                    .isFirst(dtos.isFirst())
+                    .isLast(dtos.isLast())
+                    .hasNext(dtos.hasNext())
+                    .hasPrevious(dtos.hasPrevious())
                     .build();
         }
 

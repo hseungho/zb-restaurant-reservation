@@ -58,8 +58,19 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public List<IRestaurantDto> searchRestaurantByName(String name, String userX, String userY, Pageable pageable) {
-        return null;
+    public Slice<IRestaurantDto> searchRestaurantByName(String name, String userX, String userY, Pageable pageable) {
+        CoordinateDto coordinate = validateSearchRestaurantRequest(userX, userY);
+        return restaurantRepository.findByNameCalculateDistance(name, coordinate.getX(), coordinate.getY(), pageable);
+    }
+
+    private CoordinateDto validateSearchRestaurantRequest(String userX, String userY) {
+        try {
+            double x = Double.parseDouble(userX);
+            double y = Double.parseDouble(userY);
+            return new CoordinateDto(x, y);
+        } catch (NumberFormatException e) {
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_SEARCH_RESTAURANT_INVALID_VALUE);
+        }
     }
 
     public void test() {

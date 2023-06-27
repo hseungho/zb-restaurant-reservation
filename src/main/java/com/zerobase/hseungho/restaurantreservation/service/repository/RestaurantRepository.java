@@ -14,15 +14,11 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
     boolean existsByManager(User user);
 
-    @Query(value = "SELECT " +
-            "r.id, r.name, r.address, " +
-            "ST_Distance_Sphere(POINT(:userX, :userY), POINT(r.x, r.y)) as distance, " +
-            "r.description, r.openHour, r.openMinute, " +
-            "r.closeHour, r.closeMinute, r.countOfTables, " +
-            "r.maxPerReservation, r.contactNumber, r.rating, " +
-            "r.createdAt, r.updatedAt, r.deleteReqAt, r.deletedAt " +
+    @Query(value =
+            "SELECT *, " +
+            "ST_Distance_Sphere(POINT(:userX, :userY), POINT(r.x, r.y)) as distance " +
             "FROM restaurant r " +
-            "WHERE r.name LIKE :name ",
+            "WHERE r.name LIKE :name%",
     nativeQuery = true)
     Slice<IRestaurantDto> findByNameCalculateDistance(String name, Double userX, Double userY, Pageable pageable);
 

@@ -4,6 +4,7 @@ import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.IResta
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.RestaurantDto;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SaveRestaurant;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
@@ -25,12 +26,13 @@ public interface RestaurantService {
 
     /**
      * 매장 검색 - 매장명 기준
-     * @param name 검색할 매장명
-     * @param userX 요청자 x 좌표
-     * @param userY 요청자 y 좌표
+     *
+     * @param name     검색할 매장명
+     * @param userX    요청자 x 좌표
+     * @param userY    요청자 y 좌표
      * @param pageable 페이징 객체
      * @return 매장 DTO 클래스 리스트
      */
-    List<IRestaurantDto> searchRestaurantByName(String name, String userX, String userY, Pageable pageable);
+    Slice<IRestaurantDto> searchRestaurantByName(String name, String userX, String userY, Pageable pageable);
 
 }

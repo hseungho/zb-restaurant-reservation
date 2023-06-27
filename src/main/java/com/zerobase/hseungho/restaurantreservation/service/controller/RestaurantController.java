@@ -6,6 +6,8 @@ import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.Search
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +41,7 @@ public class RestaurantController {
     public SearchRestaurant.Response searchRestaurantByName(@RequestParam("name") String name,
                                                             @RequestParam("x") String userX,
                                                             @RequestParam("y") String userY,
-                                                            Pageable pageable) {
+                                                            @PageableDefault(sort = "rating", direction = Sort.Direction.DESC) Pageable pageable) {
         return SearchRestaurant.Response.fromListDto(
                 restaurantService.searchRestaurantByName(name, userX, userY, pageable)
         );
