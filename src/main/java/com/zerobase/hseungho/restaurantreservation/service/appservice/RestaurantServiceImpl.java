@@ -5,6 +5,8 @@ import com.zerobase.hseungho.restaurantreservation.global.exception.impl.NotFoun
 import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
 import com.zerobase.hseungho.restaurantreservation.global.security.SecurityHolder;
 import com.zerobase.hseungho.restaurantreservation.global.util.ValidUtils;
+import com.zerobase.hseungho.restaurantreservation.global.webclient.KakaoWebClientComponent;
+import com.zerobase.hseungho.restaurantreservation.global.webclient.dto.CoordinateDto;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Menu;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Restaurant;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
@@ -35,30 +37,19 @@ public class RestaurantServiceImpl implements RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final Trie<String, String> trie;
 
+    private final KakaoWebClientComponent kakaoWebClientComponent;
+
     @Override
-    @Transactional
     public RestaurantDto saveRestaurant(SaveRestaurant.Request request) {
-        String id = SecurityHolder.getIdOfUser();
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER));
-
-        validateSaveRestaurantRequest(user, request);
-
-        Restaurant restaurant = Restaurant.create(request, user);
-        addMenusIfPresent(restaurant, request);
-
+        Restaurant restaurant = this.saveRestaurantEntity(request);
         this.trie.put(restaurant.getName(), restaurant.getName());
-
-        return RestaurantDto.fromEntity(
-                restaurantRepository.save(restaurant)
-        );
+        return RestaurantDto.fromEntity(restaurant);
     }
 
     @Override
     public List<String> searchAutoComplete(String keyword) {
-        if (!StringUtils.hasText(keyword)) {
-            return List.of();
-        }
+        if (!StringUtils.hasText(keyword)) return List.of();
+
         return this.trie.prefixMap(keyword).keySet().stream()
                 .sorted()
                 .limit(10)
@@ -68,6 +59,23 @@ public class RestaurantServiceImpl implements RestaurantService {
     public void test() {
         Slice<IRestaurantDto> byNameCalculateDistance = restaurantRepository.findByNameCalculateDistance("매장", 34.222, 123.313, PageRequest.of(0, 10, Sort.by("name")));
         System.out.println(byNameCalculateDistance);
+    }
+
+    @Transactional
+    protected Restaurant saveRestaurantEntity(SaveRestaurant.Request request) {
+        String id = SecurityHolder.getIdOfUser();
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER));
+
+        validateSaveRestaurantRequest(user, request);
+
+        CoordinateDto coordinate = kakaoWebClientComponent.getCoordinateByAddress(request.getAddress());
+        request.setCoordinate(coordinate.getX(), coordinate.getY());
+
+        Restaurant restaurant = Restaurant.create(request, user);
+        addMenusIfPresent(restaurant, request);
+
+        return restaurantRepository.save(restaurant);
     }
 
     private void addMenusIfPresent(Restaurant restaurant, SaveRestaurant.Request request) {

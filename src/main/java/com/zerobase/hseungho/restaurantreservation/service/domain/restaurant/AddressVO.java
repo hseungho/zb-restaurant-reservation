@@ -14,9 +14,9 @@ public class AddressVO {
 
     @Column(name = "address", nullable = false)
     private String address;
-    @Column(name = "x")
+    @Column(name = "x", nullable = false)
     private Double x;
-    @Column(name = "y")
+    @Column(name = "y", nullable = false)
     private Double y;
 
 }

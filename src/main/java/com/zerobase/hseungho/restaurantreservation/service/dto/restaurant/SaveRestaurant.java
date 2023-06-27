@@ -9,7 +9,6 @@ import java.util.List;
 
 public class SaveRestaurant {
     @Getter
-    @Setter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
@@ -31,6 +30,10 @@ public class SaveRestaurant {
         private Integer maxPerReservation;
         @NotBlank
         private String contactNumber;
+        public void setCoordinate(Double x, Double y) {
+            this.x = x;
+            this.y = y;
+        }
     }
 
     public static class SaveRestaurantTime {

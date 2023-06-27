@@ -1,12 +1,19 @@
 package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
-import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.*;
+import com.zerobase.hseungho.restaurantreservation.global.webclient.KakaoWebClientComponent;
+import com.zerobase.hseungho.restaurantreservation.global.webclient.dto.CoordinateDto;
+import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.AddressVO;
+import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Menu;
+import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Restaurant;
+import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.RestaurantTimeVO;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.RestaurantDto;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SaveRestaurant;
 import com.zerobase.hseungho.restaurantreservation.service.repository.RestaurantRepository;
+import com.zerobase.hseungho.restaurantreservation.service.repository.UserRepository;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
 import com.zerobase.hseungho.restaurantreservation.util.TestSecurityHolder;
+import org.apache.commons.collections4.Trie;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,8 +26,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -32,7 +41,13 @@ public class RestaurantServiceImplSaveUnitTest {
     private RestaurantServiceImpl restaurantService;
 
     @Mock
+    private UserRepository userRepository;
+    @Mock
     private RestaurantRepository restaurantRepository;
+    @Mock
+    private KakaoWebClientComponent kakaoWebClientComponent;
+    @Mock
+    private Trie<String, String> trie;
 
     private final String restName = "매장이름";
     private final String restAddr = "서울 서대문구 증가로 12";
@@ -57,15 +72,22 @@ public class RestaurantServiceImplSaveUnitTest {
         restaurantService.test();
         // then
     }
+
     @Test
     @DisplayName("매장 등록 성공")
     void test_saveRestaurant_success() {
         // given
         User user = TestSecurityHolder.setSecurityHolderUser(UserType.ROLE_PARTNER);
+        given(userRepository.findById(anyString()))
+                .willReturn(Optional.of(user));
         given(restaurantRepository.existsByManager(any()))
                 .willReturn(false);
+        given(kakaoWebClientComponent.getCoordinateByAddress(anyString()))
+                .willReturn(new CoordinateDto(123.123, 321.321));
         given(restaurantRepository.save(any()))
                 .willReturn(forEntityTest(user));
+        given(trie.put(anyString(), anyString()))
+                .willReturn(null);
         ArgumentCaptor<Restaurant> captor = ArgumentCaptor.forClass(Restaurant.class);
         // when
         RestaurantDto restaurantDto = restaurantService.saveRestaurant(forRequestTest());
