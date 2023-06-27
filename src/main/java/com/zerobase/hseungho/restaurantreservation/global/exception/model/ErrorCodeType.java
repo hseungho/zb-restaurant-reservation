@@ -20,8 +20,10 @@ public enum ErrorCodeType implements ErrorCode {
     BAD_REQUEST_SAVE_RESTAURANT_USER_NOT_PARTNER(HttpStatus.BAD_REQUEST, "파트너가 아닙니다. 파트너 등록을 먼저 해주세요."),
     BAD_REQUEST_SAVE_RESTAURANT_ALREADY_MANAGER(HttpStatus.BAD_REQUEST, "이미 등록한 매장이 있습니다. 매장은 하나만 등록 가능합니다."),
     BAD_REQUEST_SAVE_RESTAURANT_BLANK(HttpStatus.BAD_REQUEST, "매장 등록에 필요한 필수 정보를 모두 입력해주세요."),
+    BAD_REQUEST_SAVE_RESTAURANT_COORDINATE_BY_ADDRESS(HttpStatus.BAD_REQUEST, "해당 주소의 좌표를 가져오는데에 실패하였습니다. 주소를 다시 시도해주세요."),
 
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다."),
+
 
     ;
 
