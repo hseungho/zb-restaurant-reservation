@@ -8,6 +8,7 @@ import com.zerobase.hseungho.restaurantreservation.global.util.ValidUtils;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Menu;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Restaurant;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
+import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.IRestaurantDto;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.RestaurantDto;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SaveRestaurant;
 import com.zerobase.hseungho.restaurantreservation.service.repository.RestaurantRepository;
@@ -15,6 +16,9 @@ import com.zerobase.hseungho.restaurantreservation.service.repository.UserReposi
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.Trie;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -59,6 +63,11 @@ public class RestaurantServiceImpl implements RestaurantService {
                 .sorted()
                 .limit(10)
                 .toList();
+    }
+
+    public void test() {
+        Slice<IRestaurantDto> byNameCalculateDistance = restaurantRepository.findByNameCalculateDistance("매장", 34.222, 123.313, PageRequest.of(0, 10, Sort.by("name")));
+        System.out.println(byNameCalculateDistance);
     }
 
     private void addMenusIfPresent(Restaurant restaurant, SaveRestaurant.Request request) {
