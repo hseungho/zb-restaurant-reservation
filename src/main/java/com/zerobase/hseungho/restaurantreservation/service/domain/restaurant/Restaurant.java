@@ -22,18 +22,27 @@ public class Restaurant extends BaseAuditingEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, unique = true, updatable = false)
     private Long id;
+    @Column(name = "name", nullable = false)
     private String name;
     @Embedded
     private AddressVO addressVO;
+    @Column(name = "description")
     private String description;
     @Embedded
     private RestaurantTimeVO restaurantTimeVO;
+    @Column(name = "count_of_tables", nullable = false)
     private Integer countOfTables;
+    @Column(name = "max_per_reservation")
     private Integer maxPerReservation;
+    @Column(name = "contact_number", nullable = false)
     private String contactNumber;
+    @Column(name = "rating")
     private Double rating;
+    @Column(name = "delete_req_at")
     private LocalDateTime deleteReqAt;
+    @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
     @OneToMany(
             mappedBy = "restaurant",
@@ -45,6 +54,7 @@ public class Restaurant extends BaseAuditingEntity {
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
     private List<Review> reviews = new ArrayList<>();
     @OneToOne
+    @JoinColumn(name = "manager_id")
     private User manager;
 
     public static Restaurant create(SaveRestaurant.Request request, User manager) {

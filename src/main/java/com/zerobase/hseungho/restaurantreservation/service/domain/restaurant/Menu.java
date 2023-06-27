@@ -16,10 +16,14 @@ public class Menu extends BaseAuditingEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, unique = true, updatable = false)
     private Long id;
+    @Column(name = "name", nullable = false)
     private String name;
+    @Column(name = "price", nullable = false)
     private Long price;
     @ManyToOne
+    @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 
     public static Menu create(String name, Long price) {

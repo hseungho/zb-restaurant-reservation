@@ -25,13 +25,20 @@ import java.util.List;
 public class User extends BaseAuditingEntity implements UserDetails {
 
     @Id
+    @Column(name = "id", nullable = false, unique = true, updatable = false)
     private final String id = IdGenerator.generateUUID();
+    @Column(name = "user_id", unique = true, updatable = false)
     private String userId;
+    @Column(name = "password")
     private String password;
+    @Column(name = "nickname", unique = true)
     private String nickname;
     @Enumerated(EnumType.STRING)
+    @Column(name = "type")
     private UserType type;
+    @Column(name = "logged_in_at")
     private LocalDateTime loggedInAt;
+    @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
     @Transient

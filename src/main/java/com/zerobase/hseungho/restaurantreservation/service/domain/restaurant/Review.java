@@ -17,13 +17,19 @@ public class Review extends BaseAuditingEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, unique = true, updatable = false)
     private Long id;
+    @Column(name = "rating", nullable = false)
     private Double rating;
+    @Column(name = "content", nullable = false)
     private String content;
+    @Column(name = "image_src")
     private String imageSrc;
     @OneToOne
+    @JoinColumn(name = "author_id", nullable = false, updatable = false)
     private User author;
     @ManyToOne
+    @JoinColumn(name = "restaurant_id", nullable = false, updatable = false)
     private Restaurant restaurant;
 
 }
