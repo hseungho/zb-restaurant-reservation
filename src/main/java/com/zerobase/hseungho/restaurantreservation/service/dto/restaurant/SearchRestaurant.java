@@ -43,22 +43,26 @@ public class SearchRestaurant {
             private Long restaurantId;
             private String name;
             private String address;
-            private Double distance;
+            private String description;
             private RestaurantTimeDto openTime;
             private RestaurantTimeDto closeTime;
             private Integer maxPerReservation;
             private String contactNumber;
+            private Double rating;
+            private Double distance;
 
             public static ResponseDocument fromDto(IRestaurantDto dto) {
                 return ResponseDocument.builder()
                         .restaurantId(dto.getId())
                         .name(dto.getName())
                         .address(dto.getAddress())
-                        .distance(dto.getDistance())
+                        .description(dto.getDescription())
                         .openTime(RestaurantTimeDto.of(dto.getOpenHour(), dto.getOpenMinute()))
                         .closeTime(RestaurantTimeDto.of(dto.getCloseHour(), dto.getCloseMinute()))
                         .maxPerReservation(dto.getMaxPerReservation())
                         .contactNumber(dto.getContactNumber())
+                        .rating(dto.getRating())
+                        .distance(dto.getDistance())
                         .build();
             }
         }
