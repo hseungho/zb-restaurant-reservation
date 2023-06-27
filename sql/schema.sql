@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS `menu`;
 DROP TABLE IF EXISTS `review`;
 DROP TABLE IF EXISTS `restaurant`;
 DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `reservation`;
 
 CREATE TABLE `users` (
      id varchar(40) not null primary key,
@@ -9,10 +10,10 @@ CREATE TABLE `users` (
      password varchar(255) not null ,
      nickname varchar(50) not null unique ,
      type varchar(20) not null ,
-     logged_in_at timestamp,
-     created_at timestamp not null ,
-     updated_at timestamp,
-     deleted_at timestamp
+     logged_in_at datetime,
+     created_at datetime not null ,
+     updated_at datetime,
+     deleted_at datetime
 );
 
 CREATE TABLE `restaurant` (
@@ -31,10 +32,10 @@ CREATE TABLE `restaurant` (
       contact_number varchar(15) not null ,
       rating double default 0.0 ,
       manager_id varchar(40) not null ,
-      created_at timestamp not null ,
-      updated_at timestamp ,
-      delete_req_at timestamp ,
-      deleted_at timestamp ,
+      created_at datetime not null ,
+      updated_at datetime ,
+      delete_req_at datetime ,
+      deleted_at datetime ,
       FOREIGN KEY (manager_id) REFERENCES `users` (id)
 );
 
@@ -54,5 +55,22 @@ CREATE TABLE `review` (
     author_id varchar(40) not null ,
     restaurant_id bigint not null ,
     FOREIGN KEY (author_id) REFERENCES `users` (id),
+    FOREIGN KEY (restaurant_id) REFERENCES `restaurant` (id)
+);
+
+CREATE TABLE `reservation` (
+    id bigint not null auto_increment primary key ,
+    number varchar(20) not null unique ,
+    num_of_person int not null ,
+    client_contact_number varchar(11) not null ,
+    reserved_at datetime,
+    canceled_at datetime,
+    visited_at datetime,
+    approved_at datetime,
+    refused_at datetime,
+    status varchar(50) not null ,
+    client_id varchar(40) not null ,
+    restaurant_id bigint not null ,
+    FOREIGN KEY (client_id) REFERENCES `users` (id),
     FOREIGN KEY (restaurant_id) REFERENCES `restaurant` (id)
 );
