@@ -58,9 +58,17 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Slice<IRestaurantDto> searchRestaurantByName(String name, String userX, String userY, Pageable pageable) {
         CoordinateDto coordinate = validateSearchRestaurantRequest(userX, userY);
-        return restaurantRepository.findByNameCalculateDistance(name, coordinate.getX(), coordinate.getY(), pageable);
+        return restaurantRepository.findByNameWithDistance(name, coordinate.getX(), coordinate.getY(), pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Slice<IRestaurantDto> searchRestaurantByAddress(String address, String userX, String userY, Pageable pageable) {
+        CoordinateDto coordinate = validateSearchRestaurantRequest(userX, userY);
+        return restaurantRepository.findByAddressWithDistance(address, coordinate.getX(), coordinate.getY(), pageable);
     }
 
     private CoordinateDto validateSearchRestaurantRequest(String userX, String userY) {
@@ -74,7 +82,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     public void test() {
-        Slice<IRestaurantDto> byNameCalculateDistance = restaurantRepository.findByNameCalculateDistance("매", 34.222, 123.313, PageRequest.of(0, 10, Sort.by("name")));
+        Slice<IRestaurantDto> byNameCalculateDistance = restaurantRepository.findByNameWithDistance("매", 34.222, 123.313, PageRequest.of(0, 10, Sort.by("name")));
         System.out.println(byNameCalculateDistance);
     }
 

@@ -46,4 +46,5 @@ service:
       prefix: /restaurants
       save: ${service.api.restaurant.prefix}
       search-auto: ${service.api.restaurant.prefix}/search/autocomplete
-      search: ${service.api.restaurant.prefix}/search
+      search-name: ${service.api.restaurant.prefix}/search/name
+      search-address: ${service.api.restaurant.prefix}/search/address

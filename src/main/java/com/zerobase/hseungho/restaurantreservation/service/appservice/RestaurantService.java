@@ -35,4 +35,14 @@ public interface RestaurantService {
      */
     Slice<IRestaurantDto> searchRestaurantByName(String name, String userX, String userY, Pageable pageable);
 
+    /**
+     * 매장 검색 - 매장위치 기준
+     * @param address 검색할 매장 위치
+     * @param userX 요청자 x 좌표
+     * @param userY 요청자 y 좌표
+     * @param pageable 페이징 객체
+     * @return 매장 DTO 클래스 리스트
+     */
+    Slice<IRestaurantDto> searchRestaurantByAddress(String address, String userX, String userY, Pageable pageable);
+
 }

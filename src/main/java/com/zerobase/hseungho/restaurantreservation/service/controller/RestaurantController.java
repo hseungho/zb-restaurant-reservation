@@ -36,14 +36,25 @@ public class RestaurantController {
         return restaurantService.searchAutoComplete(keyword);
     }
 
-    @GetMapping("${service.api.restaurant.search}")
+    @GetMapping("${service.api.restaurant.search-name}")
     @ResponseStatus(HttpStatus.OK)
-    public SearchRestaurant.Response searchRestaurantByName(@RequestParam("name") String name,
+    public SearchRestaurant.Response searchRestaurantByName(@RequestParam("key") String name,
                                                             @RequestParam("x") String userX,
                                                             @RequestParam("y") String userY,
                                                             @PageableDefault(sort = "rating", direction = Sort.Direction.DESC) Pageable pageable) {
         return SearchRestaurant.Response.fromListDto(
                 restaurantService.searchRestaurantByName(name, userX, userY, pageable)
+        );
+    }
+
+    @GetMapping("${service.api.restaurant.search-address}")
+    @ResponseStatus(HttpStatus.OK)
+    public SearchRestaurant.Response searchRestaurantByAddress(@RequestParam("key") String address,
+                                                               @RequestParam("x") String userX,
+                                                               @RequestParam("y") String userY,
+                                                               @PageableDefault(sort = "rating", direction = Sort.Direction.DESC) Pageable pageable) {
+        return SearchRestaurant.Response.fromListDto(
+                restaurantService.searchRestaurantByAddress(address, userX, userY, pageable)
         );
     }
 
