@@ -49,3 +49,12 @@ service:
       search-name: ${service.api.restaurant.prefix}/search/name
       search-address: ${service.api.restaurant.prefix}/search/address
       find: ${service.api.restaurant.prefix}/{id}
+
+    reservation:
+      prefix: ${service.api.restaurant.prefix}/{restaurantId}/reservations
+      find-by-restaurant: ${service.api.reservation.prefix}
+      reserve: ${service.api.reservation.prefix}/{reservationId}/reserve
+      cancel: ${service.api.reservation.prefix}/{reservationId}/cancel
+      approve: ${service.api.reservation.prefix}/{reservationId}/approve
+      refuse: ${service.api.reservation.prefix}/{reservationId}/refuse
+      visit: ${service.api.reservation.prefix}/{reservationId}/visit
