@@ -52,7 +52,7 @@ service:
 
     reservation:
       prefix: ${service.api.restaurant.prefix}/{restaurantId}/reservations
-      find-by-restaurant: ${service.api.reservation.prefix}
+      find-impossible-reservation: ${service.api.reservation.prefix}
       reserve: ${service.api.reservation.prefix}/{reservationId}/reserve
       cancel: ${service.api.reservation.prefix}/{reservationId}/cancel
       approve: ${service.api.reservation.prefix}/{reservationId}/approve
