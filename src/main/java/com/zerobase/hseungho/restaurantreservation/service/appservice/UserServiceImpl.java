@@ -1,16 +1,19 @@
 package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.BadRequestException;
+import com.zerobase.hseungho.restaurantreservation.global.exception.impl.NotFoundException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.UnauthorizedException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
+import com.zerobase.hseungho.restaurantreservation.global.security.SecurityHolder;
 import com.zerobase.hseungho.restaurantreservation.global.security.jwt.JwtComponent;
 import com.zerobase.hseungho.restaurantreservation.global.util.ValidUtils;
-import com.zerobase.hseungho.restaurantreservation.service.domain.User;
-import com.zerobase.hseungho.restaurantreservation.service.dto.Login;
-import com.zerobase.hseungho.restaurantreservation.service.dto.SignUp;
-import com.zerobase.hseungho.restaurantreservation.service.dto.TokenDto;
-import com.zerobase.hseungho.restaurantreservation.service.dto.UserDto;
+import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
+import com.zerobase.hseungho.restaurantreservation.service.dto.user.Login;
+import com.zerobase.hseungho.restaurantreservation.service.dto.user.SignUp;
+import com.zerobase.hseungho.restaurantreservation.service.dto.user.TokenDto;
+import com.zerobase.hseungho.restaurantreservation.service.dto.user.UserDto;
 import com.zerobase.hseungho.restaurantreservation.service.repository.UserRepository;
+import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -60,7 +63,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public TokenDto login(Login.Request request) {
         User user = userRepository.findByUserId(request.getUserId())
-                .orElseThrow(() -> new UnauthorizedException(ErrorCodeType.UNAUTHORIZED_LOGIN_REQUESTED_VALUE));
+                .orElseThrow(() -> new UnauthorizedException(ErrorCodeType.NOT_FOUND_USER));
 
         validateLoginRequest(request, user);
 
@@ -71,6 +74,26 @@ public class UserServiceImpl implements UserService {
                 jwtComponent.generateRefreshToken(user.getId(), user.getType()),
                 user.getLoggedInAt()
         );
+    }
+
+    @Override
+    @Transactional
+    public UserDto registerPartner() {
+        String id = SecurityHolder.getIdOfUser();
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER));
+
+        validateRegisterPartnerRequest(user);
+
+        user.setType(UserType.ROLE_PARTNER);
+
+        return UserDto.fromEntity(user);
+    }
+
+    private void validateRegisterPartnerRequest(User user) {
+        if (user.isPartner()) {
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_PARTNER_ALREADY);
+        }
     }
 
     private void validateLoginRequest(Login.Request request, User user) {

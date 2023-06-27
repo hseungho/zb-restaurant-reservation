@@ -1,11 +1,13 @@
-package com.zerobase.hseungho.restaurantreservation.service.domain;
+package com.zerobase.hseungho.restaurantreservation.service.domain.user;
 
-import com.zerobase.hseungho.restaurantreservation.global.util.SeoulDateTime;
-import com.zerobase.hseungho.restaurantreservation.service.domain.base.BaseDateEntity;
 import com.zerobase.hseungho.restaurantreservation.global.util.IdGenerator;
+import com.zerobase.hseungho.restaurantreservation.global.util.SeoulDateTime;
+import com.zerobase.hseungho.restaurantreservation.service.domain.base.BaseAuditingEntity;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,21 +17,28 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-@Entity(name = "user")
+@Entity(name = "users")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class User extends BaseDateEntity implements UserDetails {
+public class User extends BaseAuditingEntity implements UserDetails {
 
     @Id
+    @Column(name = "id", nullable = false, unique = true, updatable = false)
     private final String id = IdGenerator.generateUUID();
+    @Column(name = "user_id", unique = true, updatable = false)
     private String userId;
+    @Column(name = "password")
     private String password;
+    @Column(name = "nickname", unique = true)
     private String nickname;
     @Enumerated(EnumType.STRING)
+    @Column(name = "type")
     private UserType type;
+    @Column(name = "logged_in_at")
     private LocalDateTime loggedInAt;
+    @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
     @Transient
@@ -55,6 +64,18 @@ public class User extends BaseDateEntity implements UserDetails {
         isOnLoginRequest = true;
     }
 
+    public void setType(UserType type) {
+        if (type == null) {
+            return;
+        }
+        this.type = type;
+    }
+
+    public boolean isPartner() {
+        return type == UserType.ROLE_PARTNER;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
     @Override
     public void preUpdate() {
         if (isOnLoginRequest) {

@@ -1,16 +1,51 @@
 spring:
+#  datasource:
+#    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:mem:test;
+#    username: sa
+#    password:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/restaurantreservation?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: restaurantreservation
+    password: restaurantreservation
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl # -> 대.소문자를 구분하게끔 해주는 정책.
+    show-sql: true
+    defer-datasource-initialization: true
+
   mvc:
     path-match:
       matching-strategy: ant_path_matcher
-  jwt:
-    secret: restaurant-reservation-secret-key-sample
+
+  config:
+    import: secret.yml
 
 service:
   version: v1
   api:
     prefix: /api/${service.version}
     user:
+      prefix: /users
       check-id: /sign-up/check-id
       check-nickname: /sign-up/check-nickname
       sign-up: /sign-up
       login: /login
+      register-partner: ${service.api.user.prefix}/partner
+
+    restaurant:
+      prefix: /restaurants
+      save: ${service.api.restaurant.prefix}
+      search-auto: ${service.api.restaurant.prefix}/search/autocomplete
+      search-name: ${service.api.restaurant.prefix}/search/name
+      search-address: ${service.api.restaurant.prefix}/search/address
+      find: ${service.api.restaurant.prefix}/{id}

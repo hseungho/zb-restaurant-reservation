@@ -1,5 +1,7 @@
 package com.zerobase.hseungho.restaurantreservation.global.config;
 
+import com.zerobase.hseungho.restaurantreservation.global.security.jwt.JwtAuthenticationFailureFilter;
+import com.zerobase.hseungho.restaurantreservation.global.security.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -20,10 +23,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtAuthenticationFailureFilter jwtAuthenticationFailureFilter;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .httpBasic().disable()
+                .httpBasic()
+                .and()
                 .csrf().disable()
                 .cors().configurationSource(corsConfigurationSource())
                 .and()
@@ -32,9 +39,11 @@ public class SecurityConfiguration {
                 .headers().frameOptions().disable()
                 .and()
                 .authorizeHttpRequests(request ->
-                        request.requestMatchers("/**/sign-up/**", "/**/login/**", "/**/search/**").permitAll()
+                        request.requestMatchers("/**/sign-up/**", "/**/login/**", "/**/search/**", "/h2-console/**").permitAll()
                         .anyRequest().authenticated()
                 )
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFailureFilter, JwtAuthenticationFilter.class)
                 .logout(Customizer.withDefaults())
                 .build();
     }

@@ -2,7 +2,9 @@ package com.zerobase.hseungho.restaurantreservation.global.security.jwt;
 
 import com.zerobase.hseungho.restaurantreservation.global.security.UserAuthenticationComponent;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Date;
 
 import static com.zerobase.hseungho.restaurantreservation.global.constants.TokenConstants.*;
@@ -45,7 +49,7 @@ public class JwtComponent {
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(expiredDate)
-                .signWith(SignatureAlgorithm.HS512, this.secretKey)
+                .signWith(SignatureAlgorithm.HS512, this.getBase64SecretKey())
                 .compact();
     }
 
@@ -57,19 +61,22 @@ public class JwtComponent {
     }
 
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userAuthenticationComponent.loadUserByUsername(this.getUserId(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+        UserDetails userDetails = userAuthenticationComponent.loadUserByUsername(this.getId(token));
+        return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
     }
 
-    public String getUserId(String token) {
+    public String getId(String token) {
         return this.parseClaims(token).getSubject();
     }
 
     private Claims parseClaims(String token) {
-        return Jwts.parser().setSigningKey(this.secretKey)
+        return Jwts.parser().setSigningKey(this.getBase64SecretKey())
                 .parseClaimsJws(token)
                 .getBody();
     }
 
+    private String getBase64SecretKey() {
+        return Base64.getEncoder().encodeToString(secretKey.getBytes(StandardCharsets.UTF_8));
+    }
 
 }
