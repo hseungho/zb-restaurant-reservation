@@ -48,3 +48,4 @@ service:
       search-auto: ${service.api.restaurant.prefix}/search/autocomplete
       search-name: ${service.api.restaurant.prefix}/search/name
       search-address: ${service.api.restaurant.prefix}/search/address
+      find: ${service.api.restaurant.prefix}/{id}

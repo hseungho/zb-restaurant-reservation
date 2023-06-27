@@ -45,4 +45,10 @@ public interface RestaurantService {
      */
     Slice<IRestaurantDto> searchRestaurantByAddress(String address, String userX, String userY, Pageable pageable);
 
+    /**
+     * 매장 상세정보 조회 메소드.
+     * @param id 조회할 매장 ID
+     * @return 매장 DTO 클래스
+     */
+    RestaurantDto findById(Long id);
 }

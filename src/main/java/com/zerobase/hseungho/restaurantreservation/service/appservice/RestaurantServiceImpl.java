@@ -71,6 +71,15 @@ public class RestaurantServiceImpl implements RestaurantService {
         return restaurantRepository.findByAddressWithDistance(address, coordinate.getX(), coordinate.getY(), pageable);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public RestaurantDto findById(Long id) {
+        return RestaurantDto.fromEntity(
+                restaurantRepository.findById(id)
+                        .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESTAURANT))
+        );
+    }
+
     private CoordinateDto validateSearchRestaurantRequest(String userX, String userY) {
         try {
             double x = Double.parseDouble(userX);

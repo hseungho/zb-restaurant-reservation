@@ -1,6 +1,7 @@
 package com.zerobase.hseungho.restaurantreservation.service.controller;
 
 import com.zerobase.hseungho.restaurantreservation.service.appservice.RestaurantService;
+import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.FindRestaurant;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SaveRestaurant;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SearchRestaurant;
 import jakarta.validation.Valid;
@@ -55,6 +56,14 @@ public class RestaurantController {
                                                                @PageableDefault(sort = "rating", direction = Sort.Direction.DESC) Pageable pageable) {
         return SearchRestaurant.Response.fromListDto(
                 restaurantService.searchRestaurantByAddress(address, userX, userY, pageable)
+        );
+    }
+
+    @GetMapping("${service.api.restaurant.find}")
+    @ResponseStatus(HttpStatus.OK)
+    public FindRestaurant.Response findById(@PathVariable("id") Long id) {
+        return FindRestaurant.Response.fromDto(
+                restaurantService.findById(id)
         );
     }
 
