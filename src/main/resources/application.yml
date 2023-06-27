@@ -1,4 +1,9 @@
 spring:
+#  datasource:
+#    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:mem:test;
+#    username: sa
+#    password:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://localhost:3306/restaurantreservation?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
@@ -12,7 +17,9 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl # -> 대.소문자를 구분하게끔 해주는 정책.
     show-sql: true
     defer-datasource-initialization: true
 
@@ -34,6 +41,7 @@ service:
       sign-up: /sign-up
       login: /login
       register-partner: ${service.api.user.prefix}/partner
+
     restaurant:
       prefix: /restaurants
       save: ${service.api.restaurant.prefix}
