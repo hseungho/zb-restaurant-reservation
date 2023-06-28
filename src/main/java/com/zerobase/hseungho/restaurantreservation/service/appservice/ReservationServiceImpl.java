@@ -88,7 +88,7 @@ public class ReservationServiceImpl implements ReservationService {
     private void validateApproveRequest(Reservation reservation) {
         User user = userRepository.findById(SecurityHolder.getIdOfUser())
                 .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER));
-        if (user.isPartner()) {
+        if (!user.isPartner()) {
             // 파트너가 아닌 유저는 예약을 승인할 수 없습니다.
             throw new ForbiddenException(ErrorCodeType.FORBIDDEN_APPROVE_RESERVATION_CUSTOMER_CANNOT_APPROVE);
         }

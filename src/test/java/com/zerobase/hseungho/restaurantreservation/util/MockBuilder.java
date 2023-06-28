@@ -1,5 +1,6 @@
 package com.zerobase.hseungho.restaurantreservation.util;
 
+import com.zerobase.hseungho.restaurantreservation.global.util.SeoulDateTime;
 import com.zerobase.hseungho.restaurantreservation.service.domain.reservation.Reservation;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.AddressVO;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Menu;
@@ -80,6 +81,7 @@ public class MockBuilder {
                 .number(MOCK_RESERVATION_NUMBER)
                 .numOfPerson((MOCK_NUM_OF_PERSON))
                 .clientContactNumber((MOCK_CLIENT_CONTACT_NUMBER))
+                .createdAt(SeoulDateTime.now())
                 .reservedAt(reservedAt)
                 .status(status)
                 .client(client)

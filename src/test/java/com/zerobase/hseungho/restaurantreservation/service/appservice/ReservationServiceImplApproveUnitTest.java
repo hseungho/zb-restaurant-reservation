@@ -27,7 +27,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-public class ReservationServiceImplCancelUnitTest {
+public class ReservationServiceImplApproveUnitTest {
 
     @InjectMocks
     private ReservationServiceImpl reservationService;
@@ -37,14 +37,14 @@ public class ReservationServiceImplCancelUnitTest {
     private UserRepository userRepository;
 
     @Test
-    @DisplayName("예약 취소 성공")
-    void test_cancel_success() {
+    @DisplayName("예약 승인 성공")
+    void test_approve_success() {
         // given
         LocalDateTime now = SeoulDateTime.now();
         LocalDateTime reservedAt = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth() + 1, MockBuilder.MOCK_OPEN_HOUR + 2, MockBuilder.MOCK_OPEN_MINUTE + 10);
 
-        User user = TestSecurityHolder.setSecurityHolderUser(UserType.ROLE_CUSTOMER);
-        Restaurant restaurant = MockBuilder.mockRestaurant(MockBuilder.mockUser(UserType.ROLE_PARTNER));
+        User user = TestSecurityHolder.setSecurityHolderUser(UserType.ROLE_PARTNER);
+        Restaurant restaurant = MockBuilder.mockRestaurant(user);
         Reservation reservation = MockBuilder.mockReservation(reservedAt, ReservationStatus.RESERVED, user, restaurant);
 
         given(reservationRepository.findById(anyLong()))
@@ -52,16 +52,16 @@ public class ReservationServiceImplCancelUnitTest {
         given(userRepository.findById(anyString()))
                 .willReturn(Optional.of(user));
         // when
-        ReservationDto result = reservationService.cancel(1L);
+        ReservationDto result = reservationService.approve(1L);
         // then
         Assertions.assertNotNull(result);
         Assertions.assertEquals(MockBuilder.MOCK_RESERVATION_ID, result.getId());
         Assertions.assertEquals(MockBuilder.MOCK_RESERVATION_NUMBER, result.getNumber());
         Assertions.assertEquals(MockBuilder.MOCK_CLIENT_CONTACT_NUMBER, result.getClientContactNumber());
-        Assertions.assertEquals(ReservationStatus.CANCELED, result.getStatus());
+        Assertions.assertEquals(ReservationStatus.APPROVED, result.getStatus());
         Assertions.assertNotNull(result.getCreatedAt());
         Assertions.assertNotNull(result.getReservedAt());
-        Assertions.assertNotNull(result.getCanceledAt());
+        Assertions.assertNotNull(result.getApprovedAt());
         Assertions.assertEquals(user.getId(), result.getClient().getId());
         Assertions.assertEquals(restaurant.getId(), result.getRestaurant().getId());
     }
