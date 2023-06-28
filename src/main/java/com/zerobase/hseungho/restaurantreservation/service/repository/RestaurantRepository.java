@@ -26,9 +26,9 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
     @Query(value =
             "SELECT *, " +
-                    "ST_Distance_Sphere(POINT(:userX, :userY), POINT(r.x, r.y)) as distance " +
-                    "FROM restaurant r " +
-                    "WHERE r.address LIKE %:address%",
+            "ST_Distance_Sphere(POINT(:userX, :userY), POINT(r.x, r.y)) as distance " +
+            "FROM restaurant r " +
+            "WHERE r.address LIKE %:address%",
             nativeQuery = true)
     Slice<IRestaurantDto> findByAddressWithDistance(String address, Double userX, Double userY, Pageable pageable);
 

@@ -11,7 +11,7 @@ public interface IRestaurantDto {
     Long getId();
     String getName();
     String getAddress();
-    Double getDistance();
+    Integer getDistance();
     String getDescription();
     Integer getOpenHour();
     Integer getOpenMinute();

@@ -19,7 +19,6 @@ import com.zerobase.hseungho.restaurantreservation.service.repository.UserReposi
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.Trie;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -61,15 +60,14 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Transactional(readOnly = true)
     public Slice<IRestaurantDto> searchRestaurantByName(String name, String userX, String userY, Pageable pageable) {
         CoordinateDto coordinate = validateSearchRestaurantRequest(userX, userY);
-        PageRequest pageRequest = PageUtils.of(pageable);
-        return restaurantRepository.findByNameWithDistance(name, coordinate.getX(), coordinate.getY(), pageRequest);
+        return restaurantRepository.findByNameWithDistance(name, coordinate.getX(), coordinate.getY(), PageUtils.of(pageable));
     }
 
     @Override
     @Transactional(readOnly = true)
     public Slice<IRestaurantDto> searchRestaurantByAddress(String address, String userX, String userY, Pageable pageable) {
         CoordinateDto coordinate = validateSearchRestaurantRequest(userX, userY);
-        return restaurantRepository.findByAddressWithDistance(address, coordinate.getX(), coordinate.getY(), pageable);
+        return restaurantRepository.findByAddressWithDistance(address, coordinate.getX(), coordinate.getY(), PageUtils.of(pageable));
     }
 
     @Override

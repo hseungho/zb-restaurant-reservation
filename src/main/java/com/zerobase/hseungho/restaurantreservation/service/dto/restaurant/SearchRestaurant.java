@@ -49,7 +49,7 @@ public class SearchRestaurant {
             private Integer maxPerReservation;
             private String contactNumber;
             private Double rating;
-            private Double distance;
+            private Integer distance;
 
             public static ResponseDocument fromDto(IRestaurantDto dto) {
                 return ResponseDocument.builder()
