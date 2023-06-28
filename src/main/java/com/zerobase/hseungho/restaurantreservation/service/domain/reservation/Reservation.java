@@ -1,5 +1,6 @@
 package com.zerobase.hseungho.restaurantreservation.service.domain.reservation;
 
+import com.zerobase.hseungho.restaurantreservation.global.util.SeoulDateTime;
 import com.zerobase.hseungho.restaurantreservation.service.domain.base.BaseAuditingEntity;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Restaurant;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity(name = "reservation")
 @Getter
@@ -73,5 +75,22 @@ public class Reservation extends BaseAuditingEntity {
 
     public void associate(Restaurant restaurant) {
         this.restaurant = restaurant;
+    }
+
+    public boolean isClient(User client) {
+        return Objects.equals(this.client.getId(), client.getId());
+    }
+
+    public boolean isDeletedRestaurant() {
+        return this.restaurant.isDeleted();
+    }
+
+    public boolean isCanceled() {
+        return this.status == ReservationStatus.CANCELED;
+    }
+
+    public void cancel() {
+        this.canceledAt = SeoulDateTime.now();
+        this.status = ReservationStatus.CANCELED;
     }
 }

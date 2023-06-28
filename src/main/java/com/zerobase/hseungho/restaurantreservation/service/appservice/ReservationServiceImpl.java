@@ -1,6 +1,7 @@
 package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.BadRequestException;
+import com.zerobase.hseungho.restaurantreservation.global.exception.impl.ForbiddenException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.InternalServerErrorException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.NotFoundException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
@@ -19,6 +20,7 @@ import com.zerobase.hseungho.restaurantreservation.service.repository.UserReposi
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -33,11 +35,12 @@ public class ReservationServiceImpl implements ReservationService {
     private final ReservationRepository reservationRepository;
 
     @Override
-    public ReservationDto reserve(Long restaurantId, ReserveReservation.Request request) {
+    @Transactional
+    public ReservationDto reserve(ReserveReservation.Request request) {
         User user = userRepository.findById(SecurityHolder.getIdOfUser())
                 .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER));
 
-        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+        Restaurant restaurant = restaurantRepository.findById(request.getRestaurantId())
                 .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESTAURANT));
 
         validateReserveRequest(user, restaurant, request);
@@ -54,6 +57,43 @@ public class ReservationServiceImpl implements ReservationService {
                         )
                 )
         );
+    }
+
+    @Override
+    @Transactional
+    public ReservationDto cancel(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESERVATION));
+
+        validateCancelRequest(reservation);
+
+        reservation.cancel();
+
+        return ReservationDto.fromEntity(reservation);
+    }
+
+    private void validateCancelRequest(Reservation reservation) {
+        if (reservation.isDeletedRestaurant()) {
+            // 영업 종료된 매장의 예약은 취소할 수 없습니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_CANCEL_RESERVATION_DELETED_RESTAURANT);
+        }
+        if (!isReservationClient(reservation)) {
+            // 다른 고객의 예약을 취소할 수 없습니다.
+            throw new ForbiddenException(ErrorCodeType.FORBIDDEN_CANCEL_RESERVATION_NOT_YOUR_RESOURCE);
+        }
+        if (ValidUtils.isDifferenceFromNowLessThanMinutes(reservation.getReservedAt(), 30)) {
+            // 예약 30분 전에는 취소할 수 없습니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_CANCEL_RESERVATION_CANCELED_TIME_CANNOT_LESS_THAN_THIRTY_MINUTES);
+        }
+        if (reservation.isCanceled()) {
+            // 이미 취소된 예약입니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_CANCEL_RESERVATION_ALREADY_CANCELED);
+        }
+    }
+
+    private boolean isReservationClient(Reservation reservation) {
+        return reservation.isClient(userRepository.findById(SecurityHolder.getIdOfUser())
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER)));
     }
 
     private String generateReservationNumber() {
@@ -80,6 +120,10 @@ public class ReservationServiceImpl implements ReservationService {
             // 점장은 예약 요청할 수 없습니다.
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_RESERVE_RESERVATION_RESERVING_CANNOT_MANAGER);
         }
+        if (request.getReservedAt().isBefore(SeoulDateTime.now())) {
+            // 현재시간보다 이전 시간을 예약할 수 없습니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_RESERVE_RESERVATION_RESERVED_TIME_IS_BEFORE_NOW);
+        }
         if (!restaurant.isValidReserveAt(request.getReservedAt())) {
             // 예약일시는 매장 오픈 및 마감 시간에 맞게 요청해주세요.
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_RESERVE_RESERVATION_RESERVED_TIME_IS_INVALID_RESTAURANT_TIME);
@@ -88,7 +132,7 @@ public class ReservationServiceImpl implements ReservationService {
             // 예약일시는 5분 단위로만 요청가능합니다.
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_RESERVE_RESERVATION_RESERVED_TIME_IS_NOT_IN_FIVE_MINUTES);
         }
-        if (SeoulDateTime.isDifferenceFromNowLessThanMinutes(request.getReservedAt(), 10)) {
+        if (ValidUtils.isDifferenceFromNowLessThanMinutes(request.getReservedAt(), 10)) {
             // 현재시간의 10분 후 시간은 예약하실 수 없습니다.
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_RESERVE_RESERVATION_RESERVED_TIME_CANNOT_LESS_THAN_TEN_MINUTES);
         }

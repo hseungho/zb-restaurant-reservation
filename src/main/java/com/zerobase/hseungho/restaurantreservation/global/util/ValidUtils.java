@@ -76,4 +76,11 @@ public class ValidUtils {
     public static boolean isTimeInMinutes(LocalDateTime time, int criteriaMinute) {
         return time.getMinute() % criteriaMinute == 0;
     }
+
+    public static boolean isDifferenceFromNowLessThanMinutes(LocalDateTime time, int criteriaMinute) {
+        LocalDateTime now = SeoulDateTime.now();
+        return now.isBefore(time) ?
+                now.plusMinutes(criteriaMinute).isAfter(time) :
+                now.minusMinutes(criteriaMinute).isBefore(time);
+    }
 }

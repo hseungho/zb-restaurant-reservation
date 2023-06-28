@@ -1,6 +1,7 @@
 package com.zerobase.hseungho.restaurantreservation.service.controller;
 
 import com.zerobase.hseungho.restaurantreservation.service.appservice.ReservationService;
+import com.zerobase.hseungho.restaurantreservation.service.dto.reservation.CancelReservation;
 import com.zerobase.hseungho.restaurantreservation.service.dto.reservation.ReserveReservation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +17,17 @@ public class ReservationController {
 
     @PostMapping("${service.api.reservation.reserve}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ReserveReservation.Response reserve(@PathVariable("restaurantId") Long restaurantId,
-                                               @RequestBody @Valid ReserveReservation.Request request) {
+    public ReserveReservation.Response reserve(@RequestBody @Valid ReserveReservation.Request request) {
         return ReserveReservation.Response.fromDto(
-                reservationService.reserve(restaurantId, request)
+                reservationService.reserve(request)
+        );
+    }
+
+    @PostMapping("${service.api.reservation.cancel}")
+    @ResponseStatus(HttpStatus.OK)
+    public CancelReservation.Response cancel(@PathVariable("reservationId") Long reservationId) {
+        return CancelReservation.Response.fromDto(
+                reservationService.cancel(reservationId)
         );
     }
 

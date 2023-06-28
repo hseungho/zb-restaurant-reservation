@@ -35,12 +35,21 @@ public enum ErrorCodeType implements ErrorCode {
     BAD_REQUEST_RESERVE_RESERVATION_RESERVED_TIME_CANNOT_LESS_THAN_TEN_MINUTES(HttpStatus.BAD_REQUEST, "현재시간으로부터 10분 후의 시간은 예약할 수 없습니다."),
     BAD_REQUEST_RESERVE_RESERVATION_NUM_OF_PERSON_OVER_MAX_PER_RESERVATION(HttpStatus.BAD_REQUEST,"예약 요청 인원이 매장에서 설정한 최대 인원에 맞지 않습니다."),
     BAD_REQUEST_RESERVE_RESERVATION_RESERVED_TIME_IS_FULL(HttpStatus.BAD_REQUEST, "해당 예약 시간의 예약 수가 이미 만석입니다."),
+    BAD_REQUEST_RESERVE_RESERVATION_RESERVED_TIME_IS_BEFORE_NOW(HttpStatus.BAD_REQUEST, "현재시간보다 이전 시간은 예약할 수 없습니다."),
     BAD_REQUEST_RESERVE_RESERVATION_REQ_DATE_AFTER_DELETED_RESTAURANT(HttpStatus.BAD_REQUEST, "해당 예약시간은 매장 사정으로 인해 불가능합니다."),
+    BAD_REQUEST_CANCEL_RESERVATION_DELETED_RESTAURANT(HttpStatus.BAD_REQUEST, "영업 종료된 매장의 예약은 취소할 수 없습니다."),
+    BAD_REQUEST_CANCEL_RESERVATION_CANCELED_TIME_CANNOT_LESS_THAN_THIRTY_MINUTES(HttpStatus.BAD_REQUEST, "예약 30분 전에는 예약을 취소할 수 없습니다."),
+    BAD_REQUEST_CANCEL_RESERVATION_ALREADY_CANCELED(HttpStatus.BAD_REQUEST, "이미 취소된 예약입니다."),
+    //////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////////////
+    FORBIDDEN_CANCEL_RESERVATION_NOT_YOUR_RESOURCE(HttpStatus.FORBIDDEN, "다른 고객의 예약을 취소할 수 없습니다."),
     //////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////////////////////////////////////////
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다."),
     NOT_FOUND_RESTAURANT(HttpStatus.NOT_FOUND, "존재하지 않는 매장입니다."),
+    NOT_FOUND_RESERVATION(HttpStatus.NOT_FOUND, "존재하지 않는 예약입니다."),
     //////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////////////////////////////////////////

@@ -1,30 +1,12 @@
 package com.zerobase.hseungho.restaurantreservation.service.dto.reservation;
 
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.RestaurantDto;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
-public class ReserveReservation {
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public static class Request {
-        @NotNull
-        private Long restaurantId;
-        @NotNull
-        private LocalDateTime reservedAt;
-        @Min(1)
-        private Integer numOfPerson;
-        @NotNull
-        private String clientContactNumber;
-    }
+public class CancelReservation {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
@@ -57,6 +39,7 @@ public class ReserveReservation {
                         .build();
             }
         }
+
         @Data
         @NoArgsConstructor
         @AllArgsConstructor
@@ -65,6 +48,7 @@ public class ReserveReservation {
             private Long id;
             private String number;
             private String reservedAt;
+            private String canceledAt;
             private Integer numOfPerson;
             private String clientContactNumber;
             private String status;
@@ -74,6 +58,7 @@ public class ReserveReservation {
                         .id(dto.getId())
                         .number(dto.getNumber())
                         .reservedAt(dto.getReservedAt().toString())
+                        .canceledAt(dto.getCanceledAt().toString())
                         .numOfPerson(dto.getNumOfPerson())
                         .clientContactNumber(dto.getClientContactNumber())
                         .status(dto.getStatus().name())

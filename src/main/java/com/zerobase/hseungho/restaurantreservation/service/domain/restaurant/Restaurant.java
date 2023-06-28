@@ -92,8 +92,11 @@ public class Restaurant extends BaseAuditingEntity {
 
     public boolean isAfterDeleteReqAt(LocalDateTime time) {
         if (deleteReqAt == null) return false;
-
         return time.isAfter(this.deleteReqAt);
+    }
+
+    public boolean isDeleted() {
+        return this.deletedAt != null;
     }
 
 }

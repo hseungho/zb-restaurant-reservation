@@ -35,25 +35,22 @@ service:
   api:
     prefix: /api/${service.version}
     user:
-      prefix: /users
       check-id: /sign-up/check-id
       check-nickname: /sign-up/check-nickname
       sign-up: /sign-up
       login: /login
-      register-partner: ${service.api.user.prefix}/partner
+      register-partner: /users/partner
 
     restaurant:
-      prefix: /restaurants
-      save: ${service.api.restaurant.prefix}
-      search-auto: ${service.api.restaurant.prefix}/search/autocomplete
-      search-name: ${service.api.restaurant.prefix}/search/name
-      search-address: ${service.api.restaurant.prefix}/search/address
-      find: ${service.api.restaurant.prefix}/{id}
+      save: /restaurants
+      search-auto: /restaurants/search/autocomplete
+      search-name: /restaurants/search/name
+      search-address: /restaurants/search/address
+      find: /restaurants/{id}
 
     reservation:
-      prefix: ${service.api.restaurant.prefix}/{restaurantId}/reservations
-      reserve: ${service.api.reservation.prefix}/reserve
-      cancel: ${service.api.reservation.prefix}/{reservationId}/cancel
-      approve: ${service.api.reservation.prefix}/{reservationId}/approve
-      refuse: ${service.api.reservation.prefix}/{reservationId}/refuse
-      visit: ${service.api.reservation.prefix}/{reservationId}/visit
+      reserve: /reservations
+      cancel: /reservations/{reservationId}/cancel
+      approve: /reservations/{reservationId}/approve
+      refuse: /reservations/{reservationId}/refuse
+      visit: /reservations/{reservationId}/visit

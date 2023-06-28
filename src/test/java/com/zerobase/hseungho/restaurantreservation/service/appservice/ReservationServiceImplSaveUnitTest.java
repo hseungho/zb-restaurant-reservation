@@ -1,5 +1,6 @@
 package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
+import com.zerobase.hseungho.restaurantreservation.global.util.SeoulDateTime;
 import com.zerobase.hseungho.restaurantreservation.service.domain.reservation.Reservation;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Restaurant;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
@@ -45,7 +46,8 @@ public class ReservationServiceImplSaveUnitTest {
     @DisplayName("예약 요청 성공")
     void test_reserve_success() {
         // given
-        LocalDateTime reservedAt = LocalDateTime.of(2023, 6, 1, 15, 30);
+        LocalDateTime now = SeoulDateTime.now();
+        LocalDateTime reservedAt = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth() + 1, MockBuilder.MOCK_OPEN_HOUR + 2, MockBuilder.MOCK_OPEN_MINUTE + 10);
 
         User user = TestSecurityHolder.setSecurityHolderUser(UserType.ROLE_CUSTOMER);
         Restaurant restaurant = MockBuilder.mockRestaurant(MockBuilder.mockUser(UserType.ROLE_PARTNER));
@@ -62,7 +64,7 @@ public class ReservationServiceImplSaveUnitTest {
                         reservedAt, ReservationStatus.RESERVED, user, restaurant));
         ArgumentCaptor<Reservation> captor = ArgumentCaptor.forClass(Reservation.class);
         // when
-        ReservationDto result = reservationService.reserve(1L, request(reservedAt));
+        ReservationDto result = reservationService.reserve(request(reservedAt));
         // then
         verify(reservationRepository, times(1)).save(captor.capture());
         Assertions.assertNotNull(result);
@@ -78,6 +80,7 @@ public class ReservationServiceImplSaveUnitTest {
 
     private ReserveReservation.Request request(LocalDateTime reservedAt) {
         return ReserveReservation.Request.builder()
+                .restaurantId(1L)
                 .reservedAt(reservedAt)
                 .numOfPerson(MockBuilder.MOCK_NUM_OF_PERSON)
                 .clientContactNumber(MockBuilder.MOCK_CLIENT_CONTACT_NUMBER)

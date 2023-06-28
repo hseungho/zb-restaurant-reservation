@@ -5,9 +5,9 @@ import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorC
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-public class InternalServerErrorException extends BaseException {
-    public InternalServerErrorException(ErrorCode errorCode) {
+@ResponseStatus(HttpStatus.FORBIDDEN)
+public class ForbiddenException extends BaseException {
+    public ForbiddenException(ErrorCode errorCode) {
         super(errorCode);
     }
 }
