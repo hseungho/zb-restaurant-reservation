@@ -26,4 +26,12 @@ public interface ReservationService {
      * @return 예약 DTO 클래스
      */
     ReservationDto approve(Long reservationId);
+
+    /**
+     * 예약 거절 메소드.
+     * @param reservationId 예약 거절할 예약 ID
+     * @return 예약 DTO 클래스
+     */
+    ReservationDto refuse(Long reservationId);
+
 }

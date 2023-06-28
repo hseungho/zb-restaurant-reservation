@@ -85,6 +85,43 @@ public class ReservationServiceImpl implements ReservationService {
         return ReservationDto.fromEntity(reservation);
     }
 
+    @Override
+    public ReservationDto refuse(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESERVATION));
+
+        validateRefuseRequest(reservation);
+
+        reservation.refuse();
+
+        return ReservationDto.fromEntity(reservation);
+    }
+
+    private void validateRefuseRequest(Reservation reservation) {
+        User user = userRepository.findById(SecurityHolder.getIdOfUser())
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER));
+        if (!user.isPartner()) {
+            // 파트너가 아닌 유저는 예약을 거절할 수 없습니다.
+            throw new ForbiddenException(ErrorCodeType.FORBIDDEN_REFUSE_RESERVATION_CUSTOMER_CANNOT_REFUSE);
+        }
+        if (reservation.isDeletedRestaurant()) {
+            // 영업 종료된 매장의 예약을 거절할 수 없습니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_REFUSE_RESERVATION_DELETED_RESTAURANT);
+        }
+        if (!reservation.getRestaurant().isManager(user)) {
+            // 해당 매장의 점장이 아닌 유저는 예약을 승인할 수 없습니다.
+            throw new ForbiddenException(ErrorCodeType.FORBIDDEN_REFUSE_RESERVATION_NOT_MANAGER_OF_RESTAURANT);
+        }
+        if (reservation.isRefused()) {
+            // 이미 거절된 예약입니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_REFUSE_RESERVATION_ALREADY_REFUSED);
+        }
+        if (!reservation.isReserved()) {
+            // 거절할 수 없는 예약 상태입니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_REFUSE_RESERVATION_STATUS_IS_NOT_SUITED_REFUSE);
+        }
+    }
+
     private void validateApproveRequest(Reservation reservation) {
         User user = userRepository.findById(SecurityHolder.getIdOfUser())
                 .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER));
@@ -106,7 +143,7 @@ public class ReservationServiceImpl implements ReservationService {
         }
         if (!reservation.isReserved()) {
             // 승인할 수 없는 예약 상태입니다.
-            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_APPROVE_RESERVATION_STATUS_IS_NOT_SUITED_FOR_APPROVE);
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_APPROVE_RESERVATION_STATUS_IS_NOT_SUITED_APPROVE);
         }
     }
 

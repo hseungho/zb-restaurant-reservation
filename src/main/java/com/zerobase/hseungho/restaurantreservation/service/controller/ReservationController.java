@@ -3,6 +3,7 @@ package com.zerobase.hseungho.restaurantreservation.service.controller;
 import com.zerobase.hseungho.restaurantreservation.service.appservice.ReservationService;
 import com.zerobase.hseungho.restaurantreservation.service.dto.reservation.ApproveReservation;
 import com.zerobase.hseungho.restaurantreservation.service.dto.reservation.CancelReservation;
+import com.zerobase.hseungho.restaurantreservation.service.dto.reservation.RefuseReservation;
 import com.zerobase.hseungho.restaurantreservation.service.dto.reservation.ReserveReservation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,14 @@ public class ReservationController {
     public ApproveReservation.Response approve(@PathVariable("reservationId") Long reservationId) {
         return ApproveReservation.Response.fromDto(
                 reservationService.approve(reservationId)
+        );
+    }
+
+    @PostMapping("${service.api.reservation.refuse}")
+    @ResponseStatus(HttpStatus.OK)
+    public RefuseReservation.Response refuse(@PathVariable("reservationId") Long reservationId) {
+        return RefuseReservation.Response.fromDto(
+                reservationService.refuse(reservationId)
         );
     }
 
