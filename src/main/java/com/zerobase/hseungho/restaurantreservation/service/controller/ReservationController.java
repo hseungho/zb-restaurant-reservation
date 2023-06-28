@@ -1,10 +1,7 @@
 package com.zerobase.hseungho.restaurantreservation.service.controller;
 
 import com.zerobase.hseungho.restaurantreservation.service.appservice.ReservationService;
-import com.zerobase.hseungho.restaurantreservation.service.dto.reservation.ApproveReservation;
-import com.zerobase.hseungho.restaurantreservation.service.dto.reservation.CancelReservation;
-import com.zerobase.hseungho.restaurantreservation.service.dto.reservation.RefuseReservation;
-import com.zerobase.hseungho.restaurantreservation.service.dto.reservation.ReserveReservation;
+import com.zerobase.hseungho.restaurantreservation.service.dto.reservation.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -46,6 +43,14 @@ public class ReservationController {
     public RefuseReservation.Response refuse(@PathVariable("reservationId") Long reservationId) {
         return RefuseReservation.Response.fromDto(
                 reservationService.refuse(reservationId)
+        );
+    }
+
+    @PostMapping("${service.api.reservation.visit}")
+    @ResponseStatus(HttpStatus.OK)
+    public VisitReservation.Response visit(@PathVariable("reservationId") Long reservationId) {
+        return VisitReservation.Response.fromDto(
+                reservationService.visit(reservationId)
         );
     }
 

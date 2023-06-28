@@ -115,4 +115,13 @@ public class Reservation extends BaseAuditingEntity {
         this.refusedAt = SeoulDateTime.now();
         this.status = ReservationStatus.REFUSED;
     }
+
+    public boolean isVisited() {
+        return this.status == ReservationStatus.VISITED;
+    }
+
+    public void visit() {
+        this.visitedAt = SeoulDateTime.now();
+        this.status = ReservationStatus.VISITED;
+    }
 }

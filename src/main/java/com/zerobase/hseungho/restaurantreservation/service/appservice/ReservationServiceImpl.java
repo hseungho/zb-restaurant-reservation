@@ -86,6 +86,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    @Transactional
     public ReservationDto refuse(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESERVATION));
@@ -95,6 +96,52 @@ public class ReservationServiceImpl implements ReservationService {
         reservation.refuse();
 
         return ReservationDto.fromEntity(reservation);
+    }
+
+    @Override
+    @Transactional
+    public ReservationDto visit(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESERVATION));
+
+        validateVisitRequest(reservation);
+
+        reservation.visit();
+
+        return ReservationDto.fromEntity(reservation);
+    }
+
+    private void validateVisitRequest(Reservation reservation) {
+        if (reservation.isDeletedRestaurant()) {
+            // 영업 종료된 매장의 예약을 도착확인할 수 없습니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_VISIT_RESERVATION_DELETED_RESTAURANT);
+        }
+        User user = userRepository.findById(SecurityHolder.getIdOfUser())
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER));
+        if (user.isPartner()) {
+            if (!reservation.getRestaurant().isManager(user)) {
+                // 예약 매장의 점장이 아닙니다.
+                throw new ForbiddenException(ErrorCodeType.FORBIDDEN_VISIT_RESERVATION_NOT_MANAGER_OF_RESTAURANT);
+            }
+        } else {
+            if (!reservation.isClient(user)) {
+                // 예약의 예약자가 아닙니다.
+                throw new ForbiddenException(ErrorCodeType.FORBIDDEN_VISIT_RESERVATION_NOT_YOUR_RESOURCE);
+            } else {
+                if (ValidUtils.isDifferenceFromNowLessThanMinutes(reservation.getReservedAt(), 10)) {
+                    // 예약시간의 10분 전부터는 도착확인할 수 없습니다.
+                    throw new BadRequestException(ErrorCodeType.BAD_REQUEST_VISIT_RESERVATION_VISITED_TIME_CANNOT_LESS_THAN_TEN_MINUTES);
+                }
+            }
+        }
+        if (reservation.isVisited()) {
+            // 이미 도착확인된 예약입니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_VISIT_RESERVATION_ALREADY_VISITED);
+        }
+        if (!reservation.isApproved()) {
+            // 도착확인할 수 없는 예약 상태입니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_VISIT_RESERVATION_STATUS_IS_NOT_SUITED_VISIT);
+        }
     }
 
     private void validateRefuseRequest(Reservation reservation) {
