@@ -73,13 +73,13 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     private void validateCancelRequest(Reservation reservation) {
-        if (reservation.isDeletedRestaurant()) {
-            // 영업 종료된 매장의 예약은 취소할 수 없습니다.
-            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_CANCEL_RESERVATION_DELETED_RESTAURANT);
-        }
         if (!isReservationClient(reservation)) {
             // 다른 고객의 예약을 취소할 수 없습니다.
             throw new ForbiddenException(ErrorCodeType.FORBIDDEN_CANCEL_RESERVATION_NOT_YOUR_RESOURCE);
+        }
+        if (reservation.isDeletedRestaurant()) {
+            // 영업 종료된 매장의 예약은 취소할 수 없습니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_CANCEL_RESERVATION_DELETED_RESTAURANT);
         }
         if (ValidUtils.isDifferenceFromNowLessThanMinutes(reservation.getReservedAt(), 30)) {
             // 예약 30분 전에는 취소할 수 없습니다.
