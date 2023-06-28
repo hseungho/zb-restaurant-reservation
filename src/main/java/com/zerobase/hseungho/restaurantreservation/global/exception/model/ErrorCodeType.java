@@ -27,6 +27,7 @@ public enum ErrorCodeType implements ErrorCode {
     BAD_REQUEST_SAVE_RESTAURANT_BLANK(HttpStatus.BAD_REQUEST, "매장 등록에 필요한 필수 정보를 모두 입력해주세요."),
     BAD_REQUEST_SAVE_RESTAURANT_COORDINATE_BY_ADDRESS(HttpStatus.BAD_REQUEST, "해당 주소의 좌표를 가져오는데에 실패하였습니다. 주소를 다시 시도해주세요."),
     BAD_REQUEST_SEARCH_RESTAURANT_INVALID_VALUE(HttpStatus.BAD_REQUEST, "위치값이 유효하지 않습니다."),
+    BAD_REQUEST_SEARCH_RESTAURANT_INVALID_SORT_PROPERTY(HttpStatus.BAD_REQUEST, "유효하지 않은 정렬 속성입니다."),
 
     BAD_REQUEST_RESERVE_RESERVATION_BLANK(HttpStatus.BAD_REQUEST, "예약 요청에 필요한 모든 정보를 입력해주세요."),
     BAD_REQUEST_RESERVE_RESERVATION_RESERVING_CANNOT_MANAGER(HttpStatus.BAD_REQUEST, "매장의 점장은 예약 요청할 수 없습니다."),

@@ -4,6 +4,7 @@ import com.zerobase.hseungho.restaurantreservation.global.exception.impl.BadRequ
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.NotFoundException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
 import com.zerobase.hseungho.restaurantreservation.global.security.SecurityHolder;
+import com.zerobase.hseungho.restaurantreservation.global.util.PageUtils;
 import com.zerobase.hseungho.restaurantreservation.global.util.ValidUtils;
 import com.zerobase.hseungho.restaurantreservation.global.webclient.KakaoWebClientComponent;
 import com.zerobase.hseungho.restaurantreservation.global.webclient.dto.CoordinateDto;
@@ -18,6 +19,7 @@ import com.zerobase.hseungho.restaurantreservation.service.repository.UserReposi
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.Trie;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -59,7 +61,8 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Transactional(readOnly = true)
     public Slice<IRestaurantDto> searchRestaurantByName(String name, String userX, String userY, Pageable pageable) {
         CoordinateDto coordinate = validateSearchRestaurantRequest(userX, userY);
-        return restaurantRepository.findByNameWithDistance(name, coordinate.getX(), coordinate.getY(), pageable);
+        PageRequest pageRequest = PageUtils.of(pageable);
+        return restaurantRepository.findByNameWithDistance(name, coordinate.getX(), coordinate.getY(), pageRequest);
     }
 
     @Override

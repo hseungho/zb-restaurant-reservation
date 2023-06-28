@@ -1,5 +1,7 @@
 package com.zerobase.hseungho.restaurantreservation.service.controller;
 
+import com.zerobase.hseungho.restaurantreservation.global.exception.impl.BadRequestException;
+import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
 import com.zerobase.hseungho.restaurantreservation.service.appservice.RestaurantService;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.FindRestaurant;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SaveRestaurant;
@@ -43,6 +45,8 @@ public class RestaurantController {
                                                             @RequestParam("x") String userX,
                                                             @RequestParam("y") String userY,
                                                             @PageableDefault(sort = "rating", direction = Sort.Direction.DESC) Pageable pageable) {
+        validateSortProperty(pageable.getSort());
+
         return SearchRestaurant.Response.fromListDto(
                 restaurantService.searchRestaurantByName(name, userX, userY, pageable)
         );
@@ -54,6 +58,8 @@ public class RestaurantController {
                                                                @RequestParam("x") String userX,
                                                                @RequestParam("y") String userY,
                                                                @PageableDefault(sort = "rating", direction = Sort.Direction.DESC) Pageable pageable) {
+        validateSortProperty(pageable.getSort());
+
         return SearchRestaurant.Response.fromListDto(
                 restaurantService.searchRestaurantByAddress(address, userX, userY, pageable)
         );
@@ -65,6 +71,14 @@ public class RestaurantController {
         return FindRestaurant.Response.fromDto(
                 restaurantService.findById(id)
         );
+    }
+
+    private void validateSortProperty(Sort sort) {
+        String property = sort.iterator().next().getProperty().toLowerCase();
+        if ("rating".equals(property) || "name".equals(property) || "distance".equals(property)) {
+            return;
+        }
+        throw new BadRequestException(ErrorCodeType.BAD_REQUEST_SEARCH_RESTAURANT_INVALID_SORT_PROPERTY);
     }
 
 }
