@@ -18,10 +18,8 @@ import com.zerobase.hseungho.restaurantreservation.service.repository.UserReposi
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.Trie;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -88,11 +86,6 @@ public class RestaurantServiceImpl implements RestaurantService {
         } catch (NumberFormatException e) {
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_SEARCH_RESTAURANT_INVALID_VALUE);
         }
-    }
-
-    public void test() {
-        Slice<IRestaurantDto> byNameCalculateDistance = restaurantRepository.findByNameWithDistance("매", 34.222, 123.313, PageRequest.of(0, 10, Sort.by("name")));
-        System.out.println(byNameCalculateDistance);
     }
 
     @Transactional

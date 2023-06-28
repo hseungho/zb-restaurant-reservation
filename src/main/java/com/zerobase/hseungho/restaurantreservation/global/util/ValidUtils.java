@@ -3,16 +3,17 @@ package com.zerobase.hseungho.restaurantreservation.global.util;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
+
 public class ValidUtils {
 
-    public static boolean isSimilarBetweenText(String x, String y, Double offset) {
-        return similarityBetweenTexts(x, y) > offset;
+    public static boolean isSimilarBetweenText(String x, String y, Double criteriaSimilarity) {
+        return similarityBetweenTexts(x, y) > criteriaSimilarity;
     }
 
-    public static double similarityBetweenTexts(String x, String y) {
+    private static double similarityBetweenTexts(String x, String y) {
         double maxLength = Double.max(x.length(), y.length());
         if (maxLength > 0) {
-            // 필요한 경우 선택적으로 대소문자를 무시합니다.
             return (maxLength - org.apache.commons.lang3.StringUtils.getLevenshteinDistance(x, y)) / maxLength;
         }
         return 1.0;
@@ -70,5 +71,9 @@ public class ValidUtils {
             }
         }
         return true;
+    }
+
+    public static boolean isTimeInMinutes(LocalDateTime time, int criteriaMinute) {
+        return time.getMinute() % criteriaMinute == 0;
     }
 }

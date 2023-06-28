@@ -65,15 +65,6 @@ public class RestaurantServiceImplSaveUnitTest {
     private final String contactNumber = "021231234";
 
     @Test
-    @DisplayName("")
-    void test() {
-        // given
-        // when
-        restaurantService.test();
-        // then
-    }
-
-    @Test
     @DisplayName("매장 등록 성공")
     void test_saveRestaurant_success() {
         // given
