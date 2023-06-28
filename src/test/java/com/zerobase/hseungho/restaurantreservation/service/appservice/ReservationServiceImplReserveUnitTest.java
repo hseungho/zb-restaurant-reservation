@@ -31,7 +31,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class ReservationServiceImplSaveUnitTest {
+public class ReservationServiceImplReserveUnitTest {
 
     @InjectMocks
     private ReservationServiceImpl reservationService;
