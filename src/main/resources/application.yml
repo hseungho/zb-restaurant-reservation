@@ -52,8 +52,7 @@ service:
 
     reservation:
       prefix: ${service.api.restaurant.prefix}/{restaurantId}/reservations
-      find-impossible-reservation: ${service.api.reservation.prefix}
-      reserve: ${service.api.reservation.prefix}/{reservationId}/reserve
+      reserve: ${service.api.reservation.prefix}/reserve
       cancel: ${service.api.reservation.prefix}/{reservationId}/cancel
       approve: ${service.api.reservation.prefix}/{reservationId}/approve
       refuse: ${service.api.reservation.prefix}/{reservationId}/refuse

@@ -12,6 +12,7 @@ import lombok.experimental.SuperBuilder;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity(name = "restaurant")
 @Getter
@@ -78,5 +79,15 @@ public class Restaurant extends BaseAuditingEntity {
         menu.associate(this);
     }
 
+    public boolean isManager(User user) {
+        return Objects.equals(manager.getId(), user.getId());
+    }
+
+    public boolean isValidReserveAt(LocalDateTime requestTime) {
+        return this.restaurantTimeVO.isContainsRestaurantTimes(
+                requestTime.getHour(),
+                requestTime.getMinute()
+        );
+    }
 
 }

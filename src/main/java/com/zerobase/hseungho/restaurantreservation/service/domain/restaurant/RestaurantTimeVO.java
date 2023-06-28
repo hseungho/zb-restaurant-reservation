@@ -19,4 +19,16 @@ public class RestaurantTimeVO {
     private Integer closeHour;
     @Column(name = "close_minute", nullable = false)
     private Integer closeMinute;
+
+    boolean isContainsRestaurantTimes(int hour, int minute) {
+        return isContainsOpenTime(hour, minute) && isContainsCloseTime(hour, minute);
+    }
+
+    boolean isContainsOpenTime(int hour, int minute) {
+        return this.openHour <= hour && this.openMinute <= minute;
+    }
+
+    boolean isContainsCloseTime(int hour, int minute) {
+        return this.closeHour >= hour && this.closeMinute >= minute;
+    }
 }
