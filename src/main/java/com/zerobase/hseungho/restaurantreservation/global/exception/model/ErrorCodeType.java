@@ -43,10 +43,12 @@ public enum ErrorCodeType implements ErrorCode {
     BAD_REQUEST_CANCEL_RESERVATION_ALREADY_CANCELED(HttpStatus.BAD_REQUEST, "이미 취소된 예약입니다."),
 
     BAD_REQUEST_APPROVE_RESERVATION_DELETED_RESTAURANT(HttpStatus.BAD_REQUEST, "영업 종료된 매장의 예약은 승인할 수 없습니다."),
+    BAD_REQUEST_APPROVE_RESERVATION_ALREADY_CANCELED(HttpStatus.BAD_REQUEST, "이미 취소된 예약입니다."),
     BAD_REQUEST_APPROVE_RESERVATION_ALREADY_APPROVED(HttpStatus.BAD_REQUEST, "이미 승인된 예약입니다."),
     BAD_REQUEST_APPROVE_RESERVATION_STATUS_IS_NOT_SUITED_APPROVE(HttpStatus.BAD_REQUEST, "승인할 수 없는 예약 상태입니다."),
 
     BAD_REQUEST_REFUSE_RESERVATION_DELETED_RESTAURANT(HttpStatus.BAD_REQUEST, "영업 종료된 매장의 예약은 거절할 수 없습니다."),
+    BAD_REQUEST_REFUSE_RESERVATION_ALREADY_CANCELED(HttpStatus.BAD_REQUEST, "이미 취소된 예약입니다."),
     BAD_REQUEST_REFUSE_RESERVATION_ALREADY_REFUSED(HttpStatus.BAD_REQUEST, "이미 거절된 예약입니다."),
     BAD_REQUEST_REFUSE_RESERVATION_STATUS_IS_NOT_SUITED_REFUSE(HttpStatus.BAD_REQUEST, "승인할 수 없는 예약 상태입니다."),
     //////////////////////////////////////////////////////////////////////////////

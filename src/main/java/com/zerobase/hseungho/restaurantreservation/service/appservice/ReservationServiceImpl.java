@@ -112,6 +112,10 @@ public class ReservationServiceImpl implements ReservationService {
             // 해당 매장의 점장이 아닌 유저는 예약을 승인할 수 없습니다.
             throw new ForbiddenException(ErrorCodeType.FORBIDDEN_REFUSE_RESERVATION_NOT_MANAGER_OF_RESTAURANT);
         }
+        if (reservation.isCanceled()) {
+            // 이미 취소된 예약입니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_REFUSE_RESERVATION_ALREADY_CANCELED);
+        }
         if (reservation.isRefused()) {
             // 이미 거절된 예약입니다.
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_REFUSE_RESERVATION_ALREADY_REFUSED);
@@ -136,6 +140,10 @@ public class ReservationServiceImpl implements ReservationService {
         if (!reservation.getRestaurant().isManager(user)) {
             // 해당 매장의 점장이 아닌 유저는 예약을 승인할 수 없습니다.
             throw new ForbiddenException(ErrorCodeType.FORBIDDEN_APPROVE_RESERVATION_NOT_MANAGER_OF_RESTAURANT);
+        }
+        if (reservation.isCanceled()) {
+            // 이미 취소된 예약입니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_APPROVE_RESERVATION_ALREADY_CANCELED);
         }
         if (reservation.isApproved()) {
             // 이미 승인된 예약입니다.
