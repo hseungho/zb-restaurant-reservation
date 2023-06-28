@@ -12,4 +12,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     long countByRestaurantAndReservedAt(Restaurant restaurant, LocalDateTime reservedAt);
 
+    boolean existsByNumber(String number);
+
 }

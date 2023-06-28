@@ -49,4 +49,29 @@ public class Reservation extends BaseAuditingEntity {
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 
+    public static Reservation create(String number,
+                                     int numOfPerson,
+                                     String clientContactNumber,
+                                     LocalDateTime reservedAt,
+                                     User client,
+                                     Restaurant restaurant) {
+        Reservation reservation = Reservation.builder()
+                .number(number)
+                .numOfPerson(numOfPerson)
+                .clientContactNumber(clientContactNumber)
+                .reservedAt(reservedAt)
+                .status(ReservationStatus.RESERVED)
+                .build();
+        reservation.associate(client);
+        reservation.associate(restaurant);
+        return reservation;
+    }
+
+    public void associate(User client) {
+        this.client = client;
+    }
+
+    public void associate(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
 }

@@ -1,11 +1,14 @@
 package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.BadRequestException;
+import com.zerobase.hseungho.restaurantreservation.global.exception.impl.InternalServerErrorException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.NotFoundException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
 import com.zerobase.hseungho.restaurantreservation.global.security.SecurityHolder;
+import com.zerobase.hseungho.restaurantreservation.global.util.IdGenerator;
 import com.zerobase.hseungho.restaurantreservation.global.util.SeoulDateTime;
 import com.zerobase.hseungho.restaurantreservation.global.util.ValidUtils;
+import com.zerobase.hseungho.restaurantreservation.service.domain.reservation.Reservation;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Restaurant;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
 import com.zerobase.hseungho.restaurantreservation.service.dto.reservation.ReservationDto;
@@ -18,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @Service
@@ -38,8 +42,29 @@ public class ReservationServiceImpl implements ReservationService {
 
         validateReserveRequest(user, restaurant, request);
 
+        return ReservationDto.fromEntity(
+                reservationRepository.save(
+                        Reservation.create(
+                                generateReservationNumber(),
+                                request.getNumOfPerson(),
+                                request.getClientContactNumber(),
+                                request.getReservedAt(),
+                                user,
+                                restaurant
+                        )
+                )
+        );
+    }
 
-        return null;
+    private String generateReservationNumber() {
+        AtomicInteger i = new AtomicInteger(10);
+        while (i.getAndDecrement() > 0) {
+            String number = IdGenerator.generateReservationNumber();
+            if(!reservationRepository.existsByNumber(number)) {
+                return number;
+            }
+        }
+        throw new InternalServerErrorException(ErrorCodeType.INTERNAL_SERVER_ERROR_GENERATE_RESERVATION_NUMBER);
     }
 
     private void validateReserveRequest(User user,
