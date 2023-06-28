@@ -96,7 +96,7 @@ public class ReservationServiceImpl implements ReservationService {
             // 예약 인원이 매장에서 설정한 최대 인원을 벗어납니다.
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_RESERVE_RESERVATION_NUM_OF_PERSON_OVER_MAX_PER_RESERVATION);
         }
-        if (isEqualsTablesBetweenReservations(restaurant, request.getReservedAt())) {
+        if (this.isEqualsTablesBetweenReservations(restaurant, request.getReservedAt())) {
             // 해당 예약일시의 예약 수가 만석입니다.
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_RESERVE_RESERVATION_RESERVED_TIME_IS_FULL);
         }

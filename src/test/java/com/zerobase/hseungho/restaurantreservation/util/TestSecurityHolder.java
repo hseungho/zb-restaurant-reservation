@@ -7,12 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 public class TestSecurityHolder {
     public static User setSecurityHolderUser(UserType type) {
-        User user = User.builder()
-                .userId("testid")
-                .password("testpassword1234!")
-                .nickname("testnickname")
-                .type(type)
-                .build();
+        User user = MockBuilder.mockUser(type);
         SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities())
         );
