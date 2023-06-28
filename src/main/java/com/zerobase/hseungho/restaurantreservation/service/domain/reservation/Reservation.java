@@ -82,7 +82,7 @@ public class Reservation extends BaseAuditingEntity {
     }
 
     public boolean isDeletedRestaurant() {
-        return this.restaurant.isDeleted();
+        return this.restaurant == null || this.restaurant.isDeleted();
     }
 
     public boolean isCanceled() {
@@ -92,5 +92,18 @@ public class Reservation extends BaseAuditingEntity {
     public void cancel() {
         this.canceledAt = SeoulDateTime.now();
         this.status = ReservationStatus.CANCELED;
+    }
+
+    public boolean isApproved() {
+        return this.status == ReservationStatus.APPROVED;
+    }
+
+    public boolean isReserved() {
+        return this.status == ReservationStatus.RESERVED;
+    }
+
+    public void approve() {
+        this.approvedAt = SeoulDateTime.now();
+        this.status = ReservationStatus.APPROVED;
     }
 }

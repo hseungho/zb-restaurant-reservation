@@ -72,6 +72,44 @@ public class ReservationServiceImpl implements ReservationService {
         return ReservationDto.fromEntity(reservation);
     }
 
+    @Override
+    @Transactional
+    public ReservationDto approve(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESERVATION));
+
+        validateApproveRequest(reservation);
+
+        reservation.approve();
+
+        return ReservationDto.fromEntity(reservation);
+    }
+
+    private void validateApproveRequest(Reservation reservation) {
+        User user = userRepository.findById(SecurityHolder.getIdOfUser())
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER));
+        if (user.isPartner()) {
+            // 파트너가 아닌 유저는 예약을 승인할 수 없습니다.
+            throw new ForbiddenException(ErrorCodeType.FORBIDDEN_APPROVE_RESERVATION_CUSTOMER_CANNOT_APPROVE);
+        }
+        if (reservation.isDeletedRestaurant()) {
+            // 영업 종료된 매장의 예약을 승인할 수 없습니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_APPROVE_RESERVATION_DELETED_RESTAURANT);
+        }
+        if (!reservation.getRestaurant().isManager(user)) {
+            // 해당 매장의 점장이 아닌 유저는 예약을 승인할 수 없습니다.
+            throw new ForbiddenException(ErrorCodeType.FORBIDDEN_APPROVE_RESERVATION_NOT_MANAGER_OF_RESTAURANT);
+        }
+        if (reservation.isApproved()) {
+            // 이미 승인된 예약입니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_APPROVE_RESERVATION_ALREADY_APPROVED);
+        }
+        if (!reservation.isReserved()) {
+            // 승인할 수 없는 예약 상태입니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_APPROVE_RESERVATION_STATUS_IS_NOT_SUITED_FOR_APPROVE);
+        }
+    }
+
     private void validateCancelRequest(Reservation reservation) {
         if (!isReservationClient(reservation)) {
             // 다른 고객의 예약을 취소할 수 없습니다.
