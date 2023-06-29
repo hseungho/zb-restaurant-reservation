@@ -172,11 +172,19 @@ public class ReservationServiceImpl implements ReservationService {
                     // 예약시간의 10분 전부터는 도착확인할 수 없습니다.
                     throw new BadRequestException(ErrorCodeType.BAD_REQUEST_VISIT_RESERVATION_VISITED_TIME_CANNOT_LESS_THAN_TEN_MINUTES);
                 }
+                if (!ValidUtils.isDifferenceFromNowLessThanMinutes(reservation.getReservedAt(), 30)) {
+                    // 도착확인은 예약시간 30분 전부터 도착확인할 수 있습니다.
+                    throw new BadRequestException(ErrorCodeType.BAD_REQUEST_VISIT_RESERVATION_VISIT_CAN_THIRTY_MINUTES_BEFORE_RESERVED_AT);
+                }
             }
         }
         if (reservation.isVisited()) {
             // 이미 도착확인된 예약입니다.
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_VISIT_RESERVATION_ALREADY_VISITED);
+        }
+        if (reservation.isReserved()) {
+            // 도착확인하기 위해선 점장이 예약을 승인해야합니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_VISIT_RESERVATION_RESERVED_STATUS_CANNOT_VISIT);
         }
         if (!reservation.isApproved()) {
             // 도착확인할 수 없는 예약 상태입니다.

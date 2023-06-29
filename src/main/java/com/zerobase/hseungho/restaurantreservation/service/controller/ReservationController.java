@@ -61,7 +61,7 @@ public class ReservationController {
 
     @GetMapping("${service.api.reservation.find-list-client}")
     @ResponseStatus(HttpStatus.OK)
-    public FindReservationList.Response findClientReservations(@RequestParam("date") LocalDate date,
+    public FindReservationList.Response findClientReservations(@RequestParam(value = "date", required = false) LocalDate date,
                                                                @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return FindReservationList.Response.fromDto(
                 reservationService.findClientReservations(date, pageable)
@@ -70,7 +70,7 @@ public class ReservationController {
 
     @GetMapping("${service.api.reservation.find-list-manager}")
     @ResponseStatus(HttpStatus.OK)
-    public FindReservationList.Response findManagerReservations(@RequestParam("date") LocalDate date,
+    public FindReservationList.Response findManagerReservations(@RequestParam(value = "date", required = false) LocalDate date,
                                                                @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return FindReservationList.Response.fromDto(
                 reservationService.findManagerReservations(date, pageable)

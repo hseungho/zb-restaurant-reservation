@@ -45,7 +45,7 @@ public class Reservation extends BaseAuditingEntity {
     @Column(name = "status", nullable = false)
     private ReservationStatus status;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "client_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User client;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "restaurant_id", nullable = false)

@@ -29,12 +29,12 @@ CREATE TABLE `restaurant` (
       max_per_reservation int ,
       contact_number varchar(15) not null ,
       rating double default 0.0 ,
-      manager_id varchar(40) not null ,
+      user_id varchar(40) not null ,
       created_at datetime not null ,
       updated_at datetime ,
       delete_req_at datetime ,
       deleted_at datetime ,
-      FOREIGN KEY (manager_id) REFERENCES `users` (id)
+      FOREIGN KEY (user_id) REFERENCES `users` (id)
 );
 
 CREATE TABLE `menu` (
@@ -52,11 +52,11 @@ CREATE TABLE `review` (
     rating double default 1.0 not null ,
     content varchar(255) not null ,
     image_src varchar(255),
-    author_id varchar(40) not null ,
+    user_id varchar(40) not null ,
     restaurant_id bigint not null ,
     created_at datetime not null ,
     updated_at datetime ,
-    FOREIGN KEY (author_id) REFERENCES `users` (id),
+    FOREIGN KEY (user_id) REFERENCES `users` (id),
     FOREIGN KEY (restaurant_id) REFERENCES `restaurant` (id)
 );
 
@@ -71,10 +71,10 @@ CREATE TABLE `reservation` (
     approved_at datetime,
     refused_at datetime,
     status varchar(50) not null ,
-    client_id varchar(40) not null ,
+    user_id varchar(40) not null ,
     restaurant_id bigint not null ,
     created_at datetime not null ,
     updated_at datetime ,
-    FOREIGN KEY (client_id) REFERENCES `users` (id),
+    FOREIGN KEY (user_id) REFERENCES `users` (id),
     FOREIGN KEY (restaurant_id) REFERENCES `restaurant` (id)
 );

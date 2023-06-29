@@ -48,7 +48,7 @@ public class ApproveReservation {
             private Long id;
             private String number;
             private String reservedAt;
-            private String canceledAt;
+            private String approvedAt;
             private Integer numOfPerson;
             private String clientContactNumber;
             private String status;
@@ -58,7 +58,7 @@ public class ApproveReservation {
                         .id(dto.getId())
                         .number(dto.getNumber())
                         .reservedAt(dto.getReservedAt().toString())
-                        .canceledAt(dto.getCanceledAt().toString())
+                        .approvedAt(dto.getApprovedAt().toString())
                         .numOfPerson(dto.getNumOfPerson())
                         .clientContactNumber(dto.getClientContactNumber())
                         .status(dto.getStatus().name())

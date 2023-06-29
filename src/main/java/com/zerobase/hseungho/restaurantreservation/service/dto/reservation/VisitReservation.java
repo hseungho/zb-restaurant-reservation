@@ -20,6 +20,7 @@ public class VisitReservation {
             return Response.builder()
                     .restaurant(RestaurantResponse.fromDto(dto.getRestaurant()))
                     .reservation(ReservationResponse.fromDto(dto))
+                    .client(UserResponse.fromDto(dto.getClient()))
                     .build();
         }
 

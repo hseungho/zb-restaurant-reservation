@@ -58,7 +58,7 @@ public class Restaurant extends BaseAuditingEntity {
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
     private List<Review> reviews = new ArrayList<>();
     @OneToOne
-    @JoinColumn(name = "manager_id")
+    @JoinColumn(name = "user_id")
     private User manager;
 
     public static Restaurant create(SaveRestaurant.Request request, User manager) {
