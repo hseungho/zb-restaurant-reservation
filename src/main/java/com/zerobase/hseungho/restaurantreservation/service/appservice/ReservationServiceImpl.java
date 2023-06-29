@@ -137,6 +137,7 @@ public class ReservationServiceImpl implements ReservationService {
         User user = userRepository.findById(SecurityHolder.getIdOfUser())
                 .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER));
         if (!user.isPartner()) {
+            // 파트너가 아닌 유저는 매장의 예약 리스트를 조회할 수 없습니다.
             throw new ForbiddenException(ErrorCodeType.FORBIDDEN_FIND_RESERVATION_LIST_ONLY_MANAGER);
         }
         Restaurant restaurant = restaurantRepository.findByManager(user)
