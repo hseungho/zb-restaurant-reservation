@@ -6,8 +6,8 @@ import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorC
 import com.zerobase.hseungho.restaurantreservation.global.security.SecurityHolder;
 import com.zerobase.hseungho.restaurantreservation.global.util.PageUtils;
 import com.zerobase.hseungho.restaurantreservation.global.util.ValidUtils;
-import com.zerobase.hseungho.restaurantreservation.global.webclient.KakaoWebClientComponent;
-import com.zerobase.hseungho.restaurantreservation.global.webclient.dto.CoordinateDto;
+import com.zerobase.hseungho.restaurantreservation.global.adapter.webclient.KakaoWebClientComponent;
+import com.zerobase.hseungho.restaurantreservation.global.adapter.webclient.dto.CoordinateDto;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Menu;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Restaurant;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;

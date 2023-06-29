@@ -1,10 +1,10 @@
-package com.zerobase.hseungho.restaurantreservation.global.webclient;
+package com.zerobase.hseungho.restaurantreservation.global.adapter.webclient;
 
+import com.zerobase.hseungho.restaurantreservation.global.adapter.webclient.dto.KakaoMapResponse;
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.BadRequestException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
 import com.zerobase.hseungho.restaurantreservation.global.util.ValidUtils;
-import com.zerobase.hseungho.restaurantreservation.global.webclient.dto.CoordinateDto;
-import com.zerobase.hseungho.restaurantreservation.global.webclient.dto.KakaoMapResponse;
+import com.zerobase.hseungho.restaurantreservation.global.adapter.webclient.dto.CoordinateDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;

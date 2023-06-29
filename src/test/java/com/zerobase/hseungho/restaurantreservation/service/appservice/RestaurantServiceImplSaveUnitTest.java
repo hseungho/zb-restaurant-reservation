@@ -1,7 +1,7 @@
 package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
-import com.zerobase.hseungho.restaurantreservation.global.webclient.KakaoWebClientComponent;
-import com.zerobase.hseungho.restaurantreservation.global.webclient.dto.CoordinateDto;
+import com.zerobase.hseungho.restaurantreservation.global.adapter.webclient.KakaoWebClientComponent;
+import com.zerobase.hseungho.restaurantreservation.global.adapter.webclient.dto.CoordinateDto;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Restaurant;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.RestaurantDto;
