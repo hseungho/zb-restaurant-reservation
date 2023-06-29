@@ -35,7 +35,8 @@ public interface ReservationService {
     ReservationDto refuse(Long reservationId);
 
     /**
-     * 예약 도착확인 메소드.
+     * 예약 도착확인 메소드. <br>
+     * 예약자는 예약일시 10분전부터 불가, 하지만 점장은 언제나 가능.
      * @param reservationId 도착확인할 예약 ID
      * @return 예약 DTO 클래스
      */
