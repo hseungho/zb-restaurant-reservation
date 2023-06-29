@@ -57,3 +57,8 @@ service:
       find-list-client: /reservations/client
       find-list-manager: /reservations/manager
       find: /reservations/{reservationId}
+
+    review:
+      save: /restaurants/{restaurantId}/reviews
+      update: /restaurants/{restaurantId}/reviews/{reviewId}
+      delete: /restaurants/{restaurantId}/reviews/{reviewId}
