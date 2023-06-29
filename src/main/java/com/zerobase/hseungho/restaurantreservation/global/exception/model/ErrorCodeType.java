@@ -99,6 +99,7 @@ public enum ErrorCodeType implements ErrorCode {
     //////////////////////////////////////////////////////////////////////////////
     INTERNAL_SERVER_ERROR_KAKAO_API(HttpStatus.INTERNAL_SERVER_ERROR, "내부적으로 주소 좌표를 가져오는데에 실패하였습니다. 관리자에게 문의해주세요."),
     INTERNAL_SERVER_ERROR_GENERATE_RESERVATION_NUMBER(HttpStatus.INTERNAL_SERVER_ERROR, "예약번호를 생성하는데에 문제가 발생하였습니다. 관리자에게 문의해주세요."),
+    INTERNAL_SERVER_ERROR_UPLOAD_IMAGE_S3(HttpStatus.INTERNAL_SERVER_ERROR, "내부적으로 이미지를 업로드하는데에 문제가 발생했습니다. 관리자에게 문의해주세요."),
     //////////////////////////////////////////////////////////////////////////////
 
     ;

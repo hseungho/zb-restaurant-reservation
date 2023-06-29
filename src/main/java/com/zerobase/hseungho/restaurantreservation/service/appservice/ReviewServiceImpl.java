@@ -1,7 +1,9 @@
 package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
+import com.zerobase.hseungho.restaurantreservation.global.adapter.fileupload.AwsS3ImageUpload;
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.BadRequestException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.ForbiddenException;
+import com.zerobase.hseungho.restaurantreservation.global.exception.impl.InternalServerErrorException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.NotFoundException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
 import com.zerobase.hseungho.restaurantreservation.global.security.SecurityHolder;
@@ -20,6 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -28,6 +32,8 @@ public class ReviewServiceImpl implements ReviewService {
     private final RestaurantRepository restaurantRepository;
     private final UserRepository userRepository;
     private final ReservationRepository reservationRepository;
+
+    private final AwsS3ImageUpload uploader;
 
     @Override
     @Transactional
@@ -41,17 +47,24 @@ public class ReviewServiceImpl implements ReviewService {
 
         validateSaveRequest(restaurant, reservation, user, request);
 
-        String imageSrc = "";
         Review review = Review.create(
                 request.getRating(),
                 request.getContent(),
-                imageSrc,
+                uploadImageIfPresent(request),
                 user
         );
 
         restaurant.addReview(review);
 
         return ReviewDto.fromEntityWithReservation(review, reservation);
+    }
+
+    private String uploadImageIfPresent(SaveReview.Request request) {
+        try {
+            return uploader.upload(request.getImage());
+        } catch (IOException e) {
+            throw new InternalServerErrorException(ErrorCodeType.INTERNAL_SERVER_ERROR_UPLOAD_IMAGE_S3);
+        }
     }
 
     private void validateSaveRequest(Restaurant restaurant, Reservation reservation, User user, SaveReview.Request request) {
