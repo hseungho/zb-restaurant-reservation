@@ -59,6 +59,8 @@ public enum ErrorCodeType implements ErrorCode {
     BAD_REQUEST_VISIT_RESERVATION_ALREADY_VISITED(HttpStatus.BAD_REQUEST, "이미 도착확인된 예약입니다."),
     BAD_REQUEST_VISIT_RESERVATION_RESERVED_STATUS_CANNOT_VISIT(HttpStatus.BAD_REQUEST, "도착확인하기 위해서는 점장이 예약을 승인해야 합니다."),
     BAD_REQUEST_VISIT_RESERVATION_STATUS_IS_NOT_SUITED_VISIT(HttpStatus.BAD_REQUEST, "도착확인할 수 없는 예약 상태입니다."),
+
+    BAD_REQUEST_FIND_RESERVATION_DELETED_RESTAURANT(HttpStatus.BAD_REQUEST, "영업 종료된 매장의 예약은 조회할 수 없습니다."),
     //////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////////////////////////////////////////
@@ -75,6 +77,9 @@ public enum ErrorCodeType implements ErrorCode {
 
     FORBIDDEN_FIND_RESERVATION_LIST_ONLY_CLIENT(HttpStatus.FORBIDDEN, "고객이 아닌 유저는 고객의 예약 리스트를 조회할 수 없습니다."),
     FORBIDDEN_FIND_RESERVATION_LIST_ONLY_MANAGER(HttpStatus.FORBIDDEN, "파트너가 아닌 유저는 매장의 예약 리스트를 조회할 수 없습니다."),
+
+    FORBIDDEN_FIND_RESERVATION_MANAGER_NOT_YOUR_RESOURCE(HttpStatus.FORBIDDEN, "해당 예약 매장의 점장이 아닙니다."),
+    FORBIDDEN_FIND_RESERVATION_CLIENT_NOT_YOUR_RESOURCE(HttpStatus.FORBIDDEN, "해당 예약의 예약자가 아닙니다."),
     //////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////////////////////////////////////////

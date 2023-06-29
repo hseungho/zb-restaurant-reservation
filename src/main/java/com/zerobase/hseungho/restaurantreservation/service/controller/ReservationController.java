@@ -77,4 +77,12 @@ public class ReservationController {
         );
     }
 
+    @GetMapping("${service.api.reservation.find}")
+    @ResponseStatus(HttpStatus.OK)
+    public FindReservation.Response findReservation(@PathVariable("reservationId") Long reservationId) {
+        return FindReservation.Response.fromDto(
+                reservationService.findReservation(reservationId)
+        );
+    }
+
 }

@@ -133,6 +133,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Slice<ReservationDto> findManagerReservations(LocalDate date, Pageable pageable) {
         User user = userRepository.findById(SecurityHolder.getIdOfUser())
                 .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER));
@@ -148,6 +149,37 @@ public class ReservationServiceImpl implements ReservationService {
         } else {
             return reservationRepository.findByRestaurantAndReservedAtBetween(restaurant, date.atStartOfDay(), date.plusDays(1).atStartOfDay(), pageable)
                     .map(ReservationDto::fromEntity);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ReservationDto findReservation(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESERVATION));
+
+        validateFindRequest(reservation);
+
+        return ReservationDto.fromEntity(reservation);
+    }
+
+    private void validateFindRequest(Reservation reservation) {
+        if (reservation.isDeletedRestaurant()) {
+            // 영업 종료된 매장의 예약은 조회할 수 없습니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_FIND_RESERVATION_DELETED_RESTAURANT);
+        }
+        User user = userRepository.findById(SecurityHolder.getIdOfUser())
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER));
+        if (user.isPartner()) {
+            if (!reservation.getRestaurant().isManager(user)) {
+                // 예약 매장의 점장이 아닙니다.
+                throw new ForbiddenException(ErrorCodeType.FORBIDDEN_FIND_RESERVATION_MANAGER_NOT_YOUR_RESOURCE);
+            }
+        } else {
+            if (!reservation.isClient(user)) {
+                // 예약의 예약자가 아닙니다.
+                throw new ForbiddenException(ErrorCodeType.FORBIDDEN_FIND_RESERVATION_CLIENT_NOT_YOUR_RESOURCE);
+            }
         }
     }
 

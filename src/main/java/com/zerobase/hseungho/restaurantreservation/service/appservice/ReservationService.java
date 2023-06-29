@@ -61,4 +61,11 @@ public interface ReservationService {
      * @return 예약 DTO 클래스 리스트
      */
     Slice<ReservationDto> findManagerReservations(LocalDate date, Pageable pageable);
+
+    /**
+     * 예약 상세정보 조회 메소드.
+     * @param reservationId 조회할 예약 ID
+     * @return 예약 DTO 클래스 리스트
+     */
+    ReservationDto findReservation(Long reservationId);
 }
