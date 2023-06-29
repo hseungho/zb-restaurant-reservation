@@ -5,7 +5,6 @@ import com.zerobase.hseungho.restaurantreservation.service.domain.reservation.Re
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.AddressVO;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Menu;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Restaurant;
-import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.RestaurantTimeVO;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
 import com.zerobase.hseungho.restaurantreservation.service.type.ReservationStatus;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;

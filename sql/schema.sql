@@ -1,8 +1,8 @@
 DROP TABLE IF EXISTS `menu`;
 DROP TABLE IF EXISTS `review`;
+DROP TABLE IF EXISTS `reservation`;
 DROP TABLE IF EXISTS `restaurant`;
 DROP TABLE IF EXISTS `users`;
-DROP TABLE IF EXISTS `reservation`;
 
 CREATE TABLE `users` (
      id varchar(40) not null primary key,
@@ -23,10 +23,8 @@ CREATE TABLE `restaurant` (
       x double default 0.0 ,
       y double default 0.0 ,
       description varchar(255),
-      open_hour int,
-      open_minute int,
-      close_hour int,
-      close_minute int,
+      open time not null ,
+      close time not null ,
       count_of_tables int default 1 not null ,
       max_per_reservation int ,
       contact_number varchar(15) not null ,
@@ -44,6 +42,8 @@ CREATE TABLE `menu` (
     name varchar(50) not null ,
     price bigint default 0 not null ,
     restaurant_id bigint not null ,
+    created_at datetime not null ,
+    updated_at datetime ,
     FOREIGN KEY (restaurant_id) REFERENCES `restaurant` (id)
 );
 
@@ -54,6 +54,8 @@ CREATE TABLE `review` (
     image_src varchar(255),
     author_id varchar(40) not null ,
     restaurant_id bigint not null ,
+    created_at datetime not null ,
+    updated_at datetime ,
     FOREIGN KEY (author_id) REFERENCES `users` (id),
     FOREIGN KEY (restaurant_id) REFERENCES `restaurant` (id)
 );
@@ -71,6 +73,8 @@ CREATE TABLE `reservation` (
     status varchar(50) not null ,
     client_id varchar(40) not null ,
     restaurant_id bigint not null ,
+    created_at datetime not null ,
+    updated_at datetime ,
     FOREIGN KEY (client_id) REFERENCES `users` (id),
     FOREIGN KEY (restaurant_id) REFERENCES `restaurant` (id)
 );

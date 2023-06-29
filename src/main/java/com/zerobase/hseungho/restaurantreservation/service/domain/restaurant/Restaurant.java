@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -31,8 +32,10 @@ public class Restaurant extends BaseAuditingEntity {
     private AddressVO addressVO;
     @Column(name = "description")
     private String description;
-    @Embedded
-    private RestaurantTimeVO restaurantTimeVO;
+    @Column(name = "open", nullable = false)
+    private LocalTime open;
+    @Column(name = "close", nullable = false)
+    private LocalTime close;
     @Column(name = "count_of_tables", nullable = false)
     private Integer countOfTables;
     @Column(name = "max_per_reservation")
@@ -63,10 +66,8 @@ public class Restaurant extends BaseAuditingEntity {
         restaurant.name = request.getName();
         restaurant.addressVO = new AddressVO(request.getAddress(), request.getX(), request.getY());
         restaurant.description = request.getDescription();
-        restaurant.restaurantTimeVO = new RestaurantTimeVO(
-                request.getOpenTime().getHour(), request.getOpenTime().getMinute(),
-                request.getCloseTime().getHour(), request.getCloseTime().getMinute()
-        );
+        restaurant.open = LocalTime.of(request.getOpenTime().getHour(), request.getOpenTime().getMinute());
+        restaurant.close = LocalTime.of(request.getCloseTime().getHour(), request.getCloseTime().getMinute());
         restaurant.countOfTables = request.getCountOfTables();
         restaurant.maxPerReservation = request.getMaxPerReservation();
         restaurant.contactNumber = request.getContactNumber();
@@ -84,10 +85,8 @@ public class Restaurant extends BaseAuditingEntity {
     }
 
     public boolean isValidReserveAt(LocalDateTime requestTime) {
-        return this.restaurantTimeVO.isContainsRestaurantTimes(
-                requestTime.getHour(),
-                requestTime.getMinute()
-        );
+        LocalTime reqAt = LocalTime.of(requestTime.getHour(), requestTime.getMinute());
+        return this.open.isBefore(reqAt) && this.close.isAfter(reqAt);
     }
 
     public boolean isAfterDeleteReqAt(LocalDateTime time) {

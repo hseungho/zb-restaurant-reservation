@@ -5,6 +5,7 @@ import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Rev
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 public interface IRestaurantDto {
@@ -13,10 +14,8 @@ public interface IRestaurantDto {
     String getAddress();
     Integer getDistance();
     String getDescription();
-    Integer getOpenHour();
-    Integer getOpenMinute();
-    Integer getCloseHour();
-    Integer getCloseMinute();
+    LocalTime getOpen();
+    LocalTime getClose();
     Integer getCountOfTables();
     Integer getMaxPerReservation();
     String getContactNumber();

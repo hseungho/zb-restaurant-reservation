@@ -6,7 +6,7 @@ import com.zerobase.hseungho.restaurantreservation.global.exception.impl.Interna
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.NotFoundException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
 import com.zerobase.hseungho.restaurantreservation.global.security.SecurityHolder;
-import com.zerobase.hseungho.restaurantreservation.global.util.IdGenerator;
+import com.zerobase.hseungho.restaurantreservation.global.util.Generator;
 import com.zerobase.hseungho.restaurantreservation.global.util.SeoulDateTime;
 import com.zerobase.hseungho.restaurantreservation.global.util.ValidUtils;
 import com.zerobase.hseungho.restaurantreservation.service.domain.reservation.Reservation;
@@ -269,7 +269,7 @@ public class ReservationServiceImpl implements ReservationService {
     private String generateReservationNumber() {
         AtomicInteger i = new AtomicInteger(10);
         while (i.getAndDecrement() > 0) {
-            String number = IdGenerator.generateReservationNumber();
+            String number = Generator.generateReservationNumber();
             if(!reservationRepository.existsByNumber(number)) {
                 return number;
             }

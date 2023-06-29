@@ -1,6 +1,6 @@
 package com.zerobase.hseungho.restaurantreservation.service.domain.user;
 
-import com.zerobase.hseungho.restaurantreservation.global.util.IdGenerator;
+import com.zerobase.hseungho.restaurantreservation.global.util.Generator;
 import com.zerobase.hseungho.restaurantreservation.global.util.SeoulDateTime;
 import com.zerobase.hseungho.restaurantreservation.service.domain.base.BaseAuditingEntity;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
@@ -26,7 +26,7 @@ public class User extends BaseAuditingEntity implements UserDetails {
 
     @Id
     @Column(name = "id", nullable = false, unique = true, updatable = false)
-    private final String id = IdGenerator.generateUUID();
+    private final String id = Generator.generateUUID();
     @Column(name = "user_id", unique = true, updatable = false)
     private String userId;
     @Column(name = "password")

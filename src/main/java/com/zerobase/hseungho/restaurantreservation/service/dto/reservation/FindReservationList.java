@@ -1,7 +1,6 @@
 package com.zerobase.hseungho.restaurantreservation.service.dto.reservation;
 
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.RestaurantDto;
-import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.RestaurantTimeDto;
 import com.zerobase.hseungho.restaurantreservation.service.type.ReservationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -73,8 +72,8 @@ public class FindReservationList {
                     private String name;
                     private String address;
                     private String description;
-                    private RestaurantTimeDto openTime;
-                    private RestaurantTimeDto closeTime;
+                    private String openTime;
+                    private String closeTime;
                     private String contactNumber;
                     private static RestaurantResponse fromDto(RestaurantDto dto) {
                         return RestaurantResponse.builder()
@@ -82,8 +81,8 @@ public class FindReservationList {
                                 .name(dto.getName())
                                 .address(dto.getAddress())
                                 .description(dto.getDescription())
-                                .openTime(RestaurantTimeDto.of(dto.getOpenTime().getHour(), dto.getCloseTime().getMinute()))
-                                .closeTime(RestaurantTimeDto.of(dto.getCloseTime().getHour(), dto.getCloseTime().getMinute()))
+                                .openTime(dto.getOpenTime().toString())
+                                .closeTime(dto.getCloseTime().toString())
                                 .contactNumber(dto.getContactNumber())
                                 .build();
                     }

@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Getter
@@ -19,8 +20,8 @@ public class RestaurantDto {
     private String name;
     private String address;
     private String description;
-    private RestaurantTimeDto openTime;
-    private RestaurantTimeDto closeTime;
+    private LocalTime openTime;
+    private LocalTime closeTime;
     private Integer countOfTables;
     private Integer maxPerReservation;
     private String contactNumber;
@@ -39,10 +40,8 @@ public class RestaurantDto {
                 .name(entity.getName())
                 .address(entity.getAddressVO().getAddress())
                 .description(entity.getDescription())
-                .openTime(RestaurantTimeDto.of(
-                        entity.getRestaurantTimeVO().getOpenHour(), entity.getRestaurantTimeVO().getOpenMinute()))
-                .closeTime(RestaurantTimeDto.of(
-                        entity.getRestaurantTimeVO().getCloseHour(), entity.getRestaurantTimeVO().getCloseMinute()))
+                .openTime(entity.getOpen())
+                .closeTime(entity.getClose())
                 .countOfTables(entity.getCountOfTables())
                 .maxPerReservation(entity.getMaxPerReservation())
                 .contactNumber(entity.getContactNumber())

@@ -44,8 +44,8 @@ public class SearchRestaurant {
             private String name;
             private String address;
             private String description;
-            private RestaurantTimeDto openTime;
-            private RestaurantTimeDto closeTime;
+            private String openTime;
+            private String closeTime;
             private Integer maxPerReservation;
             private String contactNumber;
             private Double rating;
@@ -57,8 +57,8 @@ public class SearchRestaurant {
                         .name(dto.getName())
                         .address(dto.getAddress())
                         .description(dto.getDescription())
-                        .openTime(RestaurantTimeDto.of(dto.getOpenHour(), dto.getOpenMinute()))
-                        .closeTime(RestaurantTimeDto.of(dto.getCloseHour(), dto.getCloseMinute()))
+                        .openTime(dto.getOpen().toString())
+                        .closeTime(dto.getClose().toString())
                         .maxPerReservation(dto.getMaxPerReservation())
                         .contactNumber(dto.getContactNumber())
                         .rating(dto.getRating())
