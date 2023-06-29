@@ -54,3 +54,5 @@ service:
       approve: /reservations/{reservationId}/approve
       refuse: /reservations/{reservationId}/refuse
       visit: /reservations/{reservationId}/visit
+      find-list-client: /reservations/client
+      find-list-manager: /reservations/manager
