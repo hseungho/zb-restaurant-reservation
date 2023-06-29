@@ -3,8 +3,10 @@ package com.zerobase.hseungho.restaurantreservation.global.exception.impl;
 import com.zerobase.hseungho.restaurantreservation.global.exception.base.BaseException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCode;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-@Getter
+@ResponseStatus(HttpStatus.BAD_REQUEST)
 public class BadRequestException extends BaseException {
     public BadRequestException(ErrorCode errorCode) {
         super(errorCode);

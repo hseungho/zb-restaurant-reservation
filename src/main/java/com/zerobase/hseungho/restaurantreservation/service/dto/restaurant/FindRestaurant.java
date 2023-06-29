@@ -19,8 +19,8 @@ public class FindRestaurant {
         private String description;
         private Double rating;
         private List<MenuResponse> menus;
-        private RestaurantTimeResponse openTime;
-        private RestaurantTimeResponse closeTime;
+        private String openTime;
+        private String closeTime;
         private Integer maxPerReservation;
         private String contactNumber;
         private List<ReviewResponse> reviews;
@@ -32,8 +32,8 @@ public class FindRestaurant {
                     .description(dto.getDescription())
                     .rating(dto.getRating())
                     .menus(dto.getMenus().stream().map(MenuResponse::fromDto).toList())
-                    .openTime(RestaurantTimeResponse.fromDto(dto.getOpenTime()))
-                    .closeTime(RestaurantTimeResponse.fromDto(dto.getCloseTime()))
+                    .openTime(dto.getOpenTime().toString())
+                    .closeTime(dto.getCloseTime().toString())
                     .maxPerReservation(dto.getMaxPerReservation())
                     .contactNumber(dto.getContactNumber())
                     .reviews(dto.getReviews().stream().map(ReviewResponse::fromDto).toList())
@@ -51,21 +51,6 @@ public class FindRestaurant {
                 return MenuResponse.builder()
                         .name(dto.getName())
                         .price(dto.getPrice())
-                        .build();
-            }
-        }
-
-        @Data
-        @NoArgsConstructor
-        @AllArgsConstructor
-        @Builder
-        private static class RestaurantTimeResponse {
-            private Integer hour;
-            private Integer minute;
-            private static RestaurantTimeResponse fromDto(RestaurantTimeDto dto) {
-                return RestaurantTimeResponse.builder()
-                        .hour(dto.getHour())
-                        .minute(dto.getMinute())
                         .build();
             }
         }

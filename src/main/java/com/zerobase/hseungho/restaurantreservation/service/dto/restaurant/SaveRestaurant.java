@@ -49,20 +49,6 @@ public class SaveRestaurant {
             @Max(59)
             private Integer minute;
         }
-        @Getter
-        @NoArgsConstructor
-        @AllArgsConstructor
-        @Builder
-        public static class Response {
-            private Integer hour;
-            private Integer minute;
-            public static SaveRestaurantTime.Response fromDto(RestaurantTimeDto dto) {
-                return Response.builder()
-                        .hour(dto.getHour())
-                        .minute(dto.getMinute())
-                        .build();
-            }
-        }
     }
 
     public static class SaveMenu {
@@ -102,8 +88,8 @@ public class SaveRestaurant {
         private String address;
         private String description;
         private List<SaveMenu.Response> menus;
-        private SaveRestaurantTime.Response openTime;
-        private SaveRestaurantTime.Response closeTime;
+        private String openTime;
+        private String closeTime;
         private Integer countOfTables;
         private Integer maxPerReservation;
         private String contactNumber;
@@ -117,8 +103,8 @@ public class SaveRestaurant {
                     .address(dto.getAddress())
                     .description(dto.getDescription())
                     .menus(dto.getMenus().stream().map(SaveMenu.Response::fromDto).toList())
-                    .openTime(SaveRestaurantTime.Response.fromDto(dto.getOpenTime()))
-                    .closeTime(SaveRestaurantTime.Response.fromDto(dto.getCloseTime()))
+                    .openTime(dto.getOpenTime().toString())
+                    .closeTime(dto.getCloseTime().toString())
                     .countOfTables(dto.getCountOfTables())
                     .maxPerReservation(dto.getMaxPerReservation())
                     .contactNumber(dto.getContactNumber())

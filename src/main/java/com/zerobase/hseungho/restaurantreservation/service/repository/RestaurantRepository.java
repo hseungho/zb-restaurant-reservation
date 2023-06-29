@@ -6,9 +6,12 @@ import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.IResta
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
@@ -25,10 +28,12 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
     @Query(value =
             "SELECT *, " +
-                    "ST_Distance_Sphere(POINT(:userX, :userY), POINT(r.x, r.y)) as distance " +
-                    "FROM restaurant r " +
-                    "WHERE r.address LIKE %:address%",
+            "ST_Distance_Sphere(POINT(:userX, :userY), POINT(r.x, r.y)) as distance " +
+            "FROM restaurant r " +
+            "WHERE r.address LIKE %:address%",
             nativeQuery = true)
     Slice<IRestaurantDto> findByAddressWithDistance(String address, Double userX, Double userY, Pageable pageable);
+
+    Optional<Restaurant> findByManager(User manager);
 
 }

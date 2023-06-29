@@ -26,7 +26,7 @@ public class Review extends BaseAuditingEntity {
     @Column(name = "image_src")
     private String imageSrc;
     @OneToOne
-    @JoinColumn(name = "author_id", nullable = false, updatable = false)
+    @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User author;
     @ManyToOne
     @JoinColumn(name = "restaurant_id", nullable = false, updatable = false)
