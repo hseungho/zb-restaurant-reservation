@@ -56,3 +56,4 @@ service:
       visit: /reservations/{reservationId}/visit
       find-list-client: /reservations/client
       find-list-manager: /reservations/manager
+      find: /reservations/{reservationId}
