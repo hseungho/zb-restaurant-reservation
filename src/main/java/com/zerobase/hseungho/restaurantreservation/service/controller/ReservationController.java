@@ -4,8 +4,13 @@ import com.zerobase.hseungho.restaurantreservation.service.appservice.Reservatio
 import com.zerobase.hseungho.restaurantreservation.service.dto.reservation.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("${service.api.prefix}")
@@ -51,6 +56,15 @@ public class ReservationController {
     public VisitReservation.Response visit(@PathVariable("reservationId") Long reservationId) {
         return VisitReservation.Response.fromDto(
                 reservationService.visit(reservationId)
+        );
+    }
+
+    @GetMapping("${service.api.reservation.find-list-client}")
+    @ResponseStatus(HttpStatus.OK)
+    public FindReservationList.Response findClientReservations(@RequestParam("date") LocalDate date,
+                                                               @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        return FindReservationList.Response.fromDto(
+                reservationService.findClientReservations(date, pageable)
         );
     }
 

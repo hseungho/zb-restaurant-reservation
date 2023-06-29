@@ -19,9 +19,12 @@ import com.zerobase.hseungho.restaurantreservation.service.repository.Restaurant
 import com.zerobase.hseungho.restaurantreservation.service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -109,6 +112,24 @@ public class ReservationServiceImpl implements ReservationService {
         reservation.visit();
 
         return ReservationDto.fromEntity(reservation);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Slice<ReservationDto> findClientReservations(LocalDate date, Pageable pageable) {
+        User user = userRepository.findById(SecurityHolder.getIdOfUser())
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER));
+        if (user.isPartner()) {
+            // 고객이 아닌 유저는 고객의 예약 리스트를 조회할 수 없습니다.
+            throw new ForbiddenException(ErrorCodeType.FORBIDDEN_FIND_RESERVATION_LIST_ONLY_CLIENT);
+        }
+        if (date == null) {
+            return reservationRepository.findByClient(user, pageable)
+                    .map(ReservationDto::fromEntity);
+        } else {
+            return reservationRepository.findByClientAndReservedAtBetween(user, date.atStartOfDay(), date.plusDays(1).atStartOfDay())
+                    .map(ReservationDto::fromEntity);
+        }
     }
 
     private void validateVisitRequest(Reservation reservation) {

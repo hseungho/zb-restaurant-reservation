@@ -2,6 +2,10 @@ package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
 import com.zerobase.hseungho.restaurantreservation.service.dto.reservation.ReservationDto;
 import com.zerobase.hseungho.restaurantreservation.service.dto.reservation.ReserveReservation;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+
+import java.time.LocalDate;
 
 public interface ReservationService {
 
@@ -41,4 +45,12 @@ public interface ReservationService {
      * @return 예약 DTO 클래스
      */
     ReservationDto visit(Long reservationId);
+
+    /**
+     * 고객의 자신 예약 리스트 조회 메소드.
+     * @param date 요청일자
+     * @param pageable 페이징 객체
+     * @return 예약 DTO 클래스 리스트
+     */
+    Slice<ReservationDto> findClientReservations(LocalDate date, Pageable pageable);
 }

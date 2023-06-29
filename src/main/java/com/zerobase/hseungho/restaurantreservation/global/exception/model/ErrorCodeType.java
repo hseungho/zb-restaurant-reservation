@@ -70,6 +70,9 @@ public enum ErrorCodeType implements ErrorCode {
 
     FORBIDDEN_VISIT_RESERVATION_NOT_MANAGER_OF_RESTAURANT(HttpStatus.FORBIDDEN, "매장의 점장이 아닌 유저가 도착확인할 수 없습니다."),
     FORBIDDEN_VISIT_RESERVATION_NOT_YOUR_RESOURCE(HttpStatus.FORBIDDEN, "다른 고객의 예약을 도착확인할 수 없습니다."),
+
+    FORBIDDEN_FIND_RESERVATION_LIST_ONLY_CLIENT(HttpStatus.FORBIDDEN, "고객이 아닌 유저는 고객의 예약 리스트를 조회할 수 없습니다."),
+    FORBIDDEN_FIND_RESERVATION_LIST_ONLY_MANAGER(HttpStatus.FORBIDDEN, "파트너가 아닌 유저는 매장의 예약 리스트를 조회할 수 없습니다."),
     //////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////////////////////////////////////////
