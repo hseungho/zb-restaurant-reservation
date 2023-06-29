@@ -98,4 +98,9 @@ public class Restaurant extends BaseAuditingEntity {
         return this.deletedAt != null;
     }
 
+    public void addReview(Review review) {
+        reviews.add(review);
+        review.associate(this);
+    }
+
 }

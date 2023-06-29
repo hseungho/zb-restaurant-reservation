@@ -3,6 +3,8 @@ package com.zerobase.hseungho.restaurantreservation.service.dto.review;
 import com.zerobase.hseungho.restaurantreservation.service.dto.reservation.ReservationDto;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.RestaurantDto;
 import com.zerobase.hseungho.restaurantreservation.service.dto.user.UserDto;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -20,6 +22,8 @@ public class SaveReview {
         @NotNull
         private Long reservationId;
         @NotNull
+        @Min(1)
+        @Max(5)
         private Double rating;
         @NotBlank
         private String content;

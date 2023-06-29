@@ -32,4 +32,17 @@ public class Review extends BaseAuditingEntity {
     @JoinColumn(name = "restaurant_id", nullable = false, updatable = false)
     private Restaurant restaurant;
 
+    public static Review create(Double rating, String content, String imageSrc, User author) {
+        return Review.builder()
+                .rating(rating)
+                .content(content)
+                .imageSrc(imageSrc)
+                .author(author)
+                .build();
+    }
+
+    public void associate(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
+
 }
