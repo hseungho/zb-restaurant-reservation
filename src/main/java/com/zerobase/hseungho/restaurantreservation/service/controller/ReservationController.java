@@ -68,4 +68,13 @@ public class ReservationController {
         );
     }
 
+    @GetMapping("${service.api.reservation.find-list-manager}")
+    @ResponseStatus(HttpStatus.OK)
+    public FindReservationList.Response findManagerReservations(@RequestParam("date") LocalDate date,
+                                                               @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        return FindReservationList.Response.fromDto(
+                reservationService.findManagerReservations(date, pageable)
+        );
+    }
+
 }

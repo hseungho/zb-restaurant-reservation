@@ -53,4 +53,12 @@ public interface ReservationService {
      * @return 예약 DTO 클래스 리스트
      */
     Slice<ReservationDto> findClientReservations(LocalDate date, Pageable pageable);
+
+    /**
+     * 점장의 자신 매장 예약 리스트 조회 메소드.
+     * @param date 요청일자
+     * @param pageable 페이징 객체
+     * @return 예약 DTO 클래스 리스트
+     */
+    Slice<ReservationDto> findManagerReservations(LocalDate date, Pageable pageable);
 }

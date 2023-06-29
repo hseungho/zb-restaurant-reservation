@@ -127,7 +127,25 @@ public class ReservationServiceImpl implements ReservationService {
             return reservationRepository.findByClient(user, pageable)
                     .map(ReservationDto::fromEntity);
         } else {
-            return reservationRepository.findByClientAndReservedAtBetween(user, date.atStartOfDay(), date.plusDays(1).atStartOfDay())
+            return reservationRepository.findByClientAndReservedAtBetween(user, date.atStartOfDay(), date.plusDays(1).atStartOfDay(), pageable)
+                    .map(ReservationDto::fromEntity);
+        }
+    }
+
+    @Override
+    public Slice<ReservationDto> findManagerReservations(LocalDate date, Pageable pageable) {
+        User user = userRepository.findById(SecurityHolder.getIdOfUser())
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER));
+        if (!user.isPartner()) {
+            throw new ForbiddenException(ErrorCodeType.FORBIDDEN_FIND_RESERVATION_LIST_ONLY_MANAGER);
+        }
+        Restaurant restaurant = restaurantRepository.findByManager(user)
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESTAURANT));
+        if (date == null) {
+            return reservationRepository.findByRestaurant(restaurant, pageable)
+                    .map(ReservationDto::fromEntity);
+        } else {
+            return reservationRepository.findByRestaurantAndReservedAtBetween(restaurant, date.atStartOfDay(), date.plusDays(1).atStartOfDay(), pageable)
                     .map(ReservationDto::fromEntity);
         }
     }

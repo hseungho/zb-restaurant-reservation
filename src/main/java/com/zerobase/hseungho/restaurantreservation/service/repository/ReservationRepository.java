@@ -19,6 +19,10 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     Slice<Reservation> findByClient(User client, Pageable pageable);
 
-    Slice<Reservation> findByClientAndReservedAtBetween(User client, LocalDateTime from, LocalDateTime to);
+    Slice<Reservation> findByClientAndReservedAtBetween(User client, LocalDateTime from, LocalDateTime to, Pageable pageable);
+
+    Slice<Reservation> findByRestaurant(Restaurant restaurant, Pageable pageable);
+
+    Slice<Reservation> findByRestaurantAndReservedAtBetween(Restaurant restaurant, LocalDateTime from, LocalDateTime to, Pageable pageable);
 
 }
