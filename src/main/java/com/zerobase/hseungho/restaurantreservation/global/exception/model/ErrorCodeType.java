@@ -42,6 +42,9 @@ public enum ErrorCodeType implements ErrorCode {
     BAD_REQUEST_SAVE_RESTAURANT_ALREADY_MANAGER(HttpStatus.BAD_REQUEST, "이미 등록한 매장이 있습니다. 매장은 하나만 등록 가능합니다."),
     BAD_REQUEST_SAVE_RESTAURANT_BLANK(HttpStatus.BAD_REQUEST, "매장 등록에 필요한 필수 정보를 모두 입력해주세요."),
     BAD_REQUEST_SAVE_RESTAURANT_COORDINATE_BY_ADDRESS(HttpStatus.BAD_REQUEST, "해당 주소의 좌표를 가져오는데에 실패하였습니다. 주소를 다시 시도해주세요."),
+
+    BAD_REQUEST_UPDATE_RESTAURANT_BLANK(HttpStatus.BAD_REQUEST, "매장 정보 수정에 필요한 모든 정보를 입력해주세요."),
+
     BAD_REQUEST_SEARCH_RESTAURANT_INVALID_VALUE(HttpStatus.BAD_REQUEST, "위치값이 유효하지 않습니다."),
     BAD_REQUEST_SEARCH_RESTAURANT_INVALID_SORT_PROPERTY(HttpStatus.BAD_REQUEST, "유효하지 않은 정렬 속성입니다."),
 
@@ -93,6 +96,8 @@ public enum ErrorCodeType implements ErrorCode {
 
     //////////////////////////////////////////////////////////////////////////////
     FORBIDDEN_ONLY_PARTNER(HttpStatus.FORBIDDEN, "파트너 유저만 접근할 수 있는 API 입니다."),
+
+    FORBIDDEN_UPDATE_RESTAURANT_NOT_YOUR_RESTAURANT(HttpStatus.FORBIDDEN, "해당 매장의 점장이 아닙니다."),
 
     FORBIDDEN_CANCEL_RESERVATION_NOT_YOUR_RESOURCE(HttpStatus.FORBIDDEN, "다른 고객의 예약을 취소할 수 없습니다."),
 

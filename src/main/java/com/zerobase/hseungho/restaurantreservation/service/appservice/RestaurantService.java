@@ -55,8 +55,10 @@ public interface RestaurantService {
 
     /**
      * 매장 정보 수정 메소드.
-     * @param request 매장 정보 수정 요청 DTO 클래스
+     *
+     * @param restaurantId 정보 수정할 매장 ID
+     * @param request      매장 정보 수정 요청 DTO 클래스
      * @return 매장 DTO 클래스
      */
-    RestaurantDto updateRestaurant(UpdateRestaurant.Request request);
+    RestaurantDto updateRestaurant(Long restaurantId, UpdateRestaurant.Request request);
 }

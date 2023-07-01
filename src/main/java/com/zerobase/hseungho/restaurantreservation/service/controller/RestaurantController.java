@@ -36,9 +36,11 @@ public class RestaurantController {
 
     @PutMapping("${service.api.restaurant.update}")
     @ResponseStatus(HttpStatus.OK)
-    public UpdateRestaurant.Response updateRestaurant(@RequestBody @Valid UpdateRestaurant.Request request) {
+    @PreAuthorize("hasRole('PARTNER')")
+    public UpdateRestaurant.Response updateRestaurant(@PathVariable("restaurantId") Long restaurantId,
+                                                      @RequestBody @Valid UpdateRestaurant.Request request) {
         return UpdateRestaurant.Response.fromDto(
-                restaurantService.updateRestaurant(request)
+                restaurantService.updateRestaurant(restaurantId, request)
         );
     }
 

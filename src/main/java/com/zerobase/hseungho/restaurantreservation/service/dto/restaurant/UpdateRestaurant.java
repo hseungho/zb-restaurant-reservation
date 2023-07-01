@@ -18,6 +18,8 @@ public class UpdateRestaurant {
         private String name;
         @NotBlank
         private String address;
+        private Double x;
+        private Double y;
         private String description;
         @NonNull
         private UpdateRestaurant.Request.TimeRequest openTime;
@@ -28,6 +30,10 @@ public class UpdateRestaurant {
         private Integer maxPerReservation;
         @NotBlank
         private String contactNumber;
+        public void setCoordinate(Double x, Double y) {
+            this.x = x;
+            this.y = y;
+        }
 
         @Data
         @NoArgsConstructor

@@ -3,6 +3,7 @@ package com.zerobase.hseungho.restaurantreservation.service.domain.restaurant;
 import com.zerobase.hseungho.restaurantreservation.service.domain.base.BaseAuditingEntity;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SaveRestaurant;
+import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.UpdateRestaurant;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -112,4 +113,14 @@ public class Restaurant extends BaseAuditingEntity {
                 .average().orElse(1.0);
     }
 
+    public void update(UpdateRestaurant.Request request) {
+        this.name = request.getName();
+        this.addressVO = new AddressVO(request.getAddress(), request.getX(), request.getY());
+        this.description = request.getDescription();
+        this.open = LocalTime.of(request.getOpenTime().getHour(), request.getOpenTime().getMinute());
+        this.close = LocalTime.of(request.getCloseTime().getHour(), request.getCloseTime().getMinute());
+        this.countOfTables = request.getCountOfTables();
+        this.maxPerReservation = request.getMaxPerReservation();
+        this.contactNumber = request.getContactNumber();
+    }
 }

@@ -1,6 +1,7 @@
 package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.BadRequestException;
+import com.zerobase.hseungho.restaurantreservation.global.exception.impl.ForbiddenException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.NotFoundException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
 import com.zerobase.hseungho.restaurantreservation.global.security.SecurityHolder;
@@ -82,8 +83,33 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     @Transactional
-    public RestaurantDto updateRestaurant(UpdateRestaurant.Request request) {
-        return null;
+    public RestaurantDto updateRestaurant(Long restaurantId, UpdateRestaurant.Request request) {
+        User user = SecurityHolder.getUser();
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESTAURANT));
+
+        validateUpdateRestaurantRequest(user, restaurant, request);
+
+        CoordinateDto coordinate = kakaoWebClientComponent.getCoordinateByAddress(request.getAddress());
+        request.setCoordinate(coordinate.getX(), coordinate.getY());
+
+        restaurant.update(request);
+
+        return RestaurantDto.fromEntity(restaurant);
+    }
+
+    private void validateUpdateRestaurantRequest(User user, Restaurant restaurant, UpdateRestaurant.Request request) {
+        if (!ValidUtils.hasTexts(request.getName(), request.getAddress(), request.getDescription(), request.getContactNumber())
+            || !ValidUtils.isExactHour(request.getOpenTime().getHour(), request.getCloseTime().getHour())
+            || !ValidUtils.isExactMinute(request.getOpenTime().getMinute(), request.getCloseTime().getMinute())
+            || !ValidUtils.isMin(1, request.getCountOfTables())) {
+            // 정보 수정의 파라미터를 올바르게 요청해주세요.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_UPDATE_RESTAURANT_BLANK);
+        }
+        if (!restaurant.isManager(user)) {
+            // 해당 매장의 점장이 아닙니다.
+            throw new ForbiddenException(ErrorCodeType.FORBIDDEN_UPDATE_RESTAURANT_NOT_YOUR_RESTAURANT);
+        }
     }
 
     private CoordinateDto validateSearchRestaurantRequest(String userX, String userY) {
