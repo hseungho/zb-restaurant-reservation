@@ -25,4 +25,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     Slice<Reservation> findByRestaurantAndReservedAtBetween(Restaurant restaurant, LocalDateTime from, LocalDateTime to, Pageable pageable);
 
+    boolean existsByRestaurantAndReservedAtGreaterThanEqual(Restaurant restaurant, LocalDateTime requestedTime);
 }

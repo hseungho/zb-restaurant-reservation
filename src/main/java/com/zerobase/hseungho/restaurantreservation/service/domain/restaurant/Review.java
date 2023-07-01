@@ -57,4 +57,9 @@ public class Review extends BaseAuditingEntity {
         return Objects.equals(this.author.getId(), aId);
     }
 
+    public void dissociate() {
+        this.author = null;
+        this.restaurant = null;
+    }
+
 }

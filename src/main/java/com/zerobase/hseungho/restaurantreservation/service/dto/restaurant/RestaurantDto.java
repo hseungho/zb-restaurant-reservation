@@ -52,7 +52,11 @@ public class RestaurantDto {
                 .deletedAt(entity.getDeletedAt())
                 .menus(entity.getMenus().stream().map(MenuDto::fromEntity).toList())
                 .reviews(entity.getReviews().stream().map(ReviewDto::fromEntity).toList())
-                .manager(UserDto.fromEntity(entity.getManager()))
+                .manager(
+                        entity.getManager() != null ?
+                                UserDto.fromEntity(entity.getManager()) :
+                                null
+                )
                 .build();
     }
 }

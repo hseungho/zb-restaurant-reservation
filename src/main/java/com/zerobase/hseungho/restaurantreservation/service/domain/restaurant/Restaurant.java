@@ -123,4 +123,14 @@ public class Restaurant extends BaseAuditingEntity {
         this.maxPerReservation = request.getMaxPerReservation();
         this.contactNumber = request.getContactNumber();
     }
+
+    public void delete(LocalDateTime now) {
+        this.deleteReqAt = now;
+        this.deletedAt = now;
+        this.manager = null;
+        this.menus.forEach(Menu::dissociate);
+        this.menus = new ArrayList<>();
+        this.reviews.forEach(Review::dissociate);
+        this.reviews = new ArrayList<>();
+    }
 }

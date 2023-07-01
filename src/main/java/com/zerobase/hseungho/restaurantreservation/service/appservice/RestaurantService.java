@@ -61,4 +61,11 @@ public interface RestaurantService {
      * @return 매장 DTO 클래스
      */
     RestaurantDto updateRestaurant(Long restaurantId, UpdateRestaurant.Request request);
+
+    /**
+     * 매장 삭제 메소드.
+     * @param restaurantId 삭제할 매장 ID
+     * @return 매장 DTO 클래스
+     */
+    RestaurantDto deleteRestaurant(Long restaurantId);
 }

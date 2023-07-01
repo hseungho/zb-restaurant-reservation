@@ -3,10 +3,7 @@ package com.zerobase.hseungho.restaurantreservation.service.controller;
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.BadRequestException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
 import com.zerobase.hseungho.restaurantreservation.service.appservice.RestaurantService;
-import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.FindRestaurant;
-import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SaveRestaurant;
-import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SearchRestaurant;
-import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.UpdateRestaurant;
+import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -41,6 +38,15 @@ public class RestaurantController {
                                                       @RequestBody @Valid UpdateRestaurant.Request request) {
         return UpdateRestaurant.Response.fromDto(
                 restaurantService.updateRestaurant(restaurantId, request)
+        );
+    }
+
+    @DeleteMapping("${service.api.restaurant.delete}")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('PARTNER')")
+    public DeleteRestaurant.Response deleteRestaurant(@PathVariable("restaurantId") Long restaurantId) {
+        return DeleteRestaurant.Response.fromDto(
+                restaurantService.deleteRestaurant(restaurantId)
         );
     }
 

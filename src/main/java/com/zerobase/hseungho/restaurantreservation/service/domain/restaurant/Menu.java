@@ -37,4 +37,8 @@ public class Menu extends BaseAuditingEntity {
         this.restaurant = restaurant;
     }
 
+    public void dissociate() {
+        this.restaurant = null;
+    }
+
 }

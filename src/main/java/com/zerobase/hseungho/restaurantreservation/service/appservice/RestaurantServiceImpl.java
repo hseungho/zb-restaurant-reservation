@@ -6,6 +6,7 @@ import com.zerobase.hseungho.restaurantreservation.global.exception.impl.NotFoun
 import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
 import com.zerobase.hseungho.restaurantreservation.global.security.SecurityHolder;
 import com.zerobase.hseungho.restaurantreservation.global.util.PageUtils;
+import com.zerobase.hseungho.restaurantreservation.global.util.SeoulDateTime;
 import com.zerobase.hseungho.restaurantreservation.global.util.ValidUtils;
 import com.zerobase.hseungho.restaurantreservation.global.adapter.webclient.KakaoWebClientComponent;
 import com.zerobase.hseungho.restaurantreservation.global.adapter.webclient.dto.CoordinateDto;
@@ -16,6 +17,7 @@ import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.IResta
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.RestaurantDto;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SaveRestaurant;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.UpdateRestaurant;
+import com.zerobase.hseungho.restaurantreservation.service.repository.ReservationRepository;
 import com.zerobase.hseungho.restaurantreservation.service.repository.RestaurantRepository;
 import com.zerobase.hseungho.restaurantreservation.service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -37,6 +40,8 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     private final UserRepository userRepository;
     private final RestaurantRepository restaurantRepository;
+    private final ReservationRepository reservationRepository;
+
     private final Trie<String, String> trie;
 
     private final KakaoWebClientComponent kakaoWebClientComponent;
@@ -84,11 +89,10 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     @Transactional
     public RestaurantDto updateRestaurant(Long restaurantId, UpdateRestaurant.Request request) {
-        User user = SecurityHolder.getUser();
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESTAURANT));
 
-        validateUpdateRestaurantRequest(user, restaurant, request);
+        validateUpdateRestaurantRequest(SecurityHolder.getUser(), restaurant, request);
 
         CoordinateDto coordinate = kakaoWebClientComponent.getCoordinateByAddress(request.getAddress());
         request.setCoordinate(coordinate.getX(), coordinate.getY());
@@ -96,6 +100,32 @@ public class RestaurantServiceImpl implements RestaurantService {
         restaurant.update(request);
 
         return RestaurantDto.fromEntity(restaurant);
+    }
+
+    @Override
+    @Transactional
+    public RestaurantDto deleteRestaurant(Long restaurantId) {
+        LocalDateTime now = SeoulDateTime.now();
+
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESTAURANT));
+
+        validateDeleteRestaurantRequest(SecurityHolder.getUser(), restaurant, now);
+
+        restaurant.delete(now);
+
+        return RestaurantDto.fromEntity(restaurant);
+    }
+
+    private void validateDeleteRestaurantRequest(User user, Restaurant restaurant, LocalDateTime now) {
+        if (!restaurant.isManager(user)) {
+            // 해당 매장의 점장이 아닙니다.
+            throw new ForbiddenException(ErrorCodeType.FORBIDDEN_DELETE_RESTAURANT_NOT_YOUR_RESTAURANT);
+        }
+        if (reservationRepository.existsByRestaurantAndReservedAtGreaterThanEqual(restaurant, now)) {
+            // 해당 매장에 예약이 남아있어서 매장을 삭제할 수 없습니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_DELETE_RESTAURANT_REMAIN_RESERVATION);
+        }
     }
 
     private void validateUpdateRestaurantRequest(User user, Restaurant restaurant, UpdateRestaurant.Request request) {

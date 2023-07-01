@@ -6,6 +6,7 @@ import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Res
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.RestaurantDto;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.UpdateRestaurant;
+import com.zerobase.hseungho.restaurantreservation.service.repository.ReservationRepository;
 import com.zerobase.hseungho.restaurantreservation.service.repository.RestaurantRepository;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
 import com.zerobase.hseungho.restaurantreservation.util.MockBuilder;
@@ -20,8 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,6 +31,8 @@ public class RestaurantServiceImplUnitTest {
     private RestaurantServiceImpl restaurantService;
     @Mock
     private RestaurantRepository restaurantRepository;
+    @Mock
+    private ReservationRepository reservationRepository;
     @Mock
     private KakaoWebClientComponent kakaoWebClientComponent;
 
@@ -73,6 +75,28 @@ public class RestaurantServiceImplUnitTest {
         Assertions.assertEquals(10, result.getCountOfTables());
         Assertions.assertEquals(8, result.getMaxPerReservation());
         Assertions.assertEquals(user.getNickname(), result.getManager().getNickname());
+    }
+
+    @Test
+    @DisplayName("매장 삭제")
+    void test_deleteRestaurant() {
+        // given
+        User user = TestSecurityHolder.setSecurityHolderUser(UserType.ROLE_PARTNER);
+        Restaurant restaurant = MockBuilder.mockRestaurant(user);
+        given(restaurantRepository.findById(anyLong()))
+                .willReturn(Optional.of(restaurant));
+        given(reservationRepository.existsByRestaurantAndReservedAtGreaterThanEqual(any(), any()))
+                .willReturn(false);
+        // when
+        RestaurantDto result = restaurantService.deleteRestaurant(1L);
+        // then
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(restaurant.getId(), result.getId());
+        Assertions.assertNotNull(result.getDeleteReqAt());
+        Assertions.assertNotNull(result.getDeletedAt());
+        Assertions.assertNull(result.getManager());
+        Assertions.assertTrue(result.getMenus().isEmpty());
+        Assertions.assertTrue(result.getReviews().isEmpty());
     }
 
 }
