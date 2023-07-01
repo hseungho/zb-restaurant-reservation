@@ -57,4 +57,11 @@ public interface UserService {
      * @return 유저 DTO 클래스
      */
     UserDto findProfile();
+
+    /**
+     * 내 정보 수정 메소드.
+     * @param request 정보 수정 요청 DTO 클래스
+     * @return 유저 DTO 클래스
+     */
+    UserDto updateProfile(UpdateProfile.Request request);
 }

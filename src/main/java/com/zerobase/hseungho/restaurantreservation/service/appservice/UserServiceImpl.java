@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -128,10 +129,43 @@ public class UserServiceImpl implements UserService {
         return UserDto.fromEntity(SecurityHolder.getUser());
     }
 
+    @Override
+    @Transactional
+    public UserDto updateProfile(UpdateProfile.Request request) {
+        User user = userRepository.findById(SecurityHolder.getIdOfUser())
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER));
+
+        validateUpdateProfileRequest(user, request);
+
+        user.update(request.getNickname());
+
+        return UserDto.fromEntity(user);
+    }
+
+    private void validateUpdateProfileRequest(User user, UpdateProfile.Request request) {
+        if (!ValidUtils.hasTexts(request.getNickname())) {
+            // 수정할 정보를 모두 입력해주세요.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_UPDATE_PROFILE_BLANK);
+        }
+        if (!checkNicknameAvailable(request.getNickname())) {
+            // 사용할 수 없는 닉네임입니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_UPDATE_PROFILE_NICKNAME_DUPLICATED);
+        }
+        if (!(request.getNickname().length() < 15)) {
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_UPDATE_PROFILE_NICKNAME_LENGTH);
+        }
+        if (Objects.equals(request.getNickname(), user.getNickname())) {
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_UPDATE_PROFILE_SAME_NICKNAME);
+        }
+    }
+
     private void validateUpdatePasswordRequest(UpdatePassword.Request request, User user) {
         if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
             // 현재 비밀번호가 일치하지 않습니다.
             throw new UnauthorizedException(ErrorCodeType.UNAUTHORIZED_UPDATE_PASSWORD_INVALID_CUR_PASSWORD);
+        }
+        if (!isAvailablePassword(user.getUserId(), request.getNewPassword())) {
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_UPDATE_PASSWORD_INVALID_PASSWORD);
         }
     }
 

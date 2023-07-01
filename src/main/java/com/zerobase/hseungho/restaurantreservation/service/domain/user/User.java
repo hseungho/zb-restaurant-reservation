@@ -79,6 +79,10 @@ public class User extends BaseAuditingEntity implements UserDetails {
         this.password = encodedPassword;
     }
 
+    public void update(String nickname) {
+        this.nickname = nickname;
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     @Override
     public void preUpdate() {

@@ -71,6 +71,14 @@ public class UserController {
         );
     }
 
+    @PatchMapping("${service.api.user.update-profile}")
+    @ResponseStatus(HttpStatus.OK)
+    public UpdateProfile.Response updateProfile(@RequestBody @Valid UpdateProfile.Request request) {
+        return UpdateProfile.Response.fromDto(
+                userService.updateProfile(request)
+        );
+    }
+
     @PostMapping("${service.api.user.register-partner}")
     @ResponseStatus(HttpStatus.OK)
     public RegisterPartner.Response registerPartner() {
