@@ -48,10 +48,18 @@ service:
 
     restaurant:
       save: /restaurants
+      update: /restaurants/{restaurantId}
+      delete: /restaurants/{restaurantId}
+      request-delete: /restaurants/{restaurantId}/request
       search-auto: /restaurants/search/autocomplete
       search-name: /restaurants/search/name
       search-address: /restaurants/search/address
-      find: /restaurants/{id}
+      find: /restaurants/{restaurantId}
+
+    menu:
+      add: /restaurants/{restaurantId}/menus
+      update: /restaurants/{restaurantId}/menus/{menuId}
+      remove: /restaurants/{restaurantId}/menus/{menuId}
 
     reservation:
       reserve: /reservations

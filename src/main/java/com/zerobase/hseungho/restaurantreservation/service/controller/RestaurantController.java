@@ -46,7 +46,6 @@ public class RestaurantController {
                                                             @RequestParam("y") String userY,
                                                             @PageableDefault(sort = "rating", direction = Sort.Direction.DESC) Pageable pageable) {
         validateSortProperty(pageable.getSort());
-
         return SearchRestaurant.Response.fromListDto(
                 restaurantService.searchRestaurantByName(name, userX, userY, pageable)
         );
@@ -59,7 +58,6 @@ public class RestaurantController {
                                                                @RequestParam("y") String userY,
                                                                @PageableDefault(sort = "rating", direction = Sort.Direction.DESC) Pageable pageable) {
         validateSortProperty(pageable.getSort());
-
         return SearchRestaurant.Response.fromListDto(
                 restaurantService.searchRestaurantByAddress(address, userX, userY, pageable)
         );
@@ -67,9 +65,9 @@ public class RestaurantController {
 
     @GetMapping("${service.api.restaurant.find}")
     @ResponseStatus(HttpStatus.OK)
-    public FindRestaurant.Response findById(@PathVariable("id") Long id) {
+    public FindRestaurant.Response findById(@PathVariable("restaurantId") Long restaurantId) {
         return FindRestaurant.Response.fromDto(
-                restaurantService.findById(id)
+                restaurantService.findById(restaurantId)
         );
     }
 
