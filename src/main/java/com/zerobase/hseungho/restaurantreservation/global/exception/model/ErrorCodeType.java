@@ -39,7 +39,6 @@ public enum ErrorCodeType implements ErrorCode {
     BAD_REQUEST_RESIGN_ALREADY(HttpStatus.BAD_REQUEST, "이미 탈퇴한 유저입니다."),
     BAD_REQUEST_RESIGN_HAVING_RESTAURANT(HttpStatus.BAD_REQUEST, "매장을 소유하고 있는 파트너 유저는 탈퇴할 수 없습니다."),
 
-    BAD_REQUEST_SAVE_RESTAURANT_USER_NOT_PARTNER(HttpStatus.BAD_REQUEST, "파트너가 아닙니다. 파트너 등록을 먼저 해주세요."),
     BAD_REQUEST_SAVE_RESTAURANT_ALREADY_MANAGER(HttpStatus.BAD_REQUEST, "이미 등록한 매장이 있습니다. 매장은 하나만 등록 가능합니다."),
     BAD_REQUEST_SAVE_RESTAURANT_BLANK(HttpStatus.BAD_REQUEST, "매장 등록에 필요한 필수 정보를 모두 입력해주세요."),
     BAD_REQUEST_SAVE_RESTAURANT_COORDINATE_BY_ADDRESS(HttpStatus.BAD_REQUEST, "해당 주소의 좌표를 가져오는데에 실패하였습니다. 주소를 다시 시도해주세요."),
@@ -93,6 +92,8 @@ public enum ErrorCodeType implements ErrorCode {
     //////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////////////////////////////////////////
+    FORBIDDEN_ONLY_PARTNER(HttpStatus.FORBIDDEN, "파트너 유저만 접근할 수 있는 API 입니다."),
+
     FORBIDDEN_CANCEL_RESERVATION_NOT_YOUR_RESOURCE(HttpStatus.FORBIDDEN, "다른 고객의 예약을 취소할 수 없습니다."),
 
     FORBIDDEN_APPROVE_RESERVATION_CUSTOMER_CANNOT_APPROVE(HttpStatus.FORBIDDEN, "파트너가 아닌 유저는 예약을 승인할 수 없습니다."),

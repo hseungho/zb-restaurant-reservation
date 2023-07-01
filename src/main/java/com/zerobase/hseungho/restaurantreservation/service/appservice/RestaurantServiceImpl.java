@@ -91,8 +91,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Transactional
     protected Restaurant saveRestaurantEntity(SaveRestaurant.Request request) {
-        String id = SecurityHolder.getIdOfUser();
-        User user = userRepository.findById(id)
+        User user = userRepository.findById(SecurityHolder.getIdOfUser())
                 .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER));
 
         validateSaveRestaurantRequest(user, request);
@@ -118,9 +117,6 @@ public class RestaurantServiceImpl implements RestaurantService {
                 || !ValidUtils.isExactMinute(request.getOpenTime().getMinute(), request.getCloseTime().getMinute())
                 || !ValidUtils.isMin(1, request.getCountOfTables())) {
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_SAVE_RESTAURANT_BLANK);
-        }
-        if (!user.isPartner()) {
-            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_SAVE_RESTAURANT_USER_NOT_PARTNER);
         }
         if (restaurantRepository.existsByManager(user)) {
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_SAVE_RESTAURANT_ALREADY_MANAGER);

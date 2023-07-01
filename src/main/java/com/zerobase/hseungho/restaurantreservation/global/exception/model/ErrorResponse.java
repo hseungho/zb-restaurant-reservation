@@ -1,11 +1,16 @@
 package com.zerobase.hseungho.restaurantreservation.global.exception.model;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zerobase.hseungho.restaurantreservation.global.util.SeoulDateTime;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
+
+import java.io.IOException;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -28,6 +33,16 @@ public class ErrorResponse {
                 errorCode.getErrorMessage(),
                 path
         );
+    }
+
+    public static void sendErrorResponse(ErrorCode errorCode,
+                                         HttpServletRequest request,
+                                         HttpServletResponse response) throws IOException {
+        response.setStatus(errorCode.getHttpStatus().value());
+        response.setContentType("application/json; charset=utf-8");
+        response.getWriter().write(new ObjectMapper().writeValueAsString(
+                ErrorResponse.errorResponse(errorCode, request.getRequestURI())
+        ));
     }
 
     @Override

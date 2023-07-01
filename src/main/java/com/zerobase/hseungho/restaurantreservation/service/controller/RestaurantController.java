@@ -33,6 +33,10 @@ public class RestaurantController {
         );
     }
 
+//    @PutMapping("${service.api.restaurant.update}")
+//    @ResponseStatus(HttpStatus.OK)
+//    public
+
     @GetMapping("${service.api.restaurant.search-auto}")
     @ResponseStatus(HttpStatus.OK)
     public List<String> searchAutocomplete(@RequestParam("keyword") String keyword) {

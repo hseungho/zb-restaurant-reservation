@@ -1,6 +1,7 @@
 package com.zerobase.hseungho.restaurantreservation.global.config;
 
 import com.zerobase.hseungho.restaurantreservation.global.constants.PermitApiConstants;
+import com.zerobase.hseungho.restaurantreservation.global.security.CustomAccessDeniedHandler;
 import com.zerobase.hseungho.restaurantreservation.global.security.jwt.JwtAuthenticationFailureFilter;
 import com.zerobase.hseungho.restaurantreservation.global.security.jwt.JwtAuthenticationFilter;
 import com.zerobase.hseungho.restaurantreservation.global.security.jwt.JwtComponent;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -23,6 +25,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
@@ -51,6 +54,8 @@ public class SecurityConfiguration {
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtComponent), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JwtAuthenticationFailureFilter(), JwtAuthenticationFilter.class)
+                .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())
+                .and()
                 .logout(Customizer.withDefaults())
                 .build();
     }
