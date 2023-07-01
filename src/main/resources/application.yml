@@ -39,7 +39,12 @@ service:
       check-nickname: /sign-up/check-nickname
       sign-up: /sign-up
       login: /login
+      refresh: /login/refresh
+      update-pw: /users/password
+      find-profile: /users/profile
+      update-profile: /users/profile
       register-partner: /users/partner
+      resign: /users/resign
 
     restaurant:
       save: /restaurants
