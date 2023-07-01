@@ -71,6 +71,8 @@ public enum ErrorCodeType implements ErrorCode {
     BAD_REQUEST_UPDATE_REVIEW_INVALID_RATING_RANGE(HttpStatus.BAD_REQUEST, "평점은 1~5점 사이의 점수만 줄 수 있습니다."),
     BAD_REQUEST_UPDATE_REVIEW_BLANK(HttpStatus.BAD_REQUEST, "리뷰 수정에 필요한 모든 정보를 입력해주세요."),
     BAD_REQUEST_UPDATE_REVIEW_DELETED_RESTAURANT(HttpStatus.BAD_REQUEST, "영업 종료된 매장의 리뷰를 수정할 수 없습니다."),
+
+    BAD_REQUEST_DELETE_REVIEW_DELETED_RESTAURANT(HttpStatus.BAD_REQUEST, "영업 종료된 매장의 리뷰를 삭제할 수 없습니다."),
     //////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////////////////////////////////////////
@@ -92,8 +94,8 @@ public enum ErrorCodeType implements ErrorCode {
     FORBIDDEN_FIND_RESERVATION_CLIENT_NOT_YOUR_RESOURCE(HttpStatus.FORBIDDEN, "해당 예약의 예약자가 아닙니다."),
 
     FORBIDDEN_SAVE_REVIEW_NOT_YOUR_RESOURCE(HttpStatus.FORBIDDEN, "해당 예약의 예약자가 아닙니다."),
-
     FORBIDDEN_UPDATE_REVIEW_NOT_YOUR_REVIEW(HttpStatus.FORBIDDEN, "작성자가 아닌 유저가 리뷰를 수정할 후 없습니다."),
+    FORBIDDEN_DELETE_REVIEW_NOT_YOUR_REVIEW(HttpStatus.FORBIDDEN, "작성자가 아닌 유저가 리뷰를 삭제할 수 없습니다."),
     //////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////////////////////////////////////////

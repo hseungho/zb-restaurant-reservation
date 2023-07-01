@@ -85,7 +85,28 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public Long delete(Long restaurantId, Long reviewId) {
-        return null;
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESTAURANT));
+
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_REVIEW));
+
+        validateDeleteRequest(restaurant, review);
+
+        reviewRepository.delete(review);
+        
+        return restaurantId;
+    }
+
+    private void validateDeleteRequest(Restaurant restaurant, Review review) {
+        if (restaurant.isDeleted()) {
+            // 영업종료된 매장의 리뷰를 삭제할 수 없습니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_DELETE_REVIEW_DELETED_RESTAURANT);
+        }
+        if (!review.isAuthorId(SecurityHolder.getIdOfUser())) {
+            // 리뷰의 작성자가 아닌 유저가 리뷰를 삭제할 수 없습니다.
+            throw new ForbiddenException(ErrorCodeType.FORBIDDEN_DELETE_REVIEW_NOT_YOUR_REVIEW);
+        }
     }
 
     private String updateImage(Review review, UpdateReview.Request request) {
