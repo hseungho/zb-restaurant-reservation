@@ -66,6 +66,30 @@ public class MockBuilder {
                 .manager(manager)
                 .build();
     }
+    public static Restaurant mockDeletedRestaurant(User manager) {
+        return Restaurant.builder()
+                .id(MOCK_RESTAURANT_ID)
+                .name(MOCK_RESTAURANT_NAME)
+                .addressVO(new AddressVO(MOCK_ADDRESS, 34.123, 123.314))
+                .description(MOCK_DESCRIPTION)
+                .menus(List.of(
+                        Menu.builder()
+                                .name(MOCK_MENUNAME_1).price(MOCK_MENUPRICE_1).build(),
+                        Menu.builder()
+                                .name(MOCK_MENUNAME_2).price(MOCK_MENUPRICE_2).build()
+                ))
+                .open(LocalTime.of(MOCK_OPEN_HOUR, MOCK_OPEN_MINUTE))
+                .close(LocalTime.of(MOCK_CLOSE_HOUR, MOCK_CLOSE_MINUTE))
+                .countOfTables(MOCK_COUNT_OF_TABLES)
+                .maxPerReservation(MOCK_MAX_PER_RESERVATION)
+                .contactNumber(MOCK_CONTACT_NUMBER)
+                .rating(MOCK_RATING)
+                .deleteReqAt(SeoulDateTime.now())
+                .deletedAt(SeoulDateTime.now())
+                .reviews(new ArrayList<>())
+                .manager(manager)
+                .build();
+    }
 
     public static final Long MOCK_RESERVATION_ID = 1L;
     public static final String MOCK_RESERVATION_NUMBER = "ABCDE12345";
