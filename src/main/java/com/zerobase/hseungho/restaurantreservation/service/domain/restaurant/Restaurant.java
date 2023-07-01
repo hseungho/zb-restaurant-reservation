@@ -55,7 +55,12 @@ public class Restaurant extends BaseAuditingEntity {
             orphanRemoval = true
     )
     private List<Menu> menus = new ArrayList<>();
-    @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
+    @OneToMany(
+            mappedBy = "restaurant",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.PERSIST,
+            orphanRemoval = true
+    )
     private List<Review> reviews = new ArrayList<>();
     @OneToOne
     @JoinColumn(name = "user_id")
@@ -96,6 +101,15 @@ public class Restaurant extends BaseAuditingEntity {
 
     public boolean isDeleted() {
         return this.deletedAt != null;
+    }
+
+    public void addReview(Review review) {
+        reviews.add(review);
+        review.associate(this);
+
+        rating = reviews.stream()
+                .mapToDouble(Review::getRating)
+                .average().orElse(1.0);
     }
 
 }

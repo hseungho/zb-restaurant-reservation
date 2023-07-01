@@ -46,8 +46,26 @@ public class ValidUtils {
         return true;
     }
 
+    public static boolean isMin(double minTarget, Double... args) {
+        for (Double arg : args) {
+            if (arg < minTarget) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static boolean isMax(int maxTarget, Integer... args) {
         for (Integer arg : args) {
+            if (arg > maxTarget) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean isMax(double maxTarget, Double... args) {
+        for (Double arg : args) {
             if (arg > maxTarget) {
                 return false;
             }
@@ -82,5 +100,9 @@ public class ValidUtils {
         return now.isBefore(time) ?
                 now.plusMinutes(criteriaMinute).isAfter(time) :
                 now.minusMinutes(criteriaMinute).isBefore(time);
+    }
+
+    public static boolean isAfterNow(LocalDateTime time) {
+        return SeoulDateTime.now().isAfter(time);
     }
 }

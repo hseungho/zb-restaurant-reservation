@@ -5,11 +5,13 @@ import com.zerobase.hseungho.restaurantreservation.service.domain.reservation.Re
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.AddressVO;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Menu;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Restaurant;
+import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Review;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
 import com.zerobase.hseungho.restaurantreservation.service.type.ReservationStatus;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,9 +56,8 @@ public class MockBuilder {
                         Menu.builder()
                                 .name(MOCK_MENUNAME_2).price(MOCK_MENUPRICE_2).build()
                 ))
-                .restaurantTimeVO(
-                        new RestaurantTimeVO(MOCK_OPEN_HOUR, MOCK_OPEN_MINUTE, MOCK_CLOSE_HOUR, MOCK_CLOSE_MINUTE)
-                )
+                .open(LocalTime.of(MOCK_OPEN_HOUR, MOCK_OPEN_MINUTE))
+                .close(LocalTime.of(MOCK_CLOSE_HOUR, MOCK_CLOSE_MINUTE))
                 .countOfTables(MOCK_COUNT_OF_TABLES)
                 .maxPerReservation(MOCK_MAX_PER_RESERVATION)
                 .contactNumber(MOCK_CONTACT_NUMBER)
@@ -86,5 +87,21 @@ public class MockBuilder {
                 .client(client)
                 .restaurant(restaurant)
                 .build();
+    }
+
+    public static final Long MOCK_REVIEW_ID = 1L;
+    public static final Double MOCK_REVIEW_RATING = 4.5;
+    public static final String MOCK_REVIEW_CONTENT = "리뷰내용입니다.";
+    public static final String MOCK_REVIEW_IMAGE_SRC = "리뷰이미지주소";
+    public static final Review mockReview(User author, Restaurant restaurant) {
+        return Review.builder()
+                .id(MOCK_REVIEW_ID)
+                .rating(MOCK_REVIEW_RATING)
+                .content(MOCK_REVIEW_CONTENT)
+                .imageSrc(MOCK_REVIEW_IMAGE_SRC)
+                .author(author)
+                .restaurant(restaurant)
+                .build();
+
     }
 }

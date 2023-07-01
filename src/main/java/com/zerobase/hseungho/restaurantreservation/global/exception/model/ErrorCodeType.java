@@ -61,6 +61,18 @@ public enum ErrorCodeType implements ErrorCode {
     BAD_REQUEST_VISIT_RESERVATION_STATUS_IS_NOT_SUITED_VISIT(HttpStatus.BAD_REQUEST, "도착확인할 수 없는 예약 상태입니다."),
 
     BAD_REQUEST_FIND_RESERVATION_DELETED_RESTAURANT(HttpStatus.BAD_REQUEST, "영업 종료된 매장의 예약은 조회할 수 없습니다."),
+
+    BAD_REQUEST_SAVE_REVIEW_INVALID_RATING_RANGE(HttpStatus.BAD_REQUEST, "평점은 1~5점 사이의 점수만 줄 수 있습니다."),
+    BAD_REQUEST_SAVE_REVIEW_BLANK(HttpStatus.BAD_REQUEST, "리뷰 등록에 필요한 모든 정보를 입력해주세요."),
+    BAD_REQUEST_SAVE_REVIEW_DELETED_RESTAURANT(HttpStatus.BAD_REQUEST, "영업 종료된 매장에 리뷰를 등록할 수 없습니다."),
+    BAD_REQUEST_SAVE_REVIEW_CANNOT_BEFORE_RESERVED_TIME(HttpStatus.BAD_REQUEST, "예약시간 이전에 리뷰를 등록할 수 없습니다."),
+    BAD_REQUEST_SAVE_REVIEW_CAN_ONLY_VISITED(HttpStatus.BAD_REQUEST, "도착확인이 되기 전에 리뷰를 등록할 수 없습니다."),
+
+    BAD_REQUEST_UPDATE_REVIEW_INVALID_RATING_RANGE(HttpStatus.BAD_REQUEST, "평점은 1~5점 사이의 점수만 줄 수 있습니다."),
+    BAD_REQUEST_UPDATE_REVIEW_BLANK(HttpStatus.BAD_REQUEST, "리뷰 수정에 필요한 모든 정보를 입력해주세요."),
+    BAD_REQUEST_UPDATE_REVIEW_DELETED_RESTAURANT(HttpStatus.BAD_REQUEST, "영업 종료된 매장의 리뷰를 수정할 수 없습니다."),
+
+    BAD_REQUEST_DELETE_REVIEW_DELETED_RESTAURANT(HttpStatus.BAD_REQUEST, "영업 종료된 매장의 리뷰를 삭제할 수 없습니다."),
     //////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////////////////////////////////////////
@@ -80,17 +92,23 @@ public enum ErrorCodeType implements ErrorCode {
 
     FORBIDDEN_FIND_RESERVATION_MANAGER_NOT_YOUR_RESOURCE(HttpStatus.FORBIDDEN, "해당 예약 매장의 점장이 아닙니다."),
     FORBIDDEN_FIND_RESERVATION_CLIENT_NOT_YOUR_RESOURCE(HttpStatus.FORBIDDEN, "해당 예약의 예약자가 아닙니다."),
+
+    FORBIDDEN_SAVE_REVIEW_NOT_YOUR_RESOURCE(HttpStatus.FORBIDDEN, "해당 예약의 예약자가 아닙니다."),
+    FORBIDDEN_UPDATE_REVIEW_NOT_YOUR_REVIEW(HttpStatus.FORBIDDEN, "작성자가 아닌 유저가 리뷰를 수정할 후 없습니다."),
+    FORBIDDEN_DELETE_REVIEW_NOT_YOUR_REVIEW(HttpStatus.FORBIDDEN, "작성자가 아닌 유저가 리뷰를 삭제할 수 없습니다."),
     //////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////////////////////////////////////////
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다."),
     NOT_FOUND_RESTAURANT(HttpStatus.NOT_FOUND, "존재하지 않는 매장입니다."),
     NOT_FOUND_RESERVATION(HttpStatus.NOT_FOUND, "존재하지 않는 예약입니다."),
+    NOT_FOUND_REVIEW(HttpStatus.NOT_FOUND, "존재하지 않는 리뷰입니다."),
     //////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////////////////////////////////////////
     INTERNAL_SERVER_ERROR_KAKAO_API(HttpStatus.INTERNAL_SERVER_ERROR, "내부적으로 주소 좌표를 가져오는데에 실패하였습니다. 관리자에게 문의해주세요."),
     INTERNAL_SERVER_ERROR_GENERATE_RESERVATION_NUMBER(HttpStatus.INTERNAL_SERVER_ERROR, "예약번호를 생성하는데에 문제가 발생하였습니다. 관리자에게 문의해주세요."),
+    INTERNAL_SERVER_ERROR_UPLOAD_IMAGE_S3(HttpStatus.INTERNAL_SERVER_ERROR, "내부적으로 이미지를 업로드하는데에 문제가 발생했습니다. 관리자에게 문의해주세요."),
     //////////////////////////////////////////////////////////////////////////////
 
     ;
