@@ -2,6 +2,7 @@ package com.zerobase.hseungho.restaurantreservation.service.controller;
 
 import com.zerobase.hseungho.restaurantreservation.service.appservice.ReviewService;
 import com.zerobase.hseungho.restaurantreservation.service.dto.review.SaveReview;
+import com.zerobase.hseungho.restaurantreservation.service.dto.review.UpdateReview;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,4 +24,13 @@ public class ReviewController {
         );
     }
 
+    @PutMapping("${service.api.review.update}")
+    @ResponseStatus(HttpStatus.OK)
+    public UpdateReview.Response updateReview(@PathVariable("restaurantId") Long restaurantId,
+                                              @PathVariable("reviewId") Long reviewId,
+                                              @RequestBody @Valid UpdateReview.Request request) {
+        return UpdateReview.Response.fromDto(
+                reviewService.update(restaurantId, reviewId, request)
+        );
+    }
 }

@@ -2,30 +2,23 @@ package com.zerobase.hseungho.restaurantreservation.service.dto.review;
 
 import com.zerobase.hseungho.restaurantreservation.service.dto.reservation.ReservationDto;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.RestaurantDto;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
-public class SaveReview {
+public class UpdateReview {
+
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
     public static class Request {
-        @NotNull
-        private Long reservationId;
-        @NotNull
-        @Min(1)
-        @Max(5)
         private Double rating;
-        @NotBlank
         private String content;
+        private Boolean isDeleteImage;
+        private Boolean isUpdateImage;
         private MultipartFile image;
     }
 
