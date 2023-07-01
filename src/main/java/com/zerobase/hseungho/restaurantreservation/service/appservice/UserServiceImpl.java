@@ -49,13 +49,15 @@ public class UserServiceImpl implements UserService {
     public UserDto signUp(SignUp.Request request) {
         validateSignUpRequest(request);
 
-        User newUser = User.createDefaultEntity(
-                request.getUserId(),
-                passwordEncoder.encode(request.getPassword()),
-                request.getNickname()
+        return UserDto.fromEntity(
+                userRepository.save(
+                        User.createDefaultEntity(
+                                request.getUserId(),
+                                passwordEncoder.encode(request.getPassword()),
+                                request.getNickname()
+                        )
+                )
         );
-
-        return UserDto.fromEntity(userRepository.save(newUser));
     }
 
     @Override
@@ -78,8 +80,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto registerPartner() {
-        String id = SecurityHolder.getIdOfUser();
-        User user = userRepository.findById(id)
+        User user = userRepository.findById(SecurityHolder.getIdOfUser())
                 .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER));
 
         validateRegisterPartnerRequest(user);
@@ -120,6 +121,11 @@ public class UserServiceImpl implements UserService {
         user.updatePassword(passwordEncoder.encode(request.getNewPassword()));
 
         return UserDto.fromEntity(user);
+    }
+
+    @Override
+    public UserDto findProfile() {
+        return UserDto.fromEntity(SecurityHolder.getUser());
     }
 
     private void validateUpdatePasswordRequest(UpdatePassword.Request request, User user) {

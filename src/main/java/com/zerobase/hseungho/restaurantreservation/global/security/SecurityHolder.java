@@ -9,4 +9,8 @@ public class SecurityHolder {
         return ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
     }
 
+    public static User getUser() {
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
 }

@@ -63,6 +63,14 @@ public class UserController {
         );
     }
 
+    @GetMapping("${service.api.user.find-profile}")
+    @ResponseStatus(HttpStatus.OK)
+    public FindProfile.Response findProfile() {
+        return FindProfile.Response.fromDto(
+                userService.findProfile()
+        );
+    }
+
     @PostMapping("${service.api.user.register-partner}")
     @ResponseStatus(HttpStatus.OK)
     public RegisterPartner.Response registerPartner() {

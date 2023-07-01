@@ -51,4 +51,10 @@ public interface UserService {
      * @return 유저 DTO 클래스
      */
     UserDto updatePassword(UpdatePassword.Request request);
+
+    /**
+     * 내 정보 조회 메소드.
+     * @return 유저 DTO 클래스
+     */
+    UserDto findProfile();
 }
