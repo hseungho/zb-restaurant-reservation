@@ -195,7 +195,7 @@ public class UserServiceImpl implements UserService {
             // 현재 비밀번호가 일치하지 않습니다.
             throw new UnauthorizedException(ErrorCodeType.UNAUTHORIZED_UPDATE_PASSWORD_INVALID_CUR_PASSWORD);
         }
-        if (!isAvailablePassword(user.getUserId(), request.getNewPassword())) {
+        if (isUnavailablePassword(user.getUserId(), request.getNewPassword())) {
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_UPDATE_PASSWORD_INVALID_PASSWORD);
         }
     }
@@ -239,15 +239,15 @@ public class UserServiceImpl implements UserService {
         if (!(request.getNickname().length() < 15)) {
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_SIGN_UP_NICKNAME_LENGTH);
         }
-        if (!isAvailablePassword(request.getUserId(), request.getPassword())) {
+        if (isUnavailablePassword(request.getUserId(), request.getPassword())) {
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_SIGN_UP_PASSWORD);
         }
     }
 
-    private boolean isAvailablePassword(String userId, String password) {
+    private boolean isUnavailablePassword(String userId, String password) {
         String regex = "^(?=.*\\d)(?=.*[~`!@#$%\\^&*()-])(?=.*[a-z]).{8,100}$";
         Matcher matcher = Pattern.compile(regex).matcher(password);
-        return matcher.matches() && !password.contains(userId) && !password.contains(" ");
+        return !matcher.matches() || password.contains(userId) || password.contains(" ");
     }
 
 }
