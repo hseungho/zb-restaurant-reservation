@@ -16,6 +16,8 @@ public enum ErrorCodeType implements ErrorCode {
     UNAUTHORIZED_REFRESH_TOKEN_BLANK(HttpStatus.UNAUTHORIZED, "리프레시 토큰이 없습니다. 다시 로그인해주세요."),
     UNAUTHORIZED_REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "리프레시 토큰이 만료되었습니다. 다시 로그인해주세요."),
     UNAUTHORIZED_REFRESH_TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "리프레시 토큰이 유효하지 않습니다. 다시 로그인해주세요."),
+
+    UNAUTHORIZED_UPDATE_PASSWORD_INVALID_CUR_PASSWORD(HttpStatus.UNAUTHORIZED, "현재 비밀번호가 일치하지 않습니다."),
     //////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////////////////////////////////////////

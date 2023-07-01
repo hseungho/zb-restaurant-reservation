@@ -75,6 +75,10 @@ public class User extends BaseAuditingEntity implements UserDetails {
         return type == UserType.ROLE_PARTNER;
     }
 
+    public void updatePassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     @Override
     public void preUpdate() {

@@ -8,10 +8,7 @@ import com.zerobase.hseungho.restaurantreservation.global.security.SecurityHolde
 import com.zerobase.hseungho.restaurantreservation.global.security.jwt.JwtComponent;
 import com.zerobase.hseungho.restaurantreservation.global.util.ValidUtils;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
-import com.zerobase.hseungho.restaurantreservation.service.dto.user.Login;
-import com.zerobase.hseungho.restaurantreservation.service.dto.user.SignUp;
-import com.zerobase.hseungho.restaurantreservation.service.dto.user.TokenDto;
-import com.zerobase.hseungho.restaurantreservation.service.dto.user.UserDto;
+import com.zerobase.hseungho.restaurantreservation.service.dto.user.*;
 import com.zerobase.hseungho.restaurantreservation.service.repository.UserRepository;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -93,7 +90,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public TokenDto refreshToken(String refreshToken) {
         try {
             String token = validateRefreshTokenRequest(refreshToken);
@@ -109,6 +106,26 @@ public class UserServiceImpl implements UserService {
             throw new UnauthorizedException(ErrorCodeType.UNAUTHORIZED_REFRESH_TOKEN_EXPIRED);
         } catch (JwtException e) {
             throw new UnauthorizedException(ErrorCodeType.UNAUTHORIZED_REFRESH_TOKEN_INVALID);
+        }
+    }
+
+    @Override
+    @Transactional
+    public UserDto updatePassword(UpdatePassword.Request request) {
+        User user = userRepository.findById(SecurityHolder.getIdOfUser())
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER));
+
+        validateUpdatePasswordRequest(request, user);
+
+        user.updatePassword(passwordEncoder.encode(request.getNewPassword()));
+
+        return UserDto.fromEntity(user);
+    }
+
+    private void validateUpdatePasswordRequest(UpdatePassword.Request request, User user) {
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+            // 현재 비밀번호가 일치하지 않습니다.
+            throw new UnauthorizedException(ErrorCodeType.UNAUTHORIZED_UPDATE_PASSWORD_INVALID_CUR_PASSWORD);
         }
     }
 

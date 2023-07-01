@@ -1,9 +1,6 @@
 package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
-import com.zerobase.hseungho.restaurantreservation.service.dto.user.Login;
-import com.zerobase.hseungho.restaurantreservation.service.dto.user.SignUp;
-import com.zerobase.hseungho.restaurantreservation.service.dto.user.TokenDto;
-import com.zerobase.hseungho.restaurantreservation.service.dto.user.UserDto;
+import com.zerobase.hseungho.restaurantreservation.service.dto.user.*;
 
 public interface UserService {
 
@@ -47,4 +44,11 @@ public interface UserService {
      * @return 토큰 DTO 클래스
      */
     TokenDto refreshToken(String refreshToken);
+
+    /**
+     * 비밀번호 변경 메소드.
+     * @param request 비밀번호 변경 요청 DTO 클래스
+     * @return 유저 DTO 클래스
+     */
+    UserDto updatePassword(UpdatePassword.Request request);
 }

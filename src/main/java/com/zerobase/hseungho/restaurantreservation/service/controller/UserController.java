@@ -55,6 +55,14 @@ public class UserController {
         );
     }
 
+    @PatchMapping("${service.api.user.update-pw}")
+    @ResponseStatus(HttpStatus.OK)
+    public UpdatePassword.Response updatePassword(@RequestBody @Valid UpdatePassword.Request request) {
+        return UpdatePassword.Response.fromDto(
+                userService.updatePassword(request)
+        );
+    }
+
     @PostMapping("${service.api.user.register-partner}")
     @ResponseStatus(HttpStatus.OK)
     public RegisterPartner.Response registerPartner() {
