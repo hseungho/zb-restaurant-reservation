@@ -7,8 +7,10 @@ import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorC
 import com.zerobase.hseungho.restaurantreservation.global.security.SecurityHolder;
 import com.zerobase.hseungho.restaurantreservation.global.security.jwt.JwtComponent;
 import com.zerobase.hseungho.restaurantreservation.global.util.ValidUtils;
+import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Restaurant;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
 import com.zerobase.hseungho.restaurantreservation.service.dto.user.*;
+import com.zerobase.hseungho.restaurantreservation.service.repository.RestaurantRepository;
 import com.zerobase.hseungho.restaurantreservation.service.repository.UserRepository;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -29,6 +31,7 @@ import java.util.regex.Pattern;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final RestaurantRepository restaurantRepository;
 
     private final PasswordEncoder passwordEncoder;
     private final JwtComponent jwtComponent;
@@ -140,6 +143,34 @@ public class UserServiceImpl implements UserService {
         user.update(request.getNickname());
 
         return UserDto.fromEntity(user);
+    }
+
+    @Override
+    @Transactional
+    public UserDto resign() {
+        User user = userRepository.findById(SecurityHolder.getIdOfUser())
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER));
+
+        validateResignRequest(user);
+
+        user.resign();
+
+        return UserDto.fromEntity(user);
+    }
+
+    private void validateResignRequest(User user) {
+        if (user.isResigned()) {
+            // 이미 탈퇴한 유저입니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_RESIGN_ALREADY);
+        }
+        if (user.isPartner()) {
+            Restaurant restaurant = restaurantRepository.findByManager(user).orElse(null);
+            if (restaurant == null) return;
+            if (!restaurant.isDeleted()) {
+                // 아직 매장을 갖고 있는 파트너 유저는 탈퇴할 수 없습니다.
+                throw new BadRequestException(ErrorCodeType.BAD_REQUEST_RESIGN_HAVING_RESTAURANT);
+            }
+        }
     }
 
     private void validateUpdateProfileRequest(User user, UpdateProfile.Request request) {

@@ -64,4 +64,10 @@ public interface UserService {
      * @return 유저 DTO 클래스
      */
     UserDto updateProfile(UpdateProfile.Request request);
+
+    /**
+     * 회원 탈퇴 메소드.
+     * @return 유저 DTO 클래스
+     */
+    UserDto resign();
 }

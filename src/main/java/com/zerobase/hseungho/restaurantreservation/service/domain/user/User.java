@@ -56,7 +56,7 @@ public class User extends BaseAuditingEntity implements UserDetails {
     }
 
     public boolean isResigned() {
-        return deletedAt != null;
+        return deletedAt != null || type == UserType.RESIGNED;
     }
 
     public void login() {
@@ -81,6 +81,11 @@ public class User extends BaseAuditingEntity implements UserDetails {
 
     public void update(String nickname) {
         this.nickname = nickname;
+    }
+
+    public void resign() {
+        this.deletedAt = SeoulDateTime.now();
+        this.type = UserType.RESIGNED;
     }
 
     ///////////////////////////////////////////////////////////////////////////

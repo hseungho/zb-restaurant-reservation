@@ -79,6 +79,14 @@ public class UserController {
         );
     }
 
+    @DeleteMapping("${service.api.user.resign}")
+    @ResponseStatus(HttpStatus.OK)
+    public Resign.Response resign() {
+        return Resign.Response.fromDto(
+                userService.resign()
+        );
+    }
+
     @PostMapping("${service.api.user.register-partner}")
     @ResponseStatus(HttpStatus.OK)
     public RegisterPartner.Response registerPartner() {
