@@ -6,6 +6,7 @@ import com.zerobase.hseungho.restaurantreservation.service.appservice.Restaurant
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.FindRestaurant;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SaveRestaurant;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SearchRestaurant;
+import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.UpdateRestaurant;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -33,9 +34,13 @@ public class RestaurantController {
         );
     }
 
-//    @PutMapping("${service.api.restaurant.update}")
-//    @ResponseStatus(HttpStatus.OK)
-//    public
+    @PutMapping("${service.api.restaurant.update}")
+    @ResponseStatus(HttpStatus.OK)
+    public UpdateRestaurant.Response updateRestaurant(@RequestBody @Valid UpdateRestaurant.Request request) {
+        return UpdateRestaurant.Response.fromDto(
+                restaurantService.updateRestaurant(request)
+        );
+    }
 
     @GetMapping("${service.api.restaurant.search-auto}")
     @ResponseStatus(HttpStatus.OK)

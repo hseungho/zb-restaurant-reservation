@@ -22,9 +22,9 @@ public class SaveRestaurant {
         private String description;
         private List<SaveMenu.Request> menus;
         @NonNull
-        private SaveRestaurantTime.Request openTime;
+        private SaveRestaurant.TimeRequest.Request openTime;
         @NonNull
-        private SaveRestaurantTime.Request closeTime;
+        private SaveRestaurant.TimeRequest.Request closeTime;
         @Min(1)
         private Integer countOfTables;
         private Integer maxPerReservation;
@@ -36,7 +36,7 @@ public class SaveRestaurant {
         }
     }
 
-    public static class SaveRestaurantTime {
+    public static class TimeRequest {
         @Getter
         @NoArgsConstructor
         @AllArgsConstructor

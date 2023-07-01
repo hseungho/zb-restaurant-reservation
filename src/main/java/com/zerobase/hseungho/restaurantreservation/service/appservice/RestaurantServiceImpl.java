@@ -14,6 +14,7 @@ import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.IRestaurantDto;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.RestaurantDto;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SaveRestaurant;
+import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.UpdateRestaurant;
 import com.zerobase.hseungho.restaurantreservation.service.repository.RestaurantRepository;
 import com.zerobase.hseungho.restaurantreservation.service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -77,6 +78,12 @@ public class RestaurantServiceImpl implements RestaurantService {
                 restaurantRepository.findById(id)
                         .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESTAURANT))
         );
+    }
+
+    @Override
+    @Transactional
+    public RestaurantDto updateRestaurant(UpdateRestaurant.Request request) {
+        return null;
     }
 
     private CoordinateDto validateSearchRestaurantRequest(String userX, String userY) {
