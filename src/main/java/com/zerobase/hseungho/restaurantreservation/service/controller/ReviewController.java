@@ -1,6 +1,7 @@
 package com.zerobase.hseungho.restaurantreservation.service.controller;
 
 import com.zerobase.hseungho.restaurantreservation.service.appservice.ReviewService;
+import com.zerobase.hseungho.restaurantreservation.service.dto.review.DeleteReview;
 import com.zerobase.hseungho.restaurantreservation.service.dto.review.SaveReview;
 import com.zerobase.hseungho.restaurantreservation.service.dto.review.UpdateReview;
 import jakarta.validation.Valid;
@@ -31,6 +32,15 @@ public class ReviewController {
                                               @RequestBody @Valid UpdateReview.Request request) {
         return UpdateReview.Response.fromDto(
                 reviewService.update(restaurantId, reviewId, request)
+        );
+    }
+
+    @DeleteMapping("${service.api.review.delete}")
+    @ResponseStatus(HttpStatus.OK)
+    public DeleteReview.Response deleteReview(@PathVariable("restaurantId") Long restaurantId,
+                                              @PathVariable("reviewId") Long reviewId) {
+        return DeleteReview.Response.of(
+                reviewService.delete(restaurantId, reviewId)
         );
     }
 }

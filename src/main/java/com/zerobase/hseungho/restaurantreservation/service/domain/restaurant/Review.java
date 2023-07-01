@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.Objects;
+
 @Entity(name = "review")
 @Getter
 @NoArgsConstructor
@@ -41,8 +43,18 @@ public class Review extends BaseAuditingEntity {
                 .build();
     }
 
+    public void update(Double rating, String content, String imageSrc) {
+        this.rating = rating;
+        this.content = content;
+        this.imageSrc = imageSrc;
+    }
+
     public void associate(Restaurant restaurant) {
         this.restaurant = restaurant;
+    }
+
+    public boolean isAuthorId(String aId) {
+        return Objects.equals(this.author.getId(), aId);
     }
 
 }

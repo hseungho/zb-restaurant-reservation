@@ -107,8 +107,9 @@ public class Restaurant extends BaseAuditingEntity {
         reviews.add(review);
         review.associate(this);
 
-        rating = reviews.stream().mapToDouble(Review::getRating)
-                .average().orElse(0);
+        rating = reviews.stream()
+                .mapToDouble(Review::getRating)
+                .average().orElse(1.0);
     }
 
 }

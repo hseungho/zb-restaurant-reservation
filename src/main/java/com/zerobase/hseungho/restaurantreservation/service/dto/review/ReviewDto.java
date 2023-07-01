@@ -34,4 +34,15 @@ public class ReviewDto {
                 .reservation(ReservationDto.fromEntity(reservation))
                 .build();
     }
+
+    public static ReviewDto fromEntity(Review entity) {
+        return ReviewDto.builder()
+                .id(entity.getId())
+                .rating(entity.getRating())
+                .content(entity.getContent())
+                .imageSrc(entity.getImageSrc())
+                .author(UserDto.fromEntity(entity.getAuthor()))
+                .restaurant(RestaurantDto.fromEntity(entity.getRestaurant()))
+                .build();
+    }
 }
