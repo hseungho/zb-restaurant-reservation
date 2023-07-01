@@ -79,4 +79,11 @@ public class JwtComponent {
         return Base64.getEncoder().encodeToString(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
+    public String separatePrefix(String authorization) {
+        if (StringUtils.hasText(authorization) && authorization.startsWith(TOKEN_PREFIX)) {
+            return authorization.substring(TOKEN_PREFIX.length());
+        }
+        return null;
+    }
+
 }

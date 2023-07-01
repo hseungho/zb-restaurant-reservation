@@ -1,13 +1,16 @@
 package com.zerobase.hseungho.restaurantreservation.global.config;
 
+import com.zerobase.hseungho.restaurantreservation.global.constants.PermitApiConstants;
 import com.zerobase.hseungho.restaurantreservation.global.security.jwt.JwtAuthenticationFailureFilter;
 import com.zerobase.hseungho.restaurantreservation.global.security.jwt.JwtAuthenticationFilter;
+import com.zerobase.hseungho.restaurantreservation.global.security.jwt.JwtComponent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -23,8 +26,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final JwtAuthenticationFailureFilter jwtAuthenticationFailureFilter;
+    private final JwtComponent jwtComponent;
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers(PermitApiConstants.PERMIT_APIS_TO_ARRAY);
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -39,11 +46,11 @@ public class SecurityConfiguration {
                 .headers().frameOptions().disable()
                 .and()
                 .authorizeHttpRequests(request ->
-                        request.requestMatchers("/**/sign-up/**", "/**/login/**", "/**/search/**", "/h2-console/**").permitAll()
+                        request.requestMatchers(PermitApiConstants.PERMIT_APIS_TO_ARRAY).permitAll()
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(jwtAuthenticationFailureFilter, JwtAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationFilter(jwtComponent), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationFailureFilter(), JwtAuthenticationFilter.class)
                 .logout(Customizer.withDefaults())
                 .build();
     }

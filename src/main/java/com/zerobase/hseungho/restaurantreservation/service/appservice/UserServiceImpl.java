@@ -14,6 +14,8 @@ import com.zerobase.hseungho.restaurantreservation.service.dto.user.TokenDto;
 import com.zerobase.hseungho.restaurantreservation.service.dto.user.UserDto;
 import com.zerobase.hseungho.restaurantreservation.service.repository.UserRepository;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -88,6 +90,37 @@ public class UserServiceImpl implements UserService {
         user.setType(UserType.ROLE_PARTNER);
 
         return UserDto.fromEntity(user);
+    }
+
+    @Override
+    @Transactional
+    public TokenDto refreshToken(String refreshToken) {
+        try {
+            String token = validateRefreshTokenRequest(refreshToken);
+
+            User user = ((User) jwtComponent.getAuthentication(token).getPrincipal());
+
+            return TokenDto.of(
+                    jwtComponent.generateAccessToken(user.getId(), user.getType()),
+                    jwtComponent.generateRefreshToken(user.getId(), user.getType()),
+                    user.getLoggedInAt()
+            );
+        } catch (ExpiredJwtException e) {
+            throw new UnauthorizedException(ErrorCodeType.UNAUTHORIZED_REFRESH_TOKEN_EXPIRED);
+        } catch (JwtException e) {
+            throw new UnauthorizedException(ErrorCodeType.UNAUTHORIZED_REFRESH_TOKEN_INVALID);
+        }
+    }
+
+    private String validateRefreshTokenRequest(String refreshToken) {
+        if (!ValidUtils.hasTexts(refreshToken)) {
+            throw new UnauthorizedException(ErrorCodeType.UNAUTHORIZED_REFRESH_TOKEN_BLANK);
+        }
+        String token = jwtComponent.separatePrefix(refreshToken);
+        if (!ValidUtils.hasTexts(token)) {
+            throw new UnauthorizedException(ErrorCodeType.UNAUTHORIZED_REFRESH_TOKEN_INVALID);
+        }
+        return token;
     }
 
     private void validateRegisterPartnerRequest(User user) {

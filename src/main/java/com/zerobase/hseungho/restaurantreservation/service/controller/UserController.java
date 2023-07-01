@@ -1,12 +1,10 @@
 package com.zerobase.hseungho.restaurantreservation.service.controller;
 
 import com.zerobase.hseungho.restaurantreservation.service.appservice.UserService;
-import com.zerobase.hseungho.restaurantreservation.service.dto.user.CheckUsingResourceAvailable;
-import com.zerobase.hseungho.restaurantreservation.service.dto.user.Login;
-import com.zerobase.hseungho.restaurantreservation.service.dto.user.RegisterPartner;
-import com.zerobase.hseungho.restaurantreservation.service.dto.user.SignUp;
+import com.zerobase.hseungho.restaurantreservation.service.dto.user.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,6 +44,14 @@ public class UserController {
     public Login.Response login(@RequestBody @Valid Login.Request request) {
         return Login.Response.fromTokenDto(
                 userService.login(request)
+        );
+    }
+
+    @GetMapping("${service.api.user.refresh}")
+    @ResponseStatus(HttpStatus.OK)
+    public TokenRefresh.Response refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String refreshToken) {
+        return TokenRefresh.Response.fromTokenDto(
+                userService.refreshToken(refreshToken)
         );
     }
 

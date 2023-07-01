@@ -40,4 +40,11 @@ public interface UserService {
      * @return 유저 DTO 클래스
      */
     UserDto registerPartner();
+
+    /**
+     * 액세스 토큰 리프레시 메소드.
+     * @param refreshToken 리프레시 토큰
+     * @return 토큰 DTO 클래스
+     */
+    TokenDto refreshToken(String refreshToken);
 }
