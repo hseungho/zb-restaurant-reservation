@@ -15,10 +15,7 @@ import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Men
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Restaurant;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Review;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
-import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.IRestaurantDto;
-import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.RestaurantDto;
-import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SaveRestaurant;
-import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.UpdateRestaurant;
+import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.*;
 import com.zerobase.hseungho.restaurantreservation.service.repository.*;
 import com.zerobase.hseungho.restaurantreservation.service.type.ReservationStatus;
 import lombok.RequiredArgsConstructor;
@@ -133,14 +130,43 @@ public class RestaurantServiceImpl implements RestaurantService {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESTAURANT));
 
-        validateRequestDeletingRestaurant(SecurityHolder.getUser(), restaurant, date.atStartOfDay());
+        validateRequestDeletingRestaurantRequest(SecurityHolder.getUser(), restaurant, date.atStartOfDay());
 
         restaurant.requestDeleting(date);
 
         return RestaurantDto.fromEntity(restaurant);
     }
 
-    private void validateRequestDeletingRestaurant(User user, Restaurant restaurant, LocalDateTime date) {
+    @Override
+    @Transactional
+    public RestaurantDto addMenus(Long restaurantId, AddMenus.Request request) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESTAURANT));
+
+        validateAddMenusRequest(SecurityHolder.getUser(), restaurant, request);
+
+        request.getMenus().forEach(it -> {
+            restaurant.addMenu(Menu.create(it.getName(), it.getPrice()));
+        });
+
+        return RestaurantDto.fromEntity(restaurant);
+    }
+
+    private void validateAddMenusRequest(User user, Restaurant restaurant, AddMenus.Request request) {
+        if (!ValidUtils.hasTexts(request.getMenus().stream()
+                    .map(AddMenus.Request.MenuRequest::getName).toArray(String[]::new))
+            || !ValidUtils.isMin(0L, request.getMenus().stream()
+                    .mapToLong(AddMenus.Request.MenuRequest::getPrice).toArray())) {
+            // 메뉴 추가를 위해 필요한 모든 정보를 입력해주세요.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_ADD_MENUS_BLANK);
+        }
+        if (!restaurant.isManager(user)) {
+            // 해당 매장의 점장이 아닙니다.
+            throw new ForbiddenException(ErrorCodeType.FORBIDDEN_ADD_MENUS_NOT_YOUR_RESTAURANT);
+        }
+    }
+
+    private void validateRequestDeletingRestaurantRequest(User user, Restaurant restaurant, LocalDateTime date) {
         if (date.isBefore(SeoulDateTime.now())) {
             // 현재보다 이전 시간에 매장을 삭제 요청할 수 없습니다.
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_REQUEST_DELETING_RESTAURANT_REQ_TIME_IS_BEFORE_NOW);

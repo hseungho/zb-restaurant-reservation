@@ -60,11 +60,10 @@ service:
       search-name: /restaurants/search/name
       search-address: /restaurants/search/address
       find: /restaurants/{restaurantId}
-
-    menu:
-      add: /restaurants/{restaurantId}/menus
-      update: /restaurants/{restaurantId}/menus/{menuId}
-      remove: /restaurants/{restaurantId}/menus/{menuId}
+      menu:
+        add: /restaurants/{restaurantId}/menus
+        update: /restaurants/{restaurantId}/menus/{menuId}
+        remove: /restaurants/{restaurantId}/menus/{menuId}
 
     reservation:
       reserve: /reservations

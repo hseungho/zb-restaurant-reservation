@@ -1,9 +1,6 @@
 package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
-import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.IRestaurantDto;
-import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.RestaurantDto;
-import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SaveRestaurant;
-import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.UpdateRestaurant;
+import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
@@ -77,4 +74,12 @@ public interface RestaurantService {
      * @return 매장 DTO 클래스
      */
     RestaurantDto requestDeletingRestaurant(Long restaurantId, LocalDate date);
+
+    /**
+     * 메뉴 추가 메소드.
+     * @param restaurantId 메뉴 추가할 매장 ID
+     * @param request 메뉴 추가 요청 DTO 클래스
+     * @return 매장 DTO 클래스
+     */
+    RestaurantDto addMenus(Long restaurantId, AddMenus.Request request);
 }

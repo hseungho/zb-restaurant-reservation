@@ -37,8 +37,8 @@ public class ValidUtils {
         return true;
     }
 
-    public static boolean isMin(int minTarget, Integer... args) {
-        for (Integer arg : args) {
+    public static boolean isMin(int minTarget, int... args) {
+        for (int arg : args) {
             if (arg < minTarget) {
                 return false;
             }
@@ -46,8 +46,17 @@ public class ValidUtils {
         return true;
     }
 
-    public static boolean isMin(double minTarget, Double... args) {
-        for (Double arg : args) {
+    public static boolean isMin(long minTarget, long... args) {
+        for (long arg : args) {
+            if (arg < minTarget) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean isMin(double minTarget, double... args) {
+        for (double arg : args) {
             if (arg < minTarget) {
                 return false;
             }

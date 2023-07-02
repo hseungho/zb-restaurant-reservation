@@ -99,6 +99,16 @@ public class RestaurantController {
         );
     }
 
+    @PostMapping("${service.api.restaurant.menu.add}")
+    @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('PARTNER')")
+    public AddMenus.Response addMenu(@PathVariable("restaurantId") Long restaurantId,
+                                     @RequestBody @Valid AddMenus.Request request) {
+        return AddMenus.Response.fromDto(
+                restaurantService.addMenus(restaurantId, request)
+        );
+    }
+
     private void validateSortProperty(Sort sort) {
         String property = sort.iterator().next().getProperty().toLowerCase();
         if ("rating".equals(property) || "name".equals(property) || "distance".equals(property)) {
