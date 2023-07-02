@@ -86,12 +86,13 @@ public interface RestaurantService {
 
     /**
      * 메뉴 수정 메소드.
+     *
      * @param restaurantId 메뉴 수정할 매장 ID
-     * @param menuId 수정할 메뉴 ID
-     * @param request 메뉴 수정 요청 DTO 클래스
+     * @param menuId       수정할 메뉴 ID
+     * @param request      메뉴 수정 요청 DTO 클래스
      * @return 메뉴 DTO 클래스
      */
-    MenuDto updateMenu(Long restaurantId, Long menuId, UpdateMenu.Request request);
+    RestaurantDto updateMenu(Long restaurantId, Long menuId, UpdateMenu.Request request);
 
     /**
      * 메뉴 삭제 메소드.

@@ -124,21 +124,11 @@ public class ReservationServiceImpl implements ReservationService {
             throw new ForbiddenException(ErrorCodeType.FORBIDDEN_FIND_RESERVATION_LIST_ONLY_CLIENT);
         }
         if (date == null) {
-            return reservationRepository.findByClient(user, pageable)
-                    .map(it -> {
-                        if (!it.getRestaurant().isDeleted()) {
-                            return ReservationDto.fromEntity(it);
-                        }
-                        return ReservationDto.empty();
-                    });
+            return reservationRepository.findByClientAndDeletedRestaurantNot(user, pageable)
+                    .map(ReservationDto::fromEntity);
         } else {
-            return reservationRepository.findByClientAndReservedAtBetween(user, date.atStartOfDay(), date.plusDays(1).atStartOfDay(), pageable)
-                    .map(it -> {
-                        if (!it.getRestaurant().isDeleted()) {
-                            return ReservationDto.fromEntity(it);
-                        }
-                        return ReservationDto.empty();
-                    });
+            return reservationRepository.findByClientAndDeletedRestaurantNotAndReservedAtBetween(user, date.atStartOfDay(), date.plusDays(1).atStartOfDay(), pageable)
+                    .map(ReservationDto::fromEntity);
         }
     }
 
@@ -153,11 +143,14 @@ public class ReservationServiceImpl implements ReservationService {
         }
         Restaurant restaurant = restaurantRepository.findByManager(user)
                 .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESTAURANT));
+        if (restaurant.isDeleted()) {
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_FIND_RESERVATION_DELETED_RESTAURANT);
+        }
         if (date == null) {
-            return reservationRepository.findByRestaurant(restaurant, pageable)
+            return reservationRepository.findByRestaurantAndDeletedRestaurantNot(restaurant, pageable)
                     .map(ReservationDto::fromEntity);
         } else {
-            return reservationRepository.findByRestaurantAndReservedAtBetween(restaurant, date.atStartOfDay(), date.plusDays(1).atStartOfDay(), pageable)
+            return reservationRepository.findByRestaurantAndDeletedRestaurantNotAndReservedAtBetween(restaurant, date.atStartOfDay(), date.plusDays(1).atStartOfDay(), pageable)
                     .map(ReservationDto::fromEntity);
         }
     }

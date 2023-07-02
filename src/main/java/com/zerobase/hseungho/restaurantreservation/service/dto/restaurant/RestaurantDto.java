@@ -54,6 +54,30 @@ public class RestaurantDto {
                 .updatedAt(entity.getUpdatedAt())
                 .deleteReqAt(entity.getDeleteReqAt())
                 .deletedAt(entity.getDeletedAt())
+                .manager(
+                        entity.getManager() != null ?
+                                UserDto.fromEntity(entity.getManager()) :
+                                null)
+                .build();
+    }
+
+
+    public static RestaurantDto fromEntityWithAssociate(Restaurant entity) {
+        return RestaurantDto.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .address(entity.getAddressVO().getAddress())
+                .description(entity.getDescription())
+                .openTime(entity.getOpen())
+                .closeTime(entity.getClose())
+                .countOfTables(entity.getCountOfTables())
+                .maxPerReservation(entity.getMaxPerReservation())
+                .contactNumber(entity.getContactNumber())
+                .rating(entity.getRating())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
+                .deleteReqAt(entity.getDeleteReqAt())
+                .deletedAt(entity.getDeletedAt())
                 .menus(entity.getMenus().stream().map(MenuDto::fromEntity).toList())
                 .reviews(entity.getReviews().stream().map(ReviewDto::fromEntity).toList())
                 .manager(

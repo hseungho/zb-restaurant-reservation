@@ -22,7 +22,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
             "SELECT *, " +
             "ST_Distance_Sphere(POINT(:userX, :userY), POINT(r.x, r.y)) as distance " +
             "FROM restaurant r " +
-            "WHERE r.name LIKE %:name%",
+            "WHERE (r.delete_req_at IS NULL AND r.deleted_at IS NULL) AND r.name LIKE %:name%",
     nativeQuery = true)
     Slice<IRestaurantDto> findByNameWithDistance(String name, Double userX, Double userY, Pageable pageable);
 
@@ -30,7 +30,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
             "SELECT *, " +
             "ST_Distance_Sphere(POINT(:userX, :userY), POINT(r.x, r.y)) as distance " +
             "FROM restaurant r " +
-            "WHERE r.address LIKE %:address%",
+            "WHERE (r.delete_req_at IS NULL AND r.deleted_at IS NULL) AND r.address LIKE %:address%",
             nativeQuery = true)
     Slice<IRestaurantDto> findByAddressWithDistance(String address, Double userX, Double userY, Pageable pageable);
 

@@ -178,15 +178,15 @@ public class UserServiceImpl implements UserService {
             // 수정할 정보를 모두 입력해주세요.
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_UPDATE_PROFILE_BLANK);
         }
+        if (Objects.equals(request.getNickname(), user.getNickname())) {
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_UPDATE_PROFILE_SAME_NICKNAME);
+        }
         if (!checkNicknameAvailable(request.getNickname())) {
             // 사용할 수 없는 닉네임입니다.
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_UPDATE_PROFILE_NICKNAME_DUPLICATED);
         }
         if (!(request.getNickname().length() < 15)) {
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_UPDATE_PROFILE_NICKNAME_LENGTH);
-        }
-        if (Objects.equals(request.getNickname(), user.getNickname())) {
-            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_UPDATE_PROFILE_SAME_NICKNAME);
         }
     }
 

@@ -52,10 +52,10 @@ public class SecurityConfiguration {
                         request.requestMatchers(PermitApiConstants.PERMIT_APIS_TO_ARRAY).permitAll()
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(new JwtAuthenticationFilter(jwtComponent), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JwtAuthenticationFailureFilter(), JwtAuthenticationFilter.class)
                 .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())
                 .and()
+                .addFilterBefore(new JwtAuthenticationFilter(jwtComponent), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationFailureFilter(), JwtAuthenticationFilter.class)
                 .logout(Customizer.withDefaults())
                 .build();
     }

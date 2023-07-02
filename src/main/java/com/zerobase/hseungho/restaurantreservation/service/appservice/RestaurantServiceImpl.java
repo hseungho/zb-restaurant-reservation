@@ -18,6 +18,7 @@ import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.*;
 import com.zerobase.hseungho.restaurantreservation.service.repository.*;
 import com.zerobase.hseungho.restaurantreservation.service.type.ReservationStatus;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.Trie;
@@ -47,17 +48,22 @@ public class RestaurantServiceImpl implements RestaurantService {
     private final KakaoWebClientComponent kakaoWebClientComponent;
     private final AwsS3ImageManager imageManager;
 
+    @PostConstruct
+    private void initTrie() {
+        List<Restaurant> restaurants = this.restaurantRepository.findAll();
+        restaurants.forEach(it -> this.trie.put(it.getName(), it.getName()));
+    }
+
     @Override
     public RestaurantDto saveRestaurant(SaveRestaurant.Request request) {
         Restaurant restaurant = this.saveRestaurantEntity(request);
         this.trie.put(restaurant.getName(), restaurant.getName());
-        return RestaurantDto.fromEntity(restaurant);
+        return RestaurantDto.fromEntityWithAssociate(restaurant);
     }
 
     @Override
     public List<String> searchAutoComplete(String keyword) {
         if (!StringUtils.hasText(keyword)) return List.of();
-
         return this.trie.prefixMap(keyword).keySet().stream()
                 .sorted()
                 .limit(10)
@@ -81,10 +87,12 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     @Transactional(readOnly = true)
     public RestaurantDto findById(Long id) {
-        return RestaurantDto.fromEntity(
-                restaurantRepository.findById(id)
-                        .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESTAURANT))
-        );
+        Restaurant restaurant = restaurantRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESTAURANT));
+        if (restaurant.isDeleted()) {
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_FIND_RESTAURANT_DELETE_RESTAURANT);
+        }
+        return RestaurantDto.fromEntityWithAssociate(restaurant);
     }
 
     @Override
@@ -100,7 +108,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         restaurant.update(request);
 
-        return RestaurantDto.fromEntity(restaurant);
+        return RestaurantDto.fromEntityWithAssociate(restaurant);
     }
 
     @Override
@@ -122,7 +130,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
         restaurant.deleteNow(now);
 
-        return RestaurantDto.fromEntity(restaurant);
+        return RestaurantDto.fromEntityWithAssociate(restaurant);
     }
 
     @Override
@@ -135,7 +143,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         restaurant.requestDeleting(date);
 
-        return RestaurantDto.fromEntity(restaurant);
+        return RestaurantDto.fromEntityWithAssociate(restaurant);
     }
 
     @Override
@@ -146,28 +154,33 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         validateAddMenusRequest(SecurityHolder.getUser(), restaurant, request);
 
-        request.getMenus().forEach(it ->
-                restaurant.addMenu(Menu.create(it.getName(), it.getPrice())));
+        for (AddMenus.Request.MenuRequest menuRequest : request.getMenus()) {
+            restaurant.addMenu(Menu.create(menuRequest.getName(), menuRequest.getPrice()));
+        }
 
-        return RestaurantDto.fromEntity(restaurant);
+        // JPA Cascade 를 통해 새 메뉴를 저장되기에 saveAndFlush 호출이 필요하진 않지만,
+        // 응답값으로 생성된 메뉴의 ID를 반환하기 위해서 DTO 생성 이전에 DB의 Auto_increment ID가 선 요구되기에
+        // 아래의 saveAndFlush 호출을 통해 쿼리를 즉시 날리고 영속성을 갱신하도록 하였다.
+        restaurantRepository.saveAndFlush(restaurant);
+
+        return RestaurantDto.fromEntityWithAssociate(restaurant);
     }
 
     @Override
     @Transactional
-    public MenuDto updateMenu(Long restaurantId, Long menuId, UpdateMenu.Request request) {
+    public RestaurantDto updateMenu(Long restaurantId, Long menuId, UpdateMenu.Request request) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESTAURANT));
 
         validateUpdateMenuRequest(SecurityHolder.getUser(), restaurant, request);
 
-        Menu menu = menuRepository.findByIdAndRestaurant(menuId, restaurant)
-                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_MENU));
-        menu.update(request.getName(), request.getPrice());
+        restaurant.updateMenu(menuId, request.getName(), request.getPrice());
 
-        return MenuDto.fromEntity(menu);
+        return RestaurantDto.fromEntityWithAssociate(restaurant);
     }
 
     @Override
+    @Transactional
     public RestaurantDto removeMenu(Long restaurantId, Long menuId) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESTAURANT));
@@ -179,7 +192,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         restaurant.removeMenu(menu);
 
-        return RestaurantDto.fromEntity(restaurant);
+        return RestaurantDto.fromEntityWithAssociate(restaurant);
     }
 
     private void validateRemoveMenuRequest(User user, Restaurant restaurant) {
@@ -228,6 +241,10 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     private void validateRequestDeletingRestaurantRequest(User user, Restaurant restaurant, LocalDateTime date) {
+        if (restaurant.isDeleted()) {
+            // 이미 삭제된 매장입니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_REQUEST_DELETING_RESTAURANT_ALREADY);
+        }
         if (date.isBefore(SeoulDateTime.now())) {
             // 현재보다 이전 시간에 매장을 삭제 요청할 수 없습니다.
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_REQUEST_DELETING_RESTAURANT_REQ_TIME_IS_BEFORE_NOW);
@@ -243,6 +260,10 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     private void validateDeleteRestaurantRequest(User user, Restaurant restaurant, LocalDateTime now) {
+        if (restaurant.isDeleted()) {
+            // 이미 영업종료된 매장입니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_DELETE_RESTAURANT_ALREADY);
+        }
         if (!restaurant.isManager(user)) {
             // 해당 매장의 점장이 아닙니다.
             throw new ForbiddenException(ErrorCodeType.FORBIDDEN_DELETE_RESTAURANT_NOT_YOUR_RESTAURANT);

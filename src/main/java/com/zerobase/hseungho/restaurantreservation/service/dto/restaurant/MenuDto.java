@@ -18,6 +18,7 @@ public class MenuDto {
     private Long price;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private RestaurantDto restaurant;
 
     public static MenuDto fromEntity(Menu entity) {
         return MenuDto.builder()
@@ -26,6 +27,7 @@ public class MenuDto {
                 .price(entity.getPrice())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
+                .restaurant(RestaurantDto.fromEntity(entity.getRestaurant()))
                 .build();
     }
 }

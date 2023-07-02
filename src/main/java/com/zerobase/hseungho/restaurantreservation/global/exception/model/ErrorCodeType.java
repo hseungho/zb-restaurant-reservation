@@ -14,7 +14,7 @@ public enum ErrorCodeType implements ErrorCode {
 
     //////////////////////////////////////////////////////////////////////////////
     UNAUTHORIZED_LOGIN_REQUESTED_VALUE(HttpStatus.UNAUTHORIZED, "아이디 또는 비밀번호를 잘못 입력했습니다."),
-    UNAUTHORIZED_LOGIN_ALREADY_RESIGNED_USER(HttpStatus.UNAUTHORIZED, "이미 탈퇴 처리된 아이디입니다."),
+    UNAUTHORIZED_LOGIN_ALREADY_RESIGNED_USER(HttpStatus.UNAUTHORIZED, "회원탈퇴된 유저입니다."),
 
     UNAUTHORIZED_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "인증 토큰이 만료되었습니다. 다시 로그인해주세요."),
     UNAUTHORIZED_TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "인증 토큰이 유효하지 않습니다. 다시 로그인해주세요."),
@@ -52,11 +52,15 @@ public enum ErrorCodeType implements ErrorCode {
     BAD_REQUEST_UPDATE_RESTAURANT_BLANK(HttpStatus.BAD_REQUEST, "매장 정보 수정에 필요한 모든 정보를 입력해주세요."),
 
     BAD_REQUEST_DELETE_RESTAURANT_REMAIN_RESERVATION(HttpStatus.BAD_REQUEST, "매장에 예약이 남아있어서 매장을 삭제할 수 없습니다."),
+    BAD_REQUEST_DELETE_RESTAURANT_ALREADY(HttpStatus.BAD_REQUEST, "이미 삭제된 매장입니다."),
     BAD_REQUEST_REQUEST_DELETING_RESTAURANT_REMAIN_RESERVATION(HttpStatus.BAD_REQUEST, "해당 일자에 매장에 예약이 남아있어서 매장을 삭제 요청할 수 없습니다."),
+    BAD_REQUEST_REQUEST_DELETING_RESTAURANT_ALREADY(HttpStatus.BAD_REQUEST, "이미 삭제된 매장입니다."),
     BAD_REQUEST_REQUEST_DELETING_RESTAURANT_REQ_TIME_IS_BEFORE_NOW(HttpStatus.BAD_REQUEST, "현재 시간보다 이전 시간에 매장을 삭제 요청할 수 없습니다."),
 
     BAD_REQUEST_SEARCH_RESTAURANT_INVALID_VALUE(HttpStatus.BAD_REQUEST, "위치값이 유효하지 않습니다."),
     BAD_REQUEST_SEARCH_RESTAURANT_INVALID_SORT_PROPERTY(HttpStatus.BAD_REQUEST, "유효하지 않은 정렬 속성입니다."),
+
+    BAD_REQUEST_FIND_RESTAURANT_DELETE_RESTAURANT(HttpStatus.BAD_REQUEST, "영업 종료된 매장입니다."),
 
     BAD_REQUEST_ADD_MENUS_BLANK(HttpStatus.BAD_REQUEST, "메뉴 추가에 필요한 모든 정보를 입력해주세요."),
     BAD_REQUEST_ADD_MENUS_DELETE_RESTAURANT(HttpStatus.BAD_REQUEST, "영업 종료된 매장의 메뉴를 추가할 수 없습니다."),
@@ -159,7 +163,6 @@ public enum ErrorCodeType implements ErrorCode {
     //////////////////////////////////////////////////////////////////////////////
 
     ;
-
     private final HttpStatus httpStatus;
     private final String errorMessage;
     private final String errorCode = "R-" + "0".repeat(Math.max(4-String.valueOf(this.ordinal() + 1).length(), 0)) + (this.ordinal() + 1);

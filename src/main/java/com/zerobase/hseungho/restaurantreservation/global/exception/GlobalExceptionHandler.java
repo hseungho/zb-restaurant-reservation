@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex, HttpServletRequest request) {
         log.error("Occurred AccessDeniedException -> ", ex);
-        ErrorCodeType errorCode = ErrorCodeType.FORBIDDEN;
+        ErrorCodeType errorCode = ErrorCodeType.FORBIDDEN_ONLY_PARTNER;
         return ResponseEntity.status(errorCode.getHttpStatus())
                 .body(ErrorResponse.errorResponse(errorCode, request.getRequestURI()));
     }

@@ -17,7 +17,7 @@ public class UserController {
 
     @GetMapping("${service.api.user.check-id}")
     @ResponseStatus(HttpStatus.OK)
-    public CheckUsingResourceAvailable.Response checkUserIdAvailable(@RequestParam("id") String userId) {
+    public CheckUsingResourceAvailable.Response checkUserIdAvailable(@RequestParam("key") String userId) {
         return CheckUsingResourceAvailable.Response.of(
                 userService.checkUserIdAvailable(userId)
         );
@@ -25,7 +25,7 @@ public class UserController {
 
     @GetMapping("${service.api.user.check-nickname}")
     @ResponseStatus(HttpStatus.OK)
-    public CheckUsingResourceAvailable.Response checkNicknameAvailable(@RequestParam("nickname") String nickname) {
+    public CheckUsingResourceAvailable.Response checkNicknameAvailable(@RequestParam("key") String nickname) {
         return CheckUsingResourceAvailable.Response.of(
                 userService.checkNicknameAvailable(nickname)
         );

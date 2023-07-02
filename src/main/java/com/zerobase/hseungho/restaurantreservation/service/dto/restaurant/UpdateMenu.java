@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 public class UpdateMenu {
     @Data @NoArgsConstructor @AllArgsConstructor @Builder
     public static class Request {
@@ -15,10 +17,11 @@ public class UpdateMenu {
     @Data @NoArgsConstructor @AllArgsConstructor @Builder
     public static class Response {
         private RestaurantResponse restaurant;
-        private MenuResponse menu;
-        public static Response fromDto(MenuDto dto) {
+        private List<MenuResponse> menus;
+        public static Response fromDto(RestaurantDto dto) {
             return Response.builder()
-                    .menu(MenuResponse.fromDto(dto))
+                    .restaurant(RestaurantResponse.fromDto(dto))
+                    .menus(dto.getMenus().stream().map(MenuResponse::fromDto).toList())
                     .build();
         }
         @Data @NoArgsConstructor @AllArgsConstructor @Builder

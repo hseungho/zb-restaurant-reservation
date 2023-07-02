@@ -23,6 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.*;
@@ -161,13 +162,10 @@ public class RestaurantServiceImplUnitTest {
         // given
         User user = TestSecurityHolder.setSecurityHolderUser(UserType.ROLE_PARTNER);
         Restaurant restaurant = MockBuilder.mockRestaurant(user);
-        Menu menu = MockBuilder.mockMenu(restaurant);
         given(restaurantRepository.findById(anyLong()))
                 .willReturn(Optional.of(restaurant));
-        given(menuRepository.findByIdAndRestaurant(anyLong(), any()))
-                .willReturn(Optional.of(menu));
         // when
-        MenuDto result = restaurantService.updateMenu(1L, 1L, UpdateMenu.Request.builder()
+        RestaurantDto result = restaurantService.updateMenu(1L, 1L, UpdateMenu.Request.builder()
                 .name("추가메뉴")
                 .price(10000L)
                 .build()
@@ -175,9 +173,10 @@ public class RestaurantServiceImplUnitTest {
         // then
         Assertions.assertNotNull(result);
         Assertions.assertEquals(restaurant.getId(), result.getId());
-        Assertions.assertNotNull(result);
-        Assertions.assertEquals("추가메뉴", result.getName());
-        Assertions.assertEquals(10000L, result.getPrice());
+        MenuDto menuResult = result.getMenus().stream().filter(it -> Objects.equals(1L, it.getId())).findAny().orElse(null);
+        Assertions.assertNotNull(menuResult);
+        Assertions.assertEquals("추가메뉴", menuResult.getName());
+        Assertions.assertEquals(10000L, menuResult.getPrice());
     }
 
     @Test

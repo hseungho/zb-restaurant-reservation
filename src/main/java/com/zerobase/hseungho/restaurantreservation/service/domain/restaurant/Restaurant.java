@@ -53,14 +53,14 @@ public class Restaurant extends BaseAuditingEntity {
     @OneToMany(
             mappedBy = "restaurant",
             fetch = FetchType.LAZY,
-            cascade = CascadeType.PERSIST,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
             orphanRemoval = true
     )
     private List<Menu> menus = new ArrayList<>();
     @OneToMany(
             mappedBy = "restaurant",
             fetch = FetchType.LAZY,
-            cascade = CascadeType.PERSIST,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
             orphanRemoval = true
     )
     private List<Review> reviews = new ArrayList<>();
@@ -152,5 +152,12 @@ public class Restaurant extends BaseAuditingEntity {
     public void removeMenu(Menu menu) {
         this.menus.remove(menu);
         menu.dissociate();
+    }
+
+    public void updateMenu(Long menuId, String name, Long price) {
+        this.menus.stream()
+                .filter(it -> Objects.equals(it.getId(), menuId))
+                .findAny()
+                .ifPresent(it -> it.update(name, price));
     }
 }

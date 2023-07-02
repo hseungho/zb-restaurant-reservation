@@ -51,7 +51,7 @@ public class RestaurantController {
         );
     }
 
-    @PostMapping("${service.api.restaurant.request-delete}")
+    @DeleteMapping("${service.api.restaurant.request-delete}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('PARTNER')")
     public RequestDeletingRestaurant.Response requestDeletingRestaurant(@PathVariable("restaurantId") Long restaurantId,

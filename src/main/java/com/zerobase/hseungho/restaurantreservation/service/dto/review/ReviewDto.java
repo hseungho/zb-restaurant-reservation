@@ -30,7 +30,7 @@ public class ReviewDto {
                 .content(entity.getContent())
                 .imageSrc(entity.getImageSrc())
                 .author(UserDto.fromEntity(entity.getAuthor()))
-                .restaurant(RestaurantDto.fromEntity(entity.getRestaurant()))
+                .restaurant(RestaurantDto.fromEntityWithAssociate(entity.getRestaurant()))
                 .reservation(ReservationDto.fromEntity(reservation))
                 .build();
     }
@@ -42,7 +42,7 @@ public class ReviewDto {
                 .content(entity.getContent())
                 .imageSrc(entity.getImageSrc())
                 .author(UserDto.fromEntity(entity.getAuthor()))
-                .restaurant(RestaurantDto.fromEntity(entity.getRestaurant()))
+                .restaurant(RestaurantDto.fromEntityWithAssociate(entity.getRestaurant()))
                 .build();
     }
 }

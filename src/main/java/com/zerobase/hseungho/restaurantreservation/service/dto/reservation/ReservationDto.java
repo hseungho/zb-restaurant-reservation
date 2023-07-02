@@ -52,7 +52,7 @@ public class ReservationDto {
                 .createdAt(entity.getCreatedAt())
                 .status(entity.getStatus())
                 .client(UserDto.fromEntity(entity.getClient()))
-                .restaurant(RestaurantDto.fromEntity(entity.getRestaurant()))
+                .restaurant(RestaurantDto.fromEntityWithAssociate(entity.getRestaurant()))
                 .build();
     }
 
