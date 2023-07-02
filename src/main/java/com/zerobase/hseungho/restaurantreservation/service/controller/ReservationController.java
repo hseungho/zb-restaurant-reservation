@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -37,6 +38,7 @@ public class ReservationController {
 
     @PostMapping("${service.api.reservation.approve}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('PARTNER')")
     public ApproveReservation.Response approve(@PathVariable("reservationId") Long reservationId) {
         return ApproveReservation.Response.fromDto(
                 reservationService.approve(reservationId)
@@ -45,6 +47,7 @@ public class ReservationController {
 
     @PostMapping("${service.api.reservation.refuse}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('PARTNER')")
     public RefuseReservation.Response refuse(@PathVariable("reservationId") Long reservationId) {
         return RefuseReservation.Response.fromDto(
                 reservationService.refuse(reservationId)
@@ -70,6 +73,7 @@ public class ReservationController {
 
     @GetMapping("${service.api.reservation.find-list-manager}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('PARTNER')")
     public FindReservationList.Response findManagerReservations(@RequestParam(value = "date", required = false) LocalDate date,
                                                                @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return FindReservationList.Response.fromDto(

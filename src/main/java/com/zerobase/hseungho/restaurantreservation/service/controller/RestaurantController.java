@@ -99,6 +99,15 @@ public class RestaurantController {
         );
     }
 
+    @GetMapping("${service.api.restaurant.find-by-partner}")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('PARTNER')")
+    public FindRestaurant.Response findByPartner() {
+        return FindRestaurant.Response.fromDto(
+                restaurantService.findByPartner()
+        );
+    }
+
     @PostMapping("${service.api.restaurant.menu.add}")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('PARTNER')")

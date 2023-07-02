@@ -52,6 +52,12 @@ public interface RestaurantService {
     RestaurantDto findById(Long id);
 
     /**
+     * 파트너의 내 매장 상세정보 조회 메소드.
+     * @return 매장 DTO 클래스
+     */
+    RestaurantDto findByPartner();
+
+    /**
      * 매장 정보 수정 메소드.
      *
      * @param restaurantId 정보 수정할 매장 ID
@@ -101,4 +107,5 @@ public interface RestaurantService {
      * @return 매장 DTO 클래스
      */
     RestaurantDto removeMenu(Long restaurantId, Long menuId);
+
 }

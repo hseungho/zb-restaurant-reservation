@@ -60,6 +60,7 @@ service:
       search-name: /restaurants/search/name
       search-address: /restaurants/search/address
       find: /restaurants/{restaurantId}
+      find-by-partner: /restaurants/partner
       menu:
         add: /restaurants/{restaurantId}/menus
         update: /restaurants/{restaurantId}/menus/{menuId}

@@ -96,6 +96,17 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public RestaurantDto findByPartner() {
+        Restaurant restaurant = restaurantRepository.findByManager(SecurityHolder.getUser())
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESTAURANT));
+        if (restaurant.isDeleted()) {
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_FIND_RESTAURANT_DELETE_RESTAURANT);
+        }
+        return RestaurantDto.fromEntityWithAssociate(restaurant);
+    }
+
+    @Override
     @Transactional
     public RestaurantDto updateRestaurant(Long restaurantId, UpdateRestaurant.Request request) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)

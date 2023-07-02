@@ -75,10 +75,12 @@ public class ReviewServiceImpl implements ReviewService {
         validateUpdateRequest(restaurant, review, request);
 
         review.update(
-                request.getRating(),
-                request.getContent(),
-                updateImage(review, request, image)
+            request.getRating(),
+            request.getContent(),
+            updateImage(review, request, image)
         );
+        restaurantRepository.saveAndFlush(restaurant);
+        restaurant.calculateRating();
 
         return ReviewDto.fromEntity(review);
     }

@@ -47,10 +47,11 @@ public class Review extends BaseAuditingEntity {
                 .build();
     }
 
-    public void update(Double rating, String content, String imageSrc) {
+    public Review update(Double rating, String content, String imageSrc) {
         this.rating = rating;
         this.content = content;
         this.imageSrc = imageSrc;
+        return this;
     }
 
     public void associate(Restaurant restaurant) {

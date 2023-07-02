@@ -110,9 +110,13 @@ public class Restaurant extends BaseAuditingEntity {
         reviews.add(review);
         review.associate(this);
 
+        calculateRating();
+    }
+
+    public void calculateRating() {
         rating = reviews.stream()
                 .mapToDouble(Review::getRating)
-                .average().orElse(1.0);
+                .average().orElse(0.0);
     }
 
     public void update(UpdateRestaurant.Request request) {
@@ -143,6 +147,8 @@ public class Restaurant extends BaseAuditingEntity {
     public void removeReview(Review review) {
         this.reviews.remove(review);
         review.dissociate();
+
+        calculateRating();
     }
 
     public void requestDeleting(LocalDate date) {

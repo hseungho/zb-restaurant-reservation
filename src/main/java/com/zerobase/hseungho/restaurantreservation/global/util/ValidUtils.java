@@ -112,6 +112,6 @@ public class ValidUtils {
     }
 
     public static boolean isAfterNow(LocalDateTime time) {
-        return SeoulDateTime.now().isAfter(time);
+        return time.isAfter(SeoulDateTime.now());
     }
 }

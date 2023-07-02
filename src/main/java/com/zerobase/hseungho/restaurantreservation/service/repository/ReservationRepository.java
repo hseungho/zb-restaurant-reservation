@@ -19,8 +19,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     boolean existsByNumber(String number);
 
-    Slice<Reservation> findByClient(User client, Pageable pageable);
-
     @Query(
             value = "SELECT rv " +
                     "FROM reservation rv " +
@@ -28,8 +26,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
                     "(SELECT rt FROM restaurant rt WHERE rt.deleteReqAt IS NULL AND rt.deletedAt IS NULL) "
     )
     Slice<Reservation> findByClientAndDeletedRestaurantNot(User client, Pageable pageable);
-
-    Slice<Reservation> findByClientAndReservedAtBetween(User client, LocalDateTime from, LocalDateTime to, Pageable pageable);
 
     @Query(
             value = "SELECT rv " +
@@ -39,8 +35,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     )
     Slice<Reservation> findByClientAndDeletedRestaurantNotAndReservedAtBetween(User client, LocalDateTime from, LocalDateTime to, Pageable pageable);
 
-    Slice<Reservation> findByRestaurant(Restaurant restaurant, Pageable pageable);
-
     @Query(
             value = "SELECT rv " +
                     "FROM reservation rv " +
@@ -48,8 +42,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
                     "(SELECT rt FROM restaurant rt WHERE rt.deleteReqAt IS NULL AND rt.deletedAt IS NULL)"
     )
     Slice<Reservation> findByRestaurantAndDeletedRestaurantNot(Restaurant restaurant, Pageable pageable);
-
-    Slice<Reservation> findByRestaurantAndReservedAtBetween(Restaurant restaurant, LocalDateTime from, LocalDateTime to, Pageable pageable);
 
     @Query(
             value = "SELECT rv " +
