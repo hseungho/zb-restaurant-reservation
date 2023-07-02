@@ -19,12 +19,14 @@ public interface ReviewService {
 
     /**
      * 리뷰 수정 메소드.
+     *
      * @param restaurantId 리뷰 수정할 매장 ID
-     * @param reviewId 리뷰 수정할 리뷰 ID
-     * @param request 리뷰 수정 요청 DTO 클래스
+     * @param reviewId     리뷰 수정할 리뷰 ID
+     * @param request      리뷰 수정 요청 DTO 클래스
+     * @param image
      * @return 리뷰 DTO 클래스
      */
-    ReviewDto update(Long restaurantId, Long reviewId, UpdateReview.Request request);
+    ReviewDto update(Long restaurantId, Long reviewId, UpdateReview.Request request, MultipartFile image);
 
     /**
      * 리뷰 삭제 메소드.

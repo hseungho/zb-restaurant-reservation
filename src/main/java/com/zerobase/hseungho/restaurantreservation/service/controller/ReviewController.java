@@ -21,7 +21,7 @@ public class ReviewController {
     @ResponseStatus(HttpStatus.CREATED)
     public SaveReview.Response saveReview(@PathVariable("restaurantId") Long restaurantId,
                                           @RequestPart("data") @Valid SaveReview.Request request,
-                                          @RequestPart("image") MultipartFile image) {
+                                          @RequestPart(value = "image", required = false) MultipartFile image) {
         return SaveReview.Response.fromDto(
                 reviewService.save(restaurantId, request, image)
         );
@@ -31,9 +31,10 @@ public class ReviewController {
     @ResponseStatus(HttpStatus.OK)
     public UpdateReview.Response updateReview(@PathVariable("restaurantId") Long restaurantId,
                                               @PathVariable("reviewId") Long reviewId,
-                                              @RequestBody @Valid UpdateReview.Request request) {
+                                              @RequestPart("data") @Valid UpdateReview.Request request,
+                                              @RequestPart(value = "image", required = false) MultipartFile image) {
         return UpdateReview.Response.fromDto(
-                reviewService.update(restaurantId, reviewId, request)
+                reviewService.update(restaurantId, reviewId, request, image)
         );
     }
 

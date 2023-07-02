@@ -47,18 +47,6 @@ CREATE TABLE `menu` (
     FOREIGN KEY (restaurant_id) REFERENCES `restaurant` (id)
 );
 
-CREATE TABLE `review` (
-    id bigint not null auto_increment primary key ,
-    rating double default 1.0 not null ,
-    content varchar(255) not null ,
-    image_src varchar(255),
-    user_id varchar(40) ,
-    restaurant_id bigint ,
-    created_at datetime not null ,
-    updated_at datetime ,
-    FOREIGN KEY (user_id) REFERENCES `users` (id),
-    FOREIGN KEY (restaurant_id) REFERENCES `restaurant` (id)
-);
 
 CREATE TABLE `reservation` (
     id bigint not null auto_increment primary key ,
@@ -77,4 +65,19 @@ CREATE TABLE `reservation` (
     updated_at datetime ,
     FOREIGN KEY (user_id) REFERENCES `users` (id),
     FOREIGN KEY (restaurant_id) REFERENCES `restaurant` (id)
+);
+
+CREATE TABLE `review` (
+      id bigint not null auto_increment primary key ,
+      rating double default 1.0 not null ,
+      content varchar(255) not null ,
+      image_src varchar(255),
+      user_id varchar(40) ,
+      restaurant_id bigint ,
+      reservation_id bigint ,
+      created_at datetime not null ,
+      updated_at datetime ,
+      FOREIGN KEY (user_id) REFERENCES `users` (id),
+      FOREIGN KEY (restaurant_id) REFERENCES `restaurant` (id),
+      FOREIGN KEY (reservation_id) REFERENCES `reservation` (id)
 );

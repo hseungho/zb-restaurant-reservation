@@ -1,6 +1,7 @@
 package com.zerobase.hseungho.restaurantreservation.service.domain.restaurant;
 
 import com.zerobase.hseungho.restaurantreservation.service.domain.base.BaseAuditingEntity;
+import com.zerobase.hseungho.restaurantreservation.service.domain.reservation.Reservation;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,19 +28,22 @@ public class Review extends BaseAuditingEntity {
     private String content;
     @Column(name = "image_src")
     private String imageSrc;
-    @OneToOne
-    @JoinColumn(name = "user_id", nullable = false, updatable = false)
+    @ManyToOne
+    @JoinColumn(name = "user_id", updatable = false)
     private User author;
     @ManyToOne
-    @JoinColumn(name = "restaurant_id", nullable = false, updatable = false)
+    @JoinColumn(name = "restaurant_id", updatable = false)
     private Restaurant restaurant;
+    @ManyToOne
+    @JoinColumn(name = "reservation_id", updatable = false)
+    private Reservation reservation;
 
-    public static Review create(Double rating, String content, String imageSrc, User author) {
+
+    public static Review create(Double rating, String content, String imageSrc) {
         return Review.builder()
                 .rating(rating)
                 .content(content)
                 .imageSrc(imageSrc)
-                .author(author)
                 .build();
     }
 
@@ -51,6 +55,14 @@ public class Review extends BaseAuditingEntity {
 
     public void associate(Restaurant restaurant) {
         this.restaurant = restaurant;
+    }
+
+    public void associate(User user) {
+        this.author = user;
+    }
+
+    public void associate(Reservation reservation) {
+        this.reservation = reservation;
     }
 
     public boolean isAuthorId(String aId) {

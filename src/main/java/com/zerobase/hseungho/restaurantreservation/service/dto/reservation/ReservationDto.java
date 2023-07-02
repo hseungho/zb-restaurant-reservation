@@ -31,13 +31,6 @@ public class ReservationDto {
     private UserDto client;
     private RestaurantDto restaurant;
 
-    public static ReservationDto empty() {
-        return ReservationDto.builder()
-                .client(UserDto.empty())
-                .restaurant(RestaurantDto.empty())
-                .build();
-    }
-
     public static ReservationDto fromEntity(Reservation entity) {
         return ReservationDto.builder()
                 .id(entity.getId())

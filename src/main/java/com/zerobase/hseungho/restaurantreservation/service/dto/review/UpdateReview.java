@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 public class UpdateReview {
 
@@ -19,7 +18,6 @@ public class UpdateReview {
         private String content;
         private Boolean isDeleteImage;
         private Boolean isUpdateImage;
-        private MultipartFile image;
     }
 
     @Data

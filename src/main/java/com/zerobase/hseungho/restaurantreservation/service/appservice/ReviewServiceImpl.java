@@ -54,18 +54,18 @@ public class ReviewServiceImpl implements ReviewService {
         Review review = Review.create(
                 request.getRating(),
                 request.getContent(),
-                uploadImageIfPresent(image),
-                user
+                uploadImageIfPresent(image)
         );
-
         restaurant.addReview(review);
+        user.addReview(review);
+        reservation.addReview(review);
 
-        return ReviewDto.fromEntityWithReservation(review, reservation);
+        return ReviewDto.fromEntity(reviewRepository.save(review));
     }
 
     @Override
     @Transactional
-    public ReviewDto update(Long restaurantId, Long reviewId, UpdateReview.Request request) {
+    public ReviewDto update(Long restaurantId, Long reviewId, UpdateReview.Request request, MultipartFile image) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESTAURANT));
 
@@ -77,7 +77,7 @@ public class ReviewServiceImpl implements ReviewService {
         review.update(
                 request.getRating(),
                 request.getContent(),
-                updateImage(review, request)
+                updateImage(review, request, image)
         );
 
         return ReviewDto.fromEntity(review);
@@ -114,14 +114,14 @@ public class ReviewServiceImpl implements ReviewService {
         }
     }
 
-    private String updateImage(Review review, UpdateReview.Request request) {
+    private String updateImage(Review review, UpdateReview.Request request, MultipartFile image) {
         if (request.getIsDeleteImage()) {
             imageManager.delete(review.getImageSrc());
             return null;
         }
-        if (request.getIsUpdateImage() && request.getImage() != null) {
+        if (request.getIsUpdateImage() && image != null) {
             imageManager.delete(review.getImageSrc());
-            return this.uploadImageIfPresent(request.getImage());
+            return this.uploadImageIfPresent(image);
         }
         return review.getImageSrc();
     }
@@ -177,6 +177,10 @@ public class ReviewServiceImpl implements ReviewService {
         if (!reservation.isVisited()) {
             // 도착확인이 되기 전에 리뷰를 등록할 수 없습니다.
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_SAVE_REVIEW_CAN_ONLY_VISITED);
+        }
+        if (reservation.isAlreadyReviewer(user)) {
+            // 이미 리뷰를 등록하셨습니다.
+             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_SAVE_REVIEW_ALREADY_REVIEWER);
         }
     }
 }

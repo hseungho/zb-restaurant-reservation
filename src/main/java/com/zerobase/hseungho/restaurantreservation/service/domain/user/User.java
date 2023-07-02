@@ -3,6 +3,7 @@ package com.zerobase.hseungho.restaurantreservation.service.domain.user;
 import com.zerobase.hseungho.restaurantreservation.global.util.Generator;
 import com.zerobase.hseungho.restaurantreservation.global.util.SeoulDateTime;
 import com.zerobase.hseungho.restaurantreservation.service.domain.base.BaseAuditingEntity;
+import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Review;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -40,6 +42,13 @@ public class User extends BaseAuditingEntity implements UserDetails {
     private LocalDateTime loggedInAt;
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
+    @OneToMany(
+            mappedBy = "author",
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            orphanRemoval = true
+    )
+    private List<Review> reviews = new ArrayList<>();
 
     @Transient
     private Boolean isOnLoginRequest = false;
@@ -86,6 +95,11 @@ public class User extends BaseAuditingEntity implements UserDetails {
     public void resign() {
         this.deletedAt = SeoulDateTime.now();
         this.type = UserType.RESIGNED;
+    }
+
+    public void addReview(Review review) {
+        this.reviews.add(review);
+        review.associate(this);
     }
 
     ///////////////////////////////////////////////////////////////////////////

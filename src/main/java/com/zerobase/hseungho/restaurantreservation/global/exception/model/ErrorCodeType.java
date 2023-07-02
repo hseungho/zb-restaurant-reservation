@@ -106,6 +106,7 @@ public enum ErrorCodeType implements ErrorCode {
     BAD_REQUEST_SAVE_REVIEW_DELETED_RESTAURANT(HttpStatus.BAD_REQUEST, "영업 종료된 매장에 리뷰를 등록할 수 없습니다."),
     BAD_REQUEST_SAVE_REVIEW_CANNOT_BEFORE_RESERVED_TIME(HttpStatus.BAD_REQUEST, "예약시간 이전에 리뷰를 등록할 수 없습니다."),
     BAD_REQUEST_SAVE_REVIEW_CAN_ONLY_VISITED(HttpStatus.BAD_REQUEST, "도착확인이 되기 전에 리뷰를 등록할 수 없습니다."),
+    BAD_REQUEST_SAVE_REVIEW_ALREADY_REVIEWER(HttpStatus.BAD_REQUEST, "이미 해당 예약에 대한 리뷰를 등록하였습니다."),
 
     BAD_REQUEST_UPDATE_REVIEW_INVALID_RATING_RANGE(HttpStatus.BAD_REQUEST, "평점은 1~5점 사이의 점수만 줄 수 있습니다."),
     BAD_REQUEST_UPDATE_REVIEW_BLANK(HttpStatus.BAD_REQUEST, "리뷰 수정에 필요한 모든 정보를 입력해주세요."),

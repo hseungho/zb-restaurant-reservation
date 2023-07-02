@@ -3,6 +3,7 @@ package com.zerobase.hseungho.restaurantreservation.service.domain.reservation;
 import com.zerobase.hseungho.restaurantreservation.global.util.SeoulDateTime;
 import com.zerobase.hseungho.restaurantreservation.service.domain.base.BaseAuditingEntity;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Restaurant;
+import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Review;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
 import com.zerobase.hseungho.restaurantreservation.service.type.ReservationStatus;
 import jakarta.persistence.*;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "reservation")
@@ -50,6 +52,8 @@ public class Reservation extends BaseAuditingEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
+    @OneToMany(mappedBy = "reservation", fetch = FetchType.LAZY)
+    private List<Review> reviews;
 
     public static Reservation create(String number,
                                      int numOfPerson,
@@ -123,5 +127,15 @@ public class Reservation extends BaseAuditingEntity {
     public void visit() {
         this.visitedAt = SeoulDateTime.now();
         this.status = ReservationStatus.VISITED;
+    }
+
+    public boolean isAlreadyReviewer(User user) {
+        return this.reviews.stream()
+                .anyMatch(it -> it.isAuthorId(user.getId()));
+    }
+
+    public void addReview(Review review) {
+        this.reviews.add(review);
+        review.associate(this);
     }
 }
