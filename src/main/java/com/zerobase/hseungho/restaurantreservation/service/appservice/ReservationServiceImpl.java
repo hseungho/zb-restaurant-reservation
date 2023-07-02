@@ -329,6 +329,10 @@ public class ReservationServiceImpl implements ReservationService {
             // 모든 파라미터를 올바르게 입력해주세요.
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_RESERVE_RESERVATION_BLANK);
         }
+        if (restaurant.isDeleted()) {
+            // 영업 종료된 매장에 예약을 요청할 수 없습니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_RESERVE_RESERVATION_DELETED_RESTAURANT);
+        }
         if (restaurant.isManager(user)) {
             // 점장은 예약 요청할 수 없습니다.
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_RESERVE_RESERVATION_RESERVING_CANNOT_MANAGER);

@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
@@ -52,4 +53,11 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     Slice<Reservation> findByRestaurantAndDeletedRestaurantNotAndReservedAtBetween(Restaurant restaurant, LocalDateTime from, LocalDateTime to, Pageable pageable);
 
     boolean existsByRestaurantAndStatusAndReservedAtGreaterThanEqual(Restaurant restaurant, ReservationStatus status, LocalDateTime requestedTime);
+
+    @Query(
+            value = "SELECT rv " +
+                    "FROM reservation rv " +
+                    "WHERE (rv.status = 'RESERVED' OR rv.status = 'APPROVED') AND rv.reservedAt <= :time"
+    )
+    List<Reservation> findByStatusIsReservedOrApprovedAndReservedAtBefore(LocalDateTime time);
 }
