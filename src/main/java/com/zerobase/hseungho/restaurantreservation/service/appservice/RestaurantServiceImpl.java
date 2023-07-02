@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -121,9 +122,33 @@ public class RestaurantServiceImpl implements RestaurantService {
                     .peek(it -> imageManager.delete(it.getImageSrc()))
                     .close();
         }
-        restaurant.delete(now);
+        restaurant.deleteNow(now);
 
         return RestaurantDto.fromEntity(restaurant);
+    }
+
+    @Override
+    @Transactional
+    public RestaurantDto requestDeletingRestaurant(Long restaurantId, LocalDate date) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESTAURANT));
+
+        validateRequestDeletingRestaurant(SecurityHolder.getUser(), restaurant, date.atStartOfDay());
+
+        restaurant.requestDeleting(date);
+
+        return RestaurantDto.fromEntity(restaurant);
+    }
+
+    private void validateRequestDeletingRestaurant(User user, Restaurant restaurant, LocalDateTime now) {
+        if (!restaurant.isManager(user)) {
+            // 해당 매장의 점장이 아닙니다.
+            throw new ForbiddenException(ErrorCodeType.FORBIDDEN_REQUEST_DELETING_RESTAURANT_NOT_YOUR_RESTAURANT);
+        }
+        if (reservationRepository.existsByRestaurantAndStatusAndReservedAtGreaterThanEqual(restaurant, ReservationStatus.RESERVED, now)) {
+            // 해당 매장에 예약이 남아있어서 해당 일자에 매장을 삭제할 수 없습니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_REQUEST_DELETING_RESTAURANT_REMAIN_RESERVATION);
+        }
     }
 
     private void validateDeleteRestaurantRequest(User user, Restaurant restaurant, LocalDateTime now) {

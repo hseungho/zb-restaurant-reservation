@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -47,6 +48,16 @@ public class RestaurantController {
     public DeleteRestaurant.Response deleteRestaurant(@PathVariable("restaurantId") Long restaurantId) {
         return DeleteRestaurant.Response.fromDto(
                 restaurantService.deleteRestaurant(restaurantId)
+        );
+    }
+
+    @PostMapping("${service.api.restaurant.request-delete}")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('PARTNER')")
+    public RequestDeletingRestaurant.Response requestDeletingRestaurant(@PathVariable("restaurantId") Long restaurantId,
+                                                                        @RequestParam("date")LocalDate date) {
+        return RequestDeletingRestaurant.Response.fromDto(
+                restaurantService.requestDeletingRestaurant(restaurantId, date)
         );
     }
 

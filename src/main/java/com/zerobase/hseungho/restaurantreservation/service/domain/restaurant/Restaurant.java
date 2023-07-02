@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -125,8 +126,12 @@ public class Restaurant extends BaseAuditingEntity {
         this.contactNumber = request.getContactNumber();
     }
 
-    public void delete(LocalDateTime now) {
+    public void deleteNow(LocalDateTime now) {
         this.deleteReqAt = now;
+        this.delete(now);
+    }
+
+    public void delete(LocalDateTime now) {
         this.deletedAt = now;
         this.manager = null;
         this.menus.forEach(Menu::dissociate);
@@ -138,5 +143,9 @@ public class Restaurant extends BaseAuditingEntity {
     public void removeReview(Review review) {
         this.reviews.remove(review);
         review.dissociate();
+    }
+
+    public void requestDeleting(LocalDate date) {
+        this.deleteReqAt = date.atStartOfDay();
     }
 }

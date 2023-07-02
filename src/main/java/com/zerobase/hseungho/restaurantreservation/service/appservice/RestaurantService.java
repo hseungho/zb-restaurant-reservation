@@ -7,6 +7,7 @@ import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.Update
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface RestaurantService {
@@ -68,4 +69,12 @@ public interface RestaurantService {
      * @return 매장 DTO 클래스
      */
     RestaurantDto deleteRestaurant(Long restaurantId);
+
+    /**
+     * 매장 삭제 요청 메소드.
+     * @param restaurantId 삭제 요청할 매장 ID
+     * @param date 매장 삭제 진행할 일자
+     * @return 매장 DTO 클래스
+     */
+    RestaurantDto requestDeletingRestaurant(Long restaurantId, LocalDate date);
 }

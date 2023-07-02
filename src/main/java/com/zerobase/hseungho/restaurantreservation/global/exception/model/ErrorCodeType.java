@@ -7,7 +7,10 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCodeType implements ErrorCode {
 
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증되지 않은 유저입니다."),
     FORBIDDEN(HttpStatus.FORBIDDEN, "접근할 권한이 없습니다."),
+    NOT_FOUND(HttpStatus.NOT_FOUND, "리소스가 존재하지 않습니다."),
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "API 서버가 정상적인 응답이 불가능한 상태입니다. 관리자에게 바로 문의해주세요."),
 
     //////////////////////////////////////////////////////////////////////////////
     UNAUTHORIZED_LOGIN_REQUESTED_VALUE(HttpStatus.UNAUTHORIZED, "아이디 또는 비밀번호를 잘못 입력했습니다."),
@@ -49,6 +52,7 @@ public enum ErrorCodeType implements ErrorCode {
     BAD_REQUEST_UPDATE_RESTAURANT_BLANK(HttpStatus.BAD_REQUEST, "매장 정보 수정에 필요한 모든 정보를 입력해주세요."),
 
     BAD_REQUEST_DELETE_RESTAURANT_REMAIN_RESERVATION(HttpStatus.BAD_REQUEST, "매장에 예약이 남아있어서 매장을 삭제할 수 없습니다."),
+    BAD_REQUEST_REQUEST_DELETING_RESTAURANT_REMAIN_RESERVATION(HttpStatus.BAD_REQUEST, "해당 일자에 매장에 예약이 남아있어서 매장을 삭제 요청할 수 없습니다."),
 
     BAD_REQUEST_SEARCH_RESTAURANT_INVALID_VALUE(HttpStatus.BAD_REQUEST, "위치값이 유효하지 않습니다."),
     BAD_REQUEST_SEARCH_RESTAURANT_INVALID_SORT_PROPERTY(HttpStatus.BAD_REQUEST, "유효하지 않은 정렬 속성입니다."),
@@ -97,6 +101,7 @@ public enum ErrorCodeType implements ErrorCode {
     BAD_REQUEST_UPDATE_REVIEW_DELETED_RESTAURANT(HttpStatus.BAD_REQUEST, "영업 종료된 매장의 리뷰를 수정할 수 없습니다."),
 
     BAD_REQUEST_DELETE_REVIEW_DELETED_RESTAURANT(HttpStatus.BAD_REQUEST, "영업 종료된 매장의 리뷰를 삭제할 수 없습니다."),
+
     //////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////////////////////////////////////////
@@ -104,6 +109,7 @@ public enum ErrorCodeType implements ErrorCode {
 
     FORBIDDEN_UPDATE_RESTAURANT_NOT_YOUR_RESTAURANT(HttpStatus.FORBIDDEN, "매장의 점장이 아닌 유저는 매장 정보를 수정할 수 없습니다."),
     FORBIDDEN_DELETE_RESTAURANT_NOT_YOUR_RESTAURANT(HttpStatus.FORBIDDEN, "매장의 점장이 아닌 유저는 매장을 삭제할 수 없습니다."),
+    FORBIDDEN_REQUEST_DELETING_RESTAURANT_NOT_YOUR_RESTAURANT(HttpStatus.FORBIDDEN, "매장의 점장이 아닌 유저는 매장을 삭제 요청할 수 없습니다."),
 
     FORBIDDEN_CANCEL_RESERVATION_NOT_YOUR_RESOURCE(HttpStatus.FORBIDDEN, "다른 고객의 예약을 취소할 수 없습니다."),
 
@@ -135,7 +141,6 @@ public enum ErrorCodeType implements ErrorCode {
     //////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////////////////////////////////////////
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "API 서버가 정상적인 응답이 불가능한 상태입니다. 관리자에게 바로 문의해주세요."),
     INTERNAL_SERVER_ERROR_KAKAO_API(HttpStatus.INTERNAL_SERVER_ERROR, "내부적으로 주소 좌표를 가져오는데에 실패하였습니다. 관리자에게 문의해주세요."),
     INTERNAL_SERVER_ERROR_GENERATE_RESERVATION_NUMBER(HttpStatus.INTERNAL_SERVER_ERROR, "예약번호를 생성하는데에 문제가 발생하였습니다. 관리자에게 문의해주세요."),
     INTERNAL_SERVER_ERROR_UPLOAD_IMAGE_S3(HttpStatus.INTERNAL_SERVER_ERROR, "내부적으로 이미지를 업로드하는데에 문제가 발생했습니다. 관리자에게 문의해주세요."),
