@@ -4,6 +4,7 @@ import com.zerobase.hseungho.restaurantreservation.global.adapter.webclient.Kaka
 import com.zerobase.hseungho.restaurantreservation.global.adapter.webclient.dto.CoordinateDto;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Restaurant;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
+import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.AddMenus;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.RestaurantDto;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.UpdateRestaurant;
 import com.zerobase.hseungho.restaurantreservation.service.repository.ReservationRepository;
@@ -20,6 +21,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.*;
@@ -115,6 +118,39 @@ public class RestaurantServiceImplUnitTest {
         Assertions.assertEquals(restaurant.getId(), result.getId());
         Assertions.assertNotNull(result.getDeleteReqAt());
         Assertions.assertNotNull(result.getManager());
+    }
+
+    @Test
+    @DisplayName("메뉴 추가")
+    void test_addMenus() {
+        // given
+        User user = TestSecurityHolder.setSecurityHolderUser(UserType.ROLE_PARTNER);
+        Restaurant restaurant = MockBuilder.mockRestaurant(user);
+        int originMenuSize = restaurant.getMenus().size();
+        given(restaurantRepository.findById(anyLong()))
+                .willReturn(Optional.of(restaurant));
+        // when
+        RestaurantDto result = restaurantService.addMenus(1L, AddMenus.Request.builder()
+                .menus(new ArrayList<>(List.of(
+                        AddMenus.Request.MenuRequest.builder()
+                                .name("추가메뉴 1")
+                                .price(1000L)
+                                .build(),
+                        AddMenus.Request.MenuRequest.builder()
+                                .name("추가메뉴 2")
+                                .price(2000L)
+                                .build(),
+                        AddMenus.Request.MenuRequest.builder()
+                                .name("추가메뉴 3")
+                                .price(3000L)
+                                .build())))
+                .build());
+        // then
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(restaurant.getId(), result.getId());
+        Assertions.assertEquals(restaurant.getName(), result.getName());
+        Assertions.assertEquals(restaurant.getDescription(), result.getDescription());
+        Assertions.assertEquals(originMenuSize+3, result.getMenus().size());
     }
 
 }

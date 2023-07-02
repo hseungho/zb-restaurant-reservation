@@ -145,9 +145,8 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         validateAddMenusRequest(SecurityHolder.getUser(), restaurant, request);
 
-        request.getMenus().forEach(it -> {
-            restaurant.addMenu(Menu.create(it.getName(), it.getPrice()));
-        });
+        request.getMenus().forEach(it ->
+                restaurant.addMenu(Menu.create(it.getName(), it.getPrice())));
 
         return RestaurantDto.fromEntity(restaurant);
     }
