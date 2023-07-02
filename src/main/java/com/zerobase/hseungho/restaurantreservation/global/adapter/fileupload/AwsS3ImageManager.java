@@ -5,6 +5,8 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.zerobase.hseungho.restaurantreservation.global.exception.impl.BadRequestException;
+import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
 import com.zerobase.hseungho.restaurantreservation.global.util.Generator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +22,7 @@ import java.io.IOException;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class AwsS3ImageUpload implements FileUpload {
+public class AwsS3ImageManager implements FileManager {
 
     private final AmazonS3Client s3Client;
 
@@ -54,12 +56,19 @@ public class AwsS3ImageUpload implements FileUpload {
         if (!StringUtils.hasText(url)) {
             return;
         }
-        deleteImage(url);
+        deleteImage(getImageKey(url));
     }
 
-    private void deleteImage(String url) {
-        if (s3Client.doesObjectExist(bucket, url)) {
-            s3Client.deleteObject(new DeleteObjectRequest(bucket, url));
+    private String getImageKey(String url) {
+        if (!url.contains(DIR)) {
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST, "deleted imageSrc is not contains image directory.");
+        }
+        return url.substring(url.indexOf(DIR));
+    }
+
+    private void deleteImage(String key) {
+        if (s3Client.doesObjectExist(bucket, key)) {
+            s3Client.deleteObject(new DeleteObjectRequest(bucket, key));
         }
     }
 }

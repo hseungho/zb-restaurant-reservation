@@ -1,6 +1,6 @@
 package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
-import com.zerobase.hseungho.restaurantreservation.global.adapter.fileupload.AwsS3ImageUpload;
+import com.zerobase.hseungho.restaurantreservation.global.adapter.fileupload.AwsS3ImageManager;
 import com.zerobase.hseungho.restaurantreservation.global.util.SeoulDateTime;
 import com.zerobase.hseungho.restaurantreservation.service.domain.reservation.Reservation;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Restaurant;
@@ -42,7 +42,7 @@ public class ReviewServiceImplSaveUnitTest {
     @Mock
     private ReservationRepository reservationRepository;
     @Mock
-    private AwsS3ImageUpload uploader;
+    private AwsS3ImageManager uploader;
 
     @Test
     @DisplayName("리뷰 등록")
@@ -64,7 +64,7 @@ public class ReviewServiceImplSaveUnitTest {
         given(uploader.upload(any()))
                 .willReturn(MockBuilder.MOCK_REVIEW_IMAGE_SRC);
         // when
-        ReviewDto result = reviewService.save(1L, request());
+        ReviewDto result = reviewService.save(1L, request(), new MockMultipartFile("test", new byte[]{}));
         // then
         Assertions.assertNotNull(result);
         Assertions.assertEquals(MockBuilder.MOCK_REVIEW_RATING, result.getRating());
@@ -79,7 +79,6 @@ public class ReviewServiceImplSaveUnitTest {
                 .reservationId(1L)
                 .rating(MockBuilder.MOCK_REVIEW_RATING)
                 .content(MockBuilder.MOCK_REVIEW_CONTENT)
-                .image(new MockMultipartFile("TEST", new byte[]{}))
                 .build();
     }
 

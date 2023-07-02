@@ -21,6 +21,10 @@ public class UserDto {
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
 
+    public static UserDto empty() {
+        return new UserDto();
+    }
+
     public static UserDto fromEntity(User entity) {
         return UserDto.builder()
                 .id(entity.getId())

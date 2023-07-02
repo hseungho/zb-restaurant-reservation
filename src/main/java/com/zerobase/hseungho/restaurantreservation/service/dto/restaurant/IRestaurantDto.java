@@ -16,12 +16,12 @@ public interface IRestaurantDto {
     String getDescription();
     LocalTime getOpen();
     LocalTime getClose();
-    Integer getCountOfTables();
-    Integer getMaxPerReservation();
-    String getContactNumber();
-    Double getRating();
-    LocalDateTime getCreatedAt();
-    LocalDateTime getUpdatedAt();
+    int getCount_of_tables();
+    int getMax_per_reservation();
+    String getContact_number();
+    double getRating();
+    LocalDateTime getCreated_at();
+    LocalDateTime getUpdated_at();
     LocalDateTime getDeleteReqAt();
     LocalDateTime getDeletedAt();
     List<Menu> getMenus();

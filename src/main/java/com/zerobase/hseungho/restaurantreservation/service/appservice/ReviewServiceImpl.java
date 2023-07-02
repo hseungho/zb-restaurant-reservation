@@ -1,6 +1,6 @@
 package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
-import com.zerobase.hseungho.restaurantreservation.global.adapter.fileupload.AwsS3ImageUpload;
+import com.zerobase.hseungho.restaurantreservation.global.adapter.fileupload.AwsS3ImageManager;
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.BadRequestException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.ForbiddenException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.InternalServerErrorException;
@@ -37,11 +37,11 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReservationRepository reservationRepository;
     private final ReviewRepository reviewRepository;
 
-    private final AwsS3ImageUpload uploader;
+    private final AwsS3ImageManager imageManager;
 
     @Override
     @Transactional
-    public ReviewDto save(Long restaurantId, SaveReview.Request request) {
+    public ReviewDto save(Long restaurantId, SaveReview.Request request, MultipartFile image) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESTAURANT));
         Reservation reservation = reservationRepository.findById(request.getReservationId())
@@ -54,7 +54,7 @@ public class ReviewServiceImpl implements ReviewService {
         Review review = Review.create(
                 request.getRating(),
                 request.getContent(),
-                uploadImageIfPresent(request.getImage()),
+                uploadImageIfPresent(image),
                 user
         );
 
@@ -84,6 +84,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional
     public Long delete(Long restaurantId, Long reviewId) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESTAURANT));
@@ -93,8 +94,12 @@ public class ReviewServiceImpl implements ReviewService {
 
         validateDeleteRequest(restaurant, review);
 
-        reviewRepository.delete(review);
-        
+        if (ValidUtils.hasTexts(review.getImageSrc())) {
+            imageManager.delete(review.getImageSrc());
+        }
+
+        restaurant.removeReview(review);
+
         return restaurantId;
     }
 
@@ -111,11 +116,11 @@ public class ReviewServiceImpl implements ReviewService {
 
     private String updateImage(Review review, UpdateReview.Request request) {
         if (request.getIsDeleteImage()) {
-            uploader.delete(review.getImageSrc());
+            imageManager.delete(review.getImageSrc());
             return null;
         }
         if (request.getIsUpdateImage() && request.getImage() != null) {
-            uploader.delete(review.getImageSrc());
+            imageManager.delete(review.getImageSrc());
             return this.uploadImageIfPresent(request.getImage());
         }
         return review.getImageSrc();
@@ -142,7 +147,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     private String uploadImageIfPresent(MultipartFile image) {
         try {
-            return uploader.upload(image);
+            return imageManager.upload(image);
         } catch (IOException e) {
             throw new InternalServerErrorException(ErrorCodeType.INTERNAL_SERVER_ERROR_UPLOAD_IMAGE_S3);
         }

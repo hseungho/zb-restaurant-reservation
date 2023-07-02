@@ -85,7 +85,7 @@ public class RestaurantServiceImplUnitTest {
         Restaurant restaurant = MockBuilder.mockRestaurant(user);
         given(restaurantRepository.findById(anyLong()))
                 .willReturn(Optional.of(restaurant));
-        given(reservationRepository.existsByRestaurantAndReservedAtGreaterThanEqual(any(), any()))
+        given(reservationRepository.existsByRestaurantAndStatusAndReservedAtGreaterThanEqual(any(), any(), any()))
                 .willReturn(false);
         // when
         RestaurantDto result = restaurantService.deleteRestaurant(1L);

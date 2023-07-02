@@ -6,6 +6,9 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCodeType implements ErrorCode {
 
+    BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
+    FORBIDDEN(HttpStatus.FORBIDDEN, "접근할 권한이 없습니다."),
+
     //////////////////////////////////////////////////////////////////////////////
     UNAUTHORIZED_LOGIN_REQUESTED_VALUE(HttpStatus.UNAUTHORIZED, "아이디 또는 비밀번호를 잘못 입력했습니다."),
     UNAUTHORIZED_LOGIN_ALREADY_RESIGNED_USER(HttpStatus.UNAUTHORIZED, "이미 탈퇴 처리된 아이디입니다."),
@@ -132,6 +135,7 @@ public enum ErrorCodeType implements ErrorCode {
     //////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////////////////////////////////////////
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "API 서버가 정상적인 응답이 불가능한 상태입니다. 관리자에게 바로 문의해주세요."),
     INTERNAL_SERVER_ERROR_KAKAO_API(HttpStatus.INTERNAL_SERVER_ERROR, "내부적으로 주소 좌표를 가져오는데에 실패하였습니다. 관리자에게 문의해주세요."),
     INTERNAL_SERVER_ERROR_GENERATE_RESERVATION_NUMBER(HttpStatus.INTERNAL_SERVER_ERROR, "예약번호를 생성하는데에 문제가 발생하였습니다. 관리자에게 문의해주세요."),
     INTERNAL_SERVER_ERROR_UPLOAD_IMAGE_S3(HttpStatus.INTERNAL_SERVER_ERROR, "내부적으로 이미지를 업로드하는데에 문제가 발생했습니다. 관리자에게 문의해주세요."),

@@ -3,16 +3,19 @@ package com.zerobase.hseungho.restaurantreservation.service.appservice;
 import com.zerobase.hseungho.restaurantreservation.service.dto.review.ReviewDto;
 import com.zerobase.hseungho.restaurantreservation.service.dto.review.SaveReview;
 import com.zerobase.hseungho.restaurantreservation.service.dto.review.UpdateReview;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface ReviewService {
 
     /**
      * 리뷰 등록 메소드.
+     *
      * @param restaurantId 리뷰 등록할 매장 ID
-     * @param request 리뷰 등록 요청 DTO 클래스
+     * @param request      리뷰 등록 요청 DTO 클래스
+     * @param image
      * @return 리뷰 DTO 클래스
      */
-    ReviewDto save(Long restaurantId, SaveReview.Request request);
+    ReviewDto save(Long restaurantId, SaveReview.Request request, MultipartFile image);
 
     /**
      * 리뷰 수정 메소드.

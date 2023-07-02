@@ -45,10 +45,12 @@ public class FindRestaurant {
         @AllArgsConstructor
         @Builder
         private static class MenuResponse {
+            private Long id;
             private String name;
             private Long price;
             public static MenuResponse fromDto(MenuDto dto) {
                 return MenuResponse.builder()
+                        .id(dto.getId())
                         .name(dto.getName())
                         .price(dto.getPrice())
                         .build();

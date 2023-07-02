@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 public class SaveReview {
     @Data
@@ -26,7 +25,6 @@ public class SaveReview {
         private Double rating;
         @NotBlank
         private String content;
-        private MultipartFile image;
     }
 
     @Data

@@ -46,10 +46,10 @@ public class SearchRestaurant {
             private String description;
             private String openTime;
             private String closeTime;
-            private Integer maxPerReservation;
+            private int maxPerReservation;
             private String contactNumber;
-            private Double rating;
-            private Integer distance;
+            private double rating;
+            private int distance;
 
             public static ResponseDocument fromDto(IRestaurantDto dto) {
                 return ResponseDocument.builder()
@@ -59,8 +59,8 @@ public class SearchRestaurant {
                         .description(dto.getDescription())
                         .openTime(dto.getOpen().toString())
                         .closeTime(dto.getClose().toString())
-                        .maxPerReservation(dto.getMaxPerReservation())
-                        .contactNumber(dto.getContactNumber())
+                        .maxPerReservation(dto.getMax_per_reservation())
+                        .contactNumber(dto.getContact_number())
                         .rating(dto.getRating())
                         .distance(dto.getDistance())
                         .build();

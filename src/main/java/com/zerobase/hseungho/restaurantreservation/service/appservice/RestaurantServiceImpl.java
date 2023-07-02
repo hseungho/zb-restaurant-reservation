@@ -1,5 +1,6 @@
 package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
+import com.zerobase.hseungho.restaurantreservation.global.adapter.fileupload.AwsS3ImageManager;
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.BadRequestException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.ForbiddenException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.NotFoundException;
@@ -12,14 +13,14 @@ import com.zerobase.hseungho.restaurantreservation.global.adapter.webclient.Kaka
 import com.zerobase.hseungho.restaurantreservation.global.adapter.webclient.dto.CoordinateDto;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Menu;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Restaurant;
+import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Review;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.IRestaurantDto;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.RestaurantDto;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.SaveRestaurant;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.UpdateRestaurant;
-import com.zerobase.hseungho.restaurantreservation.service.repository.ReservationRepository;
-import com.zerobase.hseungho.restaurantreservation.service.repository.RestaurantRepository;
-import com.zerobase.hseungho.restaurantreservation.service.repository.UserRepository;
+import com.zerobase.hseungho.restaurantreservation.service.repository.*;
+import com.zerobase.hseungho.restaurantreservation.service.type.ReservationStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.Trie;
@@ -45,6 +46,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     private final Trie<String, String> trie;
 
     private final KakaoWebClientComponent kakaoWebClientComponent;
+    private final AwsS3ImageManager imageManager;
 
     @Override
     public RestaurantDto saveRestaurant(SaveRestaurant.Request request) {
@@ -112,6 +114,13 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         validateDeleteRestaurantRequest(SecurityHolder.getUser(), restaurant, now);
 
+        List<Review> reviews = restaurant.getReviews();
+        if (!CollectionUtils.isEmpty(reviews)) {
+            reviews.stream()
+                    .filter(it -> it.getImageSrc() != null)
+                    .peek(it -> imageManager.delete(it.getImageSrc()))
+                    .close();
+        }
         restaurant.delete(now);
 
         return RestaurantDto.fromEntity(restaurant);
@@ -122,7 +131,7 @@ public class RestaurantServiceImpl implements RestaurantService {
             // 해당 매장의 점장이 아닙니다.
             throw new ForbiddenException(ErrorCodeType.FORBIDDEN_DELETE_RESTAURANT_NOT_YOUR_RESTAURANT);
         }
-        if (reservationRepository.existsByRestaurantAndReservedAtGreaterThanEqual(restaurant, now)) {
+        if (reservationRepository.existsByRestaurantAndStatusAndReservedAtGreaterThanEqual(restaurant, ReservationStatus.RESERVED, now)) {
             // 해당 매장에 예약이 남아있어서 매장을 삭제할 수 없습니다.
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_DELETE_RESTAURANT_REMAIN_RESERVATION);
         }

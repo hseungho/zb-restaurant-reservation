@@ -34,6 +34,10 @@ public class RestaurantDto {
     private List<ReviewDto> reviews;
     private UserDto manager;
 
+    public static RestaurantDto empty() {
+        return new RestaurantDto();
+    }
+
     public static RestaurantDto fromEntity(Restaurant entity) {
         return RestaurantDto.builder()
                 .id(entity.getId())

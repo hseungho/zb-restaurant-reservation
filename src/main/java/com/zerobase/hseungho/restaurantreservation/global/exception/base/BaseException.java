@@ -22,5 +22,14 @@ public class BaseException extends RuntimeException implements ErrorCode {
         this.errorMessage = errorCode.getErrorMessage();
     }
 
+    public BaseException(ErrorCode errorCode, String msg) {
+        super(errorCode.getErrorMessage()+" "+msg);
+        this.errorCodeType = errorCode;
+        this.httpStatus = errorCode.getHttpStatus();
+        this.errorCode = errorCode.getErrorCode();
+        this.errorName = errorCode.getErrorName();
+        this.errorMessage = errorCode.getErrorMessage() + " " + msg;
+    }
+
 
 }

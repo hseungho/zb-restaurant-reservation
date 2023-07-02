@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("${service.api.prefix}")
@@ -19,9 +20,10 @@ public class ReviewController {
     @PostMapping("${service.api.review.save}")
     @ResponseStatus(HttpStatus.CREATED)
     public SaveReview.Response saveReview(@PathVariable("restaurantId") Long restaurantId,
-                                          @RequestBody @Valid SaveReview.Request request) {
+                                          @RequestPart("data") @Valid SaveReview.Request request,
+                                          @RequestPart("image") MultipartFile image) {
         return SaveReview.Response.fromDto(
-                reviewService.save(restaurantId, request)
+                reviewService.save(restaurantId, request, image)
         );
     }
 

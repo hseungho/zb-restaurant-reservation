@@ -77,6 +77,7 @@ public class Restaurant extends BaseAuditingEntity {
         restaurant.countOfTables = request.getCountOfTables();
         restaurant.maxPerReservation = request.getMaxPerReservation();
         restaurant.contactNumber = request.getContactNumber();
+        restaurant.rating = 0.0;
         restaurant.manager = manager;
         return restaurant;
     }
@@ -129,8 +130,13 @@ public class Restaurant extends BaseAuditingEntity {
         this.deletedAt = now;
         this.manager = null;
         this.menus.forEach(Menu::dissociate);
-        this.menus = new ArrayList<>();
+        this.menus.clear();
         this.reviews.forEach(Review::dissociate);
-        this.reviews = new ArrayList<>();
+        this.reviews.clear();
+    }
+
+    public void removeReview(Review review) {
+        this.reviews.remove(review);
+        review.dissociate();
     }
 }

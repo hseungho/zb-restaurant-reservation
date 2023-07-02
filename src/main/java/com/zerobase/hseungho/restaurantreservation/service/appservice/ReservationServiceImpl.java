@@ -125,10 +125,20 @@ public class ReservationServiceImpl implements ReservationService {
         }
         if (date == null) {
             return reservationRepository.findByClient(user, pageable)
-                    .map(ReservationDto::fromEntity);
+                    .map(it -> {
+                        if (!it.getRestaurant().isDeleted()) {
+                            return ReservationDto.fromEntity(it);
+                        }
+                        return ReservationDto.empty();
+                    });
         } else {
             return reservationRepository.findByClientAndReservedAtBetween(user, date.atStartOfDay(), date.plusDays(1).atStartOfDay(), pageable)
-                    .map(ReservationDto::fromEntity);
+                    .map(it -> {
+                        if (!it.getRestaurant().isDeleted()) {
+                            return ReservationDto.fromEntity(it);
+                        }
+                        return ReservationDto.empty();
+                    });
         }
     }
 

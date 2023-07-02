@@ -3,6 +3,7 @@ package com.zerobase.hseungho.restaurantreservation.service.repository;
 import com.zerobase.hseungho.restaurantreservation.service.domain.reservation.Reservation;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Restaurant;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
+import com.zerobase.hseungho.restaurantreservation.service.type.ReservationStatus;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,5 +26,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     Slice<Reservation> findByRestaurantAndReservedAtBetween(Restaurant restaurant, LocalDateTime from, LocalDateTime to, Pageable pageable);
 
-    boolean existsByRestaurantAndReservedAtGreaterThanEqual(Restaurant restaurant, LocalDateTime requestedTime);
+    boolean existsByRestaurantAndStatusAndReservedAtGreaterThanEqual(Restaurant restaurant, ReservationStatus status, LocalDateTime requestedTime);
 }
