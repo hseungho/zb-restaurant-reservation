@@ -167,6 +167,32 @@ public class RestaurantServiceImpl implements RestaurantService {
         return MenuDto.fromEntity(menu);
     }
 
+    @Override
+    public RestaurantDto removeMenu(Long restaurantId, Long menuId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESTAURANT));
+
+        Menu menu = menuRepository.findByIdAndRestaurant(menuId, restaurant)
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_MENU));
+
+        validateRemoveMenuRequest(SecurityHolder.getUser(), restaurant);
+
+        restaurant.removeMenu(menu);
+
+        return RestaurantDto.fromEntity(restaurant);
+    }
+
+    private void validateRemoveMenuRequest(User user, Restaurant restaurant) {
+        if (!restaurant.isManager(user)) {
+            // 해당 매장의 점장이 아닙니다.
+            throw new ForbiddenException(ErrorCodeType.FORBIDDEN_REMOVE_MENU_NOY_YOUR_RESTAURANT);
+        }
+        if (restaurant.isDeleted()) {
+            // 영업 종료된 매장의 메뉴를 삭제할 수 없습니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_REMOVE_MENU_DELETE_RESTAURANT);
+        }
+    }
+
     private void validateUpdateMenuRequest(User user, Restaurant restaurant, UpdateMenu.Request request) {
         if (!ValidUtils.hasTexts(request.getName()) || !ValidUtils.isMin(0, request.getPrice())) {
             // 메뉴 수정에 필요한 모든 정보를 입력해주세요.
@@ -175,6 +201,10 @@ public class RestaurantServiceImpl implements RestaurantService {
         if (!restaurant.isManager(user)) {
             // 해당 매장의 점장이 아닙니다.
             throw new ForbiddenException(ErrorCodeType.FORBIDDEN_UPDATE_MENU_NOT_YOUR_RESTAURANT);
+        }
+        if (restaurant.isDeleted()) {
+            // 영업 종료된 매장의 메뉴를 수정할 수 없습니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_UPDATE_MENU_DELETE_RESTAURANT);
         }
     }
 
@@ -190,6 +220,10 @@ public class RestaurantServiceImpl implements RestaurantService {
         if (!restaurant.isManager(user)) {
             // 해당 매장의 점장이 아닙니다.
             throw new ForbiddenException(ErrorCodeType.FORBIDDEN_ADD_MENUS_NOT_YOUR_RESTAURANT);
+        }
+        if (restaurant.isDeleted()) {
+            // 영업 종료된 매장의 메뉴를 추가할 수 없습니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_ADD_MENUS_DELETE_RESTAURANT);
         }
     }
 

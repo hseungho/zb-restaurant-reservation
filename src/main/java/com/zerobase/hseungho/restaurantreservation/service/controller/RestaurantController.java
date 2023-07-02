@@ -102,7 +102,7 @@ public class RestaurantController {
     @PostMapping("${service.api.restaurant.menu.add}")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('PARTNER')")
-    public AddMenus.Response addMenu(@PathVariable("restaurantId") Long restaurantId,
+    public AddMenus.Response addMenus(@PathVariable("restaurantId") Long restaurantId,
                                      @RequestBody @Valid AddMenus.Request request) {
         return AddMenus.Response.fromDto(
                 restaurantService.addMenus(restaurantId, request)
@@ -117,6 +117,16 @@ public class RestaurantController {
                                           @RequestBody @Valid UpdateMenu.Request request) {
         return UpdateMenu.Response.fromDto(
                 restaurantService.updateMenu(restaurantId, menuId, request)
+        );
+    }
+
+    @DeleteMapping("${service.api.restaurant.menu.remove}")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('PARTNER')")
+    public RemoveMenu.Response removeMenu(@PathVariable("restaurantId") Long restaurantId,
+                                          @PathVariable("menuId") Long menuId) {
+        return RemoveMenu.Response.fromDto(
+                restaurantService.removeMenu(restaurantId, menuId)
         );
     }
 

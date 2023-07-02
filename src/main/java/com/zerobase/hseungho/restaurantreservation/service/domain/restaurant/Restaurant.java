@@ -148,4 +148,9 @@ public class Restaurant extends BaseAuditingEntity {
     public void requestDeleting(LocalDate date) {
         this.deleteReqAt = date.atStartOfDay();
     }
+
+    public void removeMenu(Menu menu) {
+        this.menus.remove(menu);
+        menu.dissociate();
+    }
 }

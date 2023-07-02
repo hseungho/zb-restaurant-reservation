@@ -80,7 +80,7 @@ public interface RestaurantService {
      *
      * @param restaurantId 메뉴 추가할 매장 ID
      * @param request      메뉴 추가 요청 DTO 클래스
-     * @return 메뉴 DTO 리스트 클래스
+     * @return 매장 DTO 클래스
      */
     RestaurantDto addMenus(Long restaurantId, AddMenus.Request request);
 
@@ -92,4 +92,12 @@ public interface RestaurantService {
      * @return 메뉴 DTO 클래스
      */
     MenuDto updateMenu(Long restaurantId, Long menuId, UpdateMenu.Request request);
+
+    /**
+     * 메뉴 삭제 메소드.
+     * @param restaurantId 메뉴 삭제할 매장 ID
+     * @param menuId 삭제할 메뉴 ID
+     * @return 매장 DTO 클래스
+     */
+    RestaurantDto removeMenu(Long restaurantId, Long menuId);
 }

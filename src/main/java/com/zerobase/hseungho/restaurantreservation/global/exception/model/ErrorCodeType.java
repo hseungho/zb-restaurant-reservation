@@ -58,6 +58,12 @@ public enum ErrorCodeType implements ErrorCode {
     BAD_REQUEST_SEARCH_RESTAURANT_INVALID_VALUE(HttpStatus.BAD_REQUEST, "위치값이 유효하지 않습니다."),
     BAD_REQUEST_SEARCH_RESTAURANT_INVALID_SORT_PROPERTY(HttpStatus.BAD_REQUEST, "유효하지 않은 정렬 속성입니다."),
 
+    BAD_REQUEST_ADD_MENUS_BLANK(HttpStatus.BAD_REQUEST, "메뉴 추가에 필요한 모든 정보를 입력해주세요."),
+    BAD_REQUEST_ADD_MENUS_DELETE_RESTAURANT(HttpStatus.BAD_REQUEST, "영업 종료된 매장의 메뉴를 추가할 수 없습니다."),
+    BAD_REQUEST_UPDATE_MENU_BLANK(HttpStatus.BAD_REQUEST, "메뉴 수정에 필요한 모든 정보를 입력해주세요."),
+    BAD_REQUEST_UPDATE_MENU_DELETE_RESTAURANT(HttpStatus.BAD_REQUEST, "영업 종료된 매장의 메뉴를 수정할 수 없습니다."),
+    BAD_REQUEST_REMOVE_MENU_DELETE_RESTAURANT(HttpStatus.BAD_REQUEST, "영업 종료된 매장의 메뉴를 삭제할 수 없습니다."),
+
     BAD_REQUEST_RESERVE_RESERVATION_BLANK(HttpStatus.BAD_REQUEST, "예약 요청에 필요한 모든 정보를 입력해주세요."),
     BAD_REQUEST_RESERVE_RESERVATION_RESERVING_CANNOT_MANAGER(HttpStatus.BAD_REQUEST, "매장의 점장은 예약 요청할 수 없습니다."),
     BAD_REQUEST_RESERVE_RESERVATION_RESERVED_TIME_IS_INVALID_RESTAURANT_TIME(HttpStatus.BAD_REQUEST, "매장의 오픈 및 마감 시간에 맞게 요청해주세요."),
@@ -103,9 +109,6 @@ public enum ErrorCodeType implements ErrorCode {
 
     BAD_REQUEST_DELETE_REVIEW_DELETED_RESTAURANT(HttpStatus.BAD_REQUEST, "영업 종료된 매장의 리뷰를 삭제할 수 없습니다."),
 
-    BAD_REQUEST_ADD_MENUS_BLANK(HttpStatus.BAD_REQUEST, "메뉴 추가에 필요한 모든 정보를 입력해주세요."),
-    BAD_REQUEST_UPDATE_MENU_BLANK(HttpStatus.BAD_REQUEST, "메뉴 수정에 필요한 모든 정보를 입력해주세요."),
-
     //////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////////////////////////////////////////
@@ -117,6 +120,7 @@ public enum ErrorCodeType implements ErrorCode {
 
     FORBIDDEN_ADD_MENUS_NOT_YOUR_RESTAURANT(HttpStatus.FORBIDDEN, "매장의 점장이 아닌 유저는 메뉴를 추가할 수 없습니다."),
     FORBIDDEN_UPDATE_MENU_NOT_YOUR_RESTAURANT(HttpStatus.FORBIDDEN, "매장의 점장이 아닌 유저는 메뉴를 수정할 수 없습니다."),
+    FORBIDDEN_REMOVE_MENU_NOY_YOUR_RESTAURANT(HttpStatus.FORBIDDEN, "매장의 점장이 아닌 유저는 메뉴를 삭제할 수 없습니다."),
 
     FORBIDDEN_CANCEL_RESERVATION_NOT_YOUR_RESOURCE(HttpStatus.FORBIDDEN, "다른 고객의 예약을 취소할 수 없습니다."),
 

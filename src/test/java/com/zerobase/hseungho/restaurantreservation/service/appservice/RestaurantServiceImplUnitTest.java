@@ -179,4 +179,26 @@ public class RestaurantServiceImplUnitTest {
         Assertions.assertEquals("추가메뉴", result.getName());
         Assertions.assertEquals(10000L, result.getPrice());
     }
+
+    @Test
+    @DisplayName("메뉴 삭제")
+    void test_removeMenu() {
+        // given
+        User user = TestSecurityHolder.setSecurityHolderUser(UserType.ROLE_PARTNER);
+        Restaurant restaurant = MockBuilder.mockRestaurant(user);
+        Menu menu = MockBuilder.mockMenu(restaurant);
+        restaurant.addMenu(menu);
+        int originMenuSize = restaurant.getMenus().size();
+        given(restaurantRepository.findById(anyLong()))
+                .willReturn(Optional.of(restaurant));
+        given(menuRepository.findByIdAndRestaurant(anyLong(), any()))
+                .willReturn(Optional.of(menu));
+        // when
+        RestaurantDto result = restaurantService.removeMenu(1L, 1L);
+        // then
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(restaurant.getId(), result.getId());
+        Assertions.assertEquals(restaurant.getName(), result.getName());
+        Assertions.assertEquals(originMenuSize-1, result.getMenus().size());
+    }
 }
