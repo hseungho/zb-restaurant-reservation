@@ -24,6 +24,8 @@ public class MenuDto {
                 .id(entity.getId())
                 .name(entity.getName())
                 .price(entity.getPrice())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
                 .build();
     }
 }

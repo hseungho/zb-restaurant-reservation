@@ -2,11 +2,11 @@ package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
 import com.zerobase.hseungho.restaurantreservation.global.adapter.webclient.KakaoWebClientComponent;
 import com.zerobase.hseungho.restaurantreservation.global.adapter.webclient.dto.CoordinateDto;
+import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Menu;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Restaurant;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
-import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.AddMenus;
-import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.RestaurantDto;
-import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.UpdateRestaurant;
+import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.*;
+import com.zerobase.hseungho.restaurantreservation.service.repository.MenuRepository;
 import com.zerobase.hseungho.restaurantreservation.service.repository.ReservationRepository;
 import com.zerobase.hseungho.restaurantreservation.service.repository.RestaurantRepository;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
@@ -37,6 +37,8 @@ public class RestaurantServiceImplUnitTest {
     private RestaurantRepository restaurantRepository;
     @Mock
     private ReservationRepository reservationRepository;
+    @Mock
+    private MenuRepository menuRepository;
     @Mock
     private KakaoWebClientComponent kakaoWebClientComponent;
 
@@ -153,4 +155,28 @@ public class RestaurantServiceImplUnitTest {
         Assertions.assertEquals(originMenuSize+3, result.getMenus().size());
     }
 
+    @Test
+    @DisplayName("메뉴 수정")
+    void test_updateMenu() {
+        // given
+        User user = TestSecurityHolder.setSecurityHolderUser(UserType.ROLE_PARTNER);
+        Restaurant restaurant = MockBuilder.mockRestaurant(user);
+        Menu menu = MockBuilder.mockMenu(restaurant);
+        given(restaurantRepository.findById(anyLong()))
+                .willReturn(Optional.of(restaurant));
+        given(menuRepository.findByIdAndRestaurant(anyLong(), any()))
+                .willReturn(Optional.of(menu));
+        // when
+        MenuDto result = restaurantService.updateMenu(1L, 1L, UpdateMenu.Request.builder()
+                .name("추가메뉴")
+                .price(10000L)
+                .build()
+        );
+        // then
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(restaurant.getId(), result.getId());
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals("추가메뉴", result.getName());
+        Assertions.assertEquals(10000L, result.getPrice());
+    }
 }

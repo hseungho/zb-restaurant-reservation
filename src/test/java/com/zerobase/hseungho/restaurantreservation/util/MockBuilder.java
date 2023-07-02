@@ -45,6 +45,26 @@ public class MockBuilder {
     public static final String MOCK_CONTACT_NUMBER = "021231234";
     public static final Double MOCK_RATING = 4.5;
     public static Restaurant mockRestaurant(User manager) {
+        Restaurant restaurant = Restaurant.builder()
+                .id(MOCK_RESTAURANT_ID)
+                .name(MOCK_RESTAURANT_NAME)
+                .addressVO(new AddressVO(MOCK_ADDRESS, 34.123, 123.314))
+                .description(MOCK_DESCRIPTION)
+                .menus(new ArrayList<>())
+                .open(LocalTime.of(MOCK_OPEN_HOUR, MOCK_OPEN_MINUTE))
+                .close(LocalTime.of(MOCK_CLOSE_HOUR, MOCK_CLOSE_MINUTE))
+                .countOfTables(MOCK_COUNT_OF_TABLES)
+                .maxPerReservation(MOCK_MAX_PER_RESERVATION)
+                .contactNumber(MOCK_CONTACT_NUMBER)
+                .rating(MOCK_RATING)
+                .reviews(new ArrayList<>())
+                .manager(manager)
+                .build();
+        restaurant.addMenu(mockMenu(1L, MOCK_MENUNAME_1, MOCK_MENUPRICE_1, restaurant));
+        restaurant.addMenu(mockMenu(2L, MOCK_MENUNAME_2, MOCK_MENUPRICE_2, restaurant));
+        return restaurant;
+    }
+    public static Restaurant mockDeletedRestaurant(User manager) {
         return Restaurant.builder()
                 .id(MOCK_RESTAURANT_ID)
                 .name(MOCK_RESTAURANT_NAME)
@@ -56,28 +76,6 @@ public class MockBuilder {
                         Menu.builder()
                                 .name(MOCK_MENUNAME_2).price(MOCK_MENUPRICE_2).build()
                 )))
-                .open(LocalTime.of(MOCK_OPEN_HOUR, MOCK_OPEN_MINUTE))
-                .close(LocalTime.of(MOCK_CLOSE_HOUR, MOCK_CLOSE_MINUTE))
-                .countOfTables(MOCK_COUNT_OF_TABLES)
-                .maxPerReservation(MOCK_MAX_PER_RESERVATION)
-                .contactNumber(MOCK_CONTACT_NUMBER)
-                .rating(MOCK_RATING)
-                .reviews(new ArrayList<>())
-                .manager(manager)
-                .build();
-    }
-    public static Restaurant mockDeletedRestaurant(User manager) {
-        return Restaurant.builder()
-                .id(MOCK_RESTAURANT_ID)
-                .name(MOCK_RESTAURANT_NAME)
-                .addressVO(new AddressVO(MOCK_ADDRESS, 34.123, 123.314))
-                .description(MOCK_DESCRIPTION)
-                .menus(List.of(
-                        Menu.builder()
-                                .name(MOCK_MENUNAME_1).price(MOCK_MENUPRICE_1).build(),
-                        Menu.builder()
-                                .name(MOCK_MENUNAME_2).price(MOCK_MENUPRICE_2).build()
-                ))
                 .open(LocalTime.of(MOCK_OPEN_HOUR, MOCK_OPEN_MINUTE))
                 .close(LocalTime.of(MOCK_CLOSE_HOUR, MOCK_CLOSE_MINUTE))
                 .countOfTables(MOCK_COUNT_OF_TABLES)
@@ -117,7 +115,7 @@ public class MockBuilder {
     public static final Double MOCK_REVIEW_RATING = 4.5;
     public static final String MOCK_REVIEW_CONTENT = "리뷰내용입니다.";
     public static final String MOCK_REVIEW_IMAGE_SRC = "리뷰이미지주소";
-    public static final Review mockReview(User author, Restaurant restaurant) {
+    public static Review mockReview(User author, Restaurant restaurant) {
         return Review.builder()
                 .id(MOCK_REVIEW_ID)
                 .rating(MOCK_REVIEW_RATING)
@@ -126,6 +124,25 @@ public class MockBuilder {
                 .author(author)
                 .restaurant(restaurant)
                 .build();
+    }
 
+    public static final Long MOCK_MENU_ID = 1L;
+    public static final String MOCK_MENU_NAME = "메뉴이름";
+    public static final Long MOCK_MENU_PRICE = 5000L;
+    public static Menu mockMenu(Restaurant restaurant) {
+        return Menu.builder()
+                .id(MOCK_MENU_ID)
+                .name(MOCK_MENU_NAME)
+                .price(MOCK_MENU_PRICE)
+                .restaurant(restaurant)
+                .build();
+    }
+    public static Menu mockMenu(Long id, String name, Long price, Restaurant restaurant) {
+        return Menu.builder()
+                .id(id)
+                .name(name)
+                .price(price)
+                .restaurant(restaurant)
+                .build();
     }
 }

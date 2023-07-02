@@ -77,9 +77,19 @@ public interface RestaurantService {
 
     /**
      * 메뉴 추가 메소드.
+     *
      * @param restaurantId 메뉴 추가할 매장 ID
-     * @param request 메뉴 추가 요청 DTO 클래스
-     * @return 매장 DTO 클래스
+     * @param request      메뉴 추가 요청 DTO 클래스
+     * @return 메뉴 DTO 리스트 클래스
      */
     RestaurantDto addMenus(Long restaurantId, AddMenus.Request request);
+
+    /**
+     * 메뉴 수정 메소드.
+     * @param restaurantId 메뉴 수정할 매장 ID
+     * @param menuId 수정할 메뉴 ID
+     * @param request 메뉴 수정 요청 DTO 클래스
+     * @return 메뉴 DTO 클래스
+     */
+    MenuDto updateMenu(Long restaurantId, Long menuId, UpdateMenu.Request request);
 }

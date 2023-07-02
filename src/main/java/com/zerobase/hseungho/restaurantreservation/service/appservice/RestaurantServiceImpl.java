@@ -40,6 +40,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     private final UserRepository userRepository;
     private final RestaurantRepository restaurantRepository;
     private final ReservationRepository reservationRepository;
+    private final MenuRepository menuRepository;
 
     private final Trie<String, String> trie;
 
@@ -151,8 +152,35 @@ public class RestaurantServiceImpl implements RestaurantService {
         return RestaurantDto.fromEntity(restaurant);
     }
 
+    @Override
+    @Transactional
+    public MenuDto updateMenu(Long restaurantId, Long menuId, UpdateMenu.Request request) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESTAURANT));
+
+        validateUpdateMenuRequest(SecurityHolder.getUser(), restaurant, request);
+
+        Menu menu = menuRepository.findByIdAndRestaurant(menuId, restaurant)
+                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_MENU));
+        menu.update(request.getName(), request.getPrice());
+
+        return MenuDto.fromEntity(menu);
+    }
+
+    private void validateUpdateMenuRequest(User user, Restaurant restaurant, UpdateMenu.Request request) {
+        if (!ValidUtils.hasTexts(request.getName()) || !ValidUtils.isMin(0, request.getPrice())) {
+            // 메뉴 수정에 필요한 모든 정보를 입력해주세요.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_UPDATE_MENU_BLANK);
+        }
+        if (!restaurant.isManager(user)) {
+            // 해당 매장의 점장이 아닙니다.
+            throw new ForbiddenException(ErrorCodeType.FORBIDDEN_UPDATE_MENU_NOT_YOUR_RESTAURANT);
+        }
+    }
+
     private void validateAddMenusRequest(User user, Restaurant restaurant, AddMenus.Request request) {
-        if (!ValidUtils.hasTexts(request.getMenus().stream()
+        if (CollectionUtils.isEmpty(request.getMenus())
+            || !ValidUtils.hasTexts(request.getMenus().stream()
                     .map(AddMenus.Request.MenuRequest::getName).toArray(String[]::new))
             || !ValidUtils.isMin(0L, request.getMenus().stream()
                     .mapToLong(AddMenus.Request.MenuRequest::getPrice).toArray())) {

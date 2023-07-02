@@ -109,6 +109,17 @@ public class RestaurantController {
         );
     }
 
+    @PutMapping("${service.api.restaurant.menu.update}")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('PARTNER')")
+    public UpdateMenu.Response updateMenu(@PathVariable("restaurantId") Long restaurantId,
+                                          @PathVariable("menuId") Long menuId,
+                                          @RequestBody @Valid UpdateMenu.Request request) {
+        return UpdateMenu.Response.fromDto(
+                restaurantService.updateMenu(restaurantId, menuId, request)
+        );
+    }
+
     private void validateSortProperty(Sort sort) {
         String property = sort.iterator().next().getProperty().toLowerCase();
         if ("rating".equals(property) || "name".equals(property) || "distance".equals(property)) {

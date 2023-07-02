@@ -41,4 +41,8 @@ public class Menu extends BaseAuditingEntity {
         this.restaurant = null;
     }
 
+    public void update(String name, Long price) {
+        this.name = name;
+        this.price = price;
+    }
 }

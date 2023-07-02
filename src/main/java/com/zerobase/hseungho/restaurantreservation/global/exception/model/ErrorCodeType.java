@@ -104,6 +104,7 @@ public enum ErrorCodeType implements ErrorCode {
     BAD_REQUEST_DELETE_REVIEW_DELETED_RESTAURANT(HttpStatus.BAD_REQUEST, "영업 종료된 매장의 리뷰를 삭제할 수 없습니다."),
 
     BAD_REQUEST_ADD_MENUS_BLANK(HttpStatus.BAD_REQUEST, "메뉴 추가에 필요한 모든 정보를 입력해주세요."),
+    BAD_REQUEST_UPDATE_MENU_BLANK(HttpStatus.BAD_REQUEST, "메뉴 수정에 필요한 모든 정보를 입력해주세요."),
 
     //////////////////////////////////////////////////////////////////////////////
 
@@ -115,6 +116,7 @@ public enum ErrorCodeType implements ErrorCode {
     FORBIDDEN_REQUEST_DELETING_RESTAURANT_NOT_YOUR_RESTAURANT(HttpStatus.FORBIDDEN, "매장의 점장이 아닌 유저는 매장을 삭제 요청할 수 없습니다."),
 
     FORBIDDEN_ADD_MENUS_NOT_YOUR_RESTAURANT(HttpStatus.FORBIDDEN, "매장의 점장이 아닌 유저는 메뉴를 추가할 수 없습니다."),
+    FORBIDDEN_UPDATE_MENU_NOT_YOUR_RESTAURANT(HttpStatus.FORBIDDEN, "매장의 점장이 아닌 유저는 메뉴를 수정할 수 없습니다."),
 
     FORBIDDEN_CANCEL_RESERVATION_NOT_YOUR_RESOURCE(HttpStatus.FORBIDDEN, "다른 고객의 예약을 취소할 수 없습니다."),
 
@@ -143,6 +145,7 @@ public enum ErrorCodeType implements ErrorCode {
     NOT_FOUND_RESTAURANT(HttpStatus.NOT_FOUND, "존재하지 않는 매장입니다."),
     NOT_FOUND_RESERVATION(HttpStatus.NOT_FOUND, "존재하지 않는 예약입니다."),
     NOT_FOUND_REVIEW(HttpStatus.NOT_FOUND, "존재하지 않는 리뷰입니다."),
+    NOT_FOUND_MENU(HttpStatus.NOT_FOUND, "존재하지 않는 메뉴입니다."),
     //////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////////////////////////////////////////
