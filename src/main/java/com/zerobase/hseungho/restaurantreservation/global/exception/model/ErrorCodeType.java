@@ -53,6 +53,7 @@ public enum ErrorCodeType implements ErrorCode {
 
     BAD_REQUEST_DELETE_RESTAURANT_REMAIN_RESERVATION(HttpStatus.BAD_REQUEST, "매장에 예약이 남아있어서 매장을 삭제할 수 없습니다."),
     BAD_REQUEST_REQUEST_DELETING_RESTAURANT_REMAIN_RESERVATION(HttpStatus.BAD_REQUEST, "해당 일자에 매장에 예약이 남아있어서 매장을 삭제 요청할 수 없습니다."),
+    BAD_REQUEST_REQUEST_DELETING_RESTAURANT_REQ_TIME_IS_BEFORE_NOW(HttpStatus.BAD_REQUEST, "현재 시간보다 이전 시간에 매장을 삭제 요청할 수 없습니다."),
 
     BAD_REQUEST_SEARCH_RESTAURANT_INVALID_VALUE(HttpStatus.BAD_REQUEST, "위치값이 유효하지 않습니다."),
     BAD_REQUEST_SEARCH_RESTAURANT_INVALID_SORT_PROPERTY(HttpStatus.BAD_REQUEST, "유효하지 않은 정렬 속성입니다."),

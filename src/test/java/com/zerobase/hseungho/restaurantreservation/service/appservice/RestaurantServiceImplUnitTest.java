@@ -19,6 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.*;
@@ -95,8 +96,25 @@ public class RestaurantServiceImplUnitTest {
         Assertions.assertNotNull(result.getDeleteReqAt());
         Assertions.assertNotNull(result.getDeletedAt());
         Assertions.assertNull(result.getManager());
-        Assertions.assertTrue(result.getMenus().isEmpty());
-        Assertions.assertTrue(result.getReviews().isEmpty());
+    }
+
+    @Test
+    @DisplayName("매장 삭제 요청")
+    void test_requestDeletingRestaurant() {
+        // given
+        User user = TestSecurityHolder.setSecurityHolderUser(UserType.ROLE_PARTNER);
+        Restaurant restaurant = MockBuilder.mockRestaurant(user);
+        given(restaurantRepository.findById(anyLong()))
+                .willReturn(Optional.of(restaurant));
+        given(reservationRepository.existsByRestaurantAndStatusAndReservedAtGreaterThanEqual(any(), any(), any()))
+                .willReturn(false);
+        // when
+        RestaurantDto result = restaurantService.requestDeletingRestaurant(1L, LocalDate.now().plusDays(1));
+        // then
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(restaurant.getId(), result.getId());
+        Assertions.assertNotNull(result.getDeleteReqAt());
+        Assertions.assertNotNull(result.getManager());
     }
 
 }

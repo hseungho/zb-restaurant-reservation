@@ -140,12 +140,16 @@ public class RestaurantServiceImpl implements RestaurantService {
         return RestaurantDto.fromEntity(restaurant);
     }
 
-    private void validateRequestDeletingRestaurant(User user, Restaurant restaurant, LocalDateTime now) {
+    private void validateRequestDeletingRestaurant(User user, Restaurant restaurant, LocalDateTime date) {
+        if (date.isBefore(SeoulDateTime.now())) {
+            // 현재보다 이전 시간에 매장을 삭제 요청할 수 없습니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_REQUEST_DELETING_RESTAURANT_REQ_TIME_IS_BEFORE_NOW);
+        }
         if (!restaurant.isManager(user)) {
             // 해당 매장의 점장이 아닙니다.
             throw new ForbiddenException(ErrorCodeType.FORBIDDEN_REQUEST_DELETING_RESTAURANT_NOT_YOUR_RESTAURANT);
         }
-        if (reservationRepository.existsByRestaurantAndStatusAndReservedAtGreaterThanEqual(restaurant, ReservationStatus.RESERVED, now)) {
+        if (reservationRepository.existsByRestaurantAndStatusAndReservedAtGreaterThanEqual(restaurant, ReservationStatus.RESERVED, date)) {
             // 해당 매장에 예약이 남아있어서 해당 일자에 매장을 삭제할 수 없습니다.
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_REQUEST_DELETING_RESTAURANT_REMAIN_RESERVATION);
         }

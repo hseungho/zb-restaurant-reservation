@@ -50,12 +50,12 @@ public class MockBuilder {
                 .name(MOCK_RESTAURANT_NAME)
                 .addressVO(new AddressVO(MOCK_ADDRESS, 34.123, 123.314))
                 .description(MOCK_DESCRIPTION)
-                .menus(List.of(
+                .menus(new ArrayList<>(List.of(
                         Menu.builder()
                                 .name(MOCK_MENUNAME_1).price(MOCK_MENUPRICE_1).build(),
                         Menu.builder()
                                 .name(MOCK_MENUNAME_2).price(MOCK_MENUPRICE_2).build()
-                ))
+                )))
                 .open(LocalTime.of(MOCK_OPEN_HOUR, MOCK_OPEN_MINUTE))
                 .close(LocalTime.of(MOCK_CLOSE_HOUR, MOCK_CLOSE_MINUTE))
                 .countOfTables(MOCK_COUNT_OF_TABLES)
