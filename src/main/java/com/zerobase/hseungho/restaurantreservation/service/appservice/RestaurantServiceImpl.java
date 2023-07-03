@@ -144,7 +144,14 @@ public class RestaurantServiceImpl implements RestaurantService {
         if (!CollectionUtils.isEmpty(reviews)) {
             reviews.stream()
                     .filter(it -> it.getImageSrc() != null)
-                    .peek(it -> imageManager.delete(it.getImageSrc()))
+                    .peek(it -> {
+                        imageManager.delete(it.getImageSrc());
+                        try {
+                            Thread.sleep(200L);
+                        } catch (InterruptedException e) {
+                            log.error("occurred InterruptedException during delete reviews' image -> id: {}", it.getId());
+                        }
+                    })
                     .close();
         }
         restaurant.deleteNow(now);

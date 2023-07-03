@@ -3,14 +3,14 @@ package com.zerobase.hseungho.restaurantreservation.service.repository;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Restaurant;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
 import com.zerobase.hseungho.restaurantreservation.service.dto.restaurant.IRestaurantDto;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -35,5 +35,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
     Slice<IRestaurantDto> findByAddressWithDistance(String address, Double userX, Double userY, Pageable pageable);
 
     Optional<Restaurant> findByManager(User manager);
+
+    List<Restaurant> findByDeleteReqAtBetween(LocalDateTime from, LocalDateTime to);
 
 }
