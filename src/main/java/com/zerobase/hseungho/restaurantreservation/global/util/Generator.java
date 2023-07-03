@@ -33,9 +33,19 @@ public class Generator {
         return sb.toString();
     }
 
+    /**
+     * 탈퇴하는 유저의 닉네임을 생성하여 반환하는 메소드.
+     * @return 생성된 탈퇴 유저 닉네임
+     */
     public static String generateDelUserNickname() {
         return "del" + generateRandomNum(6);
     }
+
+    /**
+     * 주어진 길이에 따라 랜덤된 숫자를 생성하여 반환하는 메소드.
+     * @param length 랜덤 숫자 문자열 길이
+     * @return 생성된 랜덤 숫자 문자열
+     */
     public static String generateRandomNum(int length) {
         Random random = new Random();
         StringBuffer sb = new StringBuffer();
