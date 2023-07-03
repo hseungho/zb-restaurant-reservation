@@ -95,7 +95,7 @@ public class User extends BaseAuditingEntity implements UserDetails {
     public void resign(String resignedUserNickname) {
         this.deletedAt = SeoulDateTime.now();
         this.type = UserType.RESIGNED;
-        this.password = null;
+        this.password = "DELETED_USER_PASSWORD_IS_NULL";
         this.nickname = resignedUserNickname;
     }
 
