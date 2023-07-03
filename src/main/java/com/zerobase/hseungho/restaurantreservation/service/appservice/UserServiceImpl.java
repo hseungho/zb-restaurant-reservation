@@ -1,11 +1,13 @@
 package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.BadRequestException;
+import com.zerobase.hseungho.restaurantreservation.global.exception.impl.InternalServerErrorException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.NotFoundException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.UnauthorizedException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
 import com.zerobase.hseungho.restaurantreservation.global.security.SecurityHolder;
 import com.zerobase.hseungho.restaurantreservation.global.security.jwt.JwtComponent;
+import com.zerobase.hseungho.restaurantreservation.global.util.Generator;
 import com.zerobase.hseungho.restaurantreservation.global.util.ValidUtils;
 import com.zerobase.hseungho.restaurantreservation.service.domain.restaurant.Restaurant;
 import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
         return UserDto.fromEntity(
                 userRepository.save(
-                        User.createDefaultEntity(
+                        User.create(
                                 request.getUserId(),
                                 passwordEncoder.encode(request.getPassword()),
                                 request.getNickname()
@@ -153,11 +156,22 @@ public class UserServiceImpl implements UserService {
 
         validateResignRequest(user);
 
-        user.resign();
+        user.resign(generateDelUserNickname());
 
         return UserDto.fromEntity(user);
     }
 
+    private String generateDelUserNickname() {
+        AtomicInteger i = new AtomicInteger(10);
+        while (i.getAndDecrement() > 0) {
+            String userNickname = Generator.generateDelUserNickname();
+            if(this.checkNicknameAvailable(userNickname)) {
+                return userNickname;
+            }
+        }
+        throw new InternalServerErrorException(ErrorCodeType.INTERNAL_SERVER_ERROR_GENERATE_DEL_USER_NICKNAME);
+
+    }
     private void validateResignRequest(User user) {
         if (user.isResigned()) {
             // 이미 탈퇴한 유저입니다.

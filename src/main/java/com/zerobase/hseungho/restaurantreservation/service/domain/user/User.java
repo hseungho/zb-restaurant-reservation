@@ -60,7 +60,7 @@ public class User extends BaseAuditingEntity implements UserDetails {
         this.type = type;
     }
 
-    public static User createDefaultEntity(String userId, String password, String nickname) {
+    public static User create(String userId, String password, String nickname) {
         return new User(userId, password, nickname, UserType.ROLE_CUSTOMER);
     }
 
@@ -92,9 +92,11 @@ public class User extends BaseAuditingEntity implements UserDetails {
         this.nickname = nickname;
     }
 
-    public void resign() {
+    public void resign(String resignedUserNickname) {
         this.deletedAt = SeoulDateTime.now();
         this.type = UserType.RESIGNED;
+        this.password = null;
+        this.nickname = resignedUserNickname;
     }
 
     public void addReview(Review review) {

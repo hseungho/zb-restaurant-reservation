@@ -40,8 +40,7 @@ public class ReservationServiceImplVisitUnitTest {
     @DisplayName("예약 도착확인 성공 - 예약자")
     void test_visit_client_success() {
         // given
-        LocalDateTime now = SeoulDateTime.now();
-        LocalDateTime reservedAt = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth() + 1, MockBuilder.MOCK_OPEN_HOUR + 2, MockBuilder.MOCK_OPEN_MINUTE + 10);
+        LocalDateTime reservedAt = SeoulDateTime.now().plusMinutes(20);
 
         User user = TestSecurityHolder.setSecurityHolderUser(UserType.ROLE_CUSTOMER);
         Restaurant restaurant = MockBuilder.mockRestaurant(MockBuilder.mockUser(UserType.ROLE_PARTNER));
@@ -72,8 +71,7 @@ public class ReservationServiceImplVisitUnitTest {
     @DisplayName("예약 도착확인 성공 - 점장")
     void test_visit_manager_success() {
         // given
-        LocalDateTime now = SeoulDateTime.now();
-        LocalDateTime reservedAt = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth() + 1, MockBuilder.MOCK_OPEN_HOUR + 2, MockBuilder.MOCK_OPEN_MINUTE + 10);
+        LocalDateTime reservedAt = SeoulDateTime.now();
 
         User user = TestSecurityHolder.setSecurityHolderUser(UserType.ROLE_PARTNER);
         Restaurant restaurant = MockBuilder.mockRestaurant(user);

@@ -40,8 +40,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     @Transactional
     public ReservationDto reserve(ReserveReservation.Request request) {
-        User user = userRepository.findById(SecurityHolder.getIdOfUser())
-                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER));
+        User user = SecurityHolder.getUser();
 
         Restaurant restaurant = restaurantRepository.findById(request.getRestaurantId())
                 .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESTAURANT));
@@ -117,12 +116,10 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     @Transactional(readOnly = true)
     public Slice<ReservationDto> findClientReservations(LocalDate date, Pageable pageable) {
-        User user = userRepository.findById(SecurityHolder.getIdOfUser())
-                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER));
-        if (user.isPartner()) {
-            // 고객이 아닌 유저는 고객의 예약 리스트를 조회할 수 없습니다.
-            throw new ForbiddenException(ErrorCodeType.FORBIDDEN_FIND_RESERVATION_LIST_ONLY_CLIENT);
-        }
+        User user = SecurityHolder.getUser();
+
+        validateFindClientReservationsRequest(user);
+
         if (date == null) {
             return reservationRepository.findByClientAndDeletedRestaurantNot(user, pageable)
                     .map(ReservationDto::fromEntity);
@@ -132,26 +129,40 @@ public class ReservationServiceImpl implements ReservationService {
         }
     }
 
+    private void validateFindClientReservationsRequest(User user) {
+        if (user.isPartner()) {
+            // 고객이 아닌 유저는 고객의 예약 리스트를 조회할 수 없습니다.
+            throw new ForbiddenException(ErrorCodeType.FORBIDDEN_FIND_RESERVATION_LIST_ONLY_CLIENT);
+        }
+    }
+
     @Override
     @Transactional(readOnly = true)
     public Slice<ReservationDto> findManagerReservations(LocalDate date, Pageable pageable) {
-        User user = userRepository.findById(SecurityHolder.getIdOfUser())
-                .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_USER));
-        if (!user.isPartner()) {
-            // 파트너가 아닌 유저는 매장의 예약 리스트를 조회할 수 없습니다.
-            throw new ForbiddenException(ErrorCodeType.FORBIDDEN_FIND_RESERVATION_LIST_ONLY_MANAGER);
-        }
+        User user = SecurityHolder.getUser();
+
         Restaurant restaurant = restaurantRepository.findByManager(user)
                 .orElseThrow(() -> new NotFoundException(ErrorCodeType.NOT_FOUND_RESTAURANT));
-        if (restaurant.isDeleted()) {
-            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_FIND_RESERVATION_DELETED_RESTAURANT);
-        }
+
+        validateFindManagerReservationsRequest(user, restaurant);
+
         if (date == null) {
             return reservationRepository.findByRestaurantAndDeletedRestaurantNot(restaurant, pageable)
                     .map(ReservationDto::fromEntity);
         } else {
             return reservationRepository.findByRestaurantAndDeletedRestaurantNotAndReservedAtBetween(restaurant, date.atStartOfDay(), date.plusDays(1).atStartOfDay(), pageable)
                     .map(ReservationDto::fromEntity);
+        }
+    }
+
+    private void validateFindManagerReservationsRequest(User user, Restaurant restaurant) {
+        if (!user.isPartner()) {
+            // 파트너가 아닌 유저는 매장의 예약 리스트를 조회할 수 없습니다.
+            throw new ForbiddenException(ErrorCodeType.FORBIDDEN_FIND_RESERVATION_LIST_ONLY_MANAGER);
+        }
+        if (restaurant.isDeleted()) {
+            // 영업 종료된 매장입니다.
+            throw new BadRequestException(ErrorCodeType.BAD_REQUEST_FIND_RESERVATION_DELETED_RESTAURANT);
         }
     }
 
@@ -324,7 +335,7 @@ public class ReservationServiceImpl implements ReservationService {
                                         Restaurant restaurant,
                                         ReserveReservation.Request request) {
         if (!ValidUtils.isNonNull(request.getReservedAt())
-                || !ValidUtils.isMin(1, request.getNumOfPerson())
+                || ValidUtils.isLessThan(1, request.getNumOfPerson())
                 || !ValidUtils.hasTexts(request.getClientContactNumber())) {
             // 모든 파라미터를 올바르게 입력해주세요.
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_RESERVE_RESERVATION_BLANK);

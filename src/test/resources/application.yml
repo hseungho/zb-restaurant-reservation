@@ -1,6 +1,74 @@
 spring:
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:test;
+    url: jdbc:h2:~/test;
     username: sa
     password:
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    defer-datasource-initialization: true
+
+  jwt:
+    secret: sample-jwt-secret-key
+
+cloud:
+  aws:
+    credentials:
+      access-key: sample-access-key
+      secret-key: sample-secret-key
+    s3:
+      bucket: sample-bucket
+    region:
+      static: sample-region
+    stack:
+      auto: false
+
+service:
+  version: v1
+  api:
+    prefix: /api/${service.version}
+    user:
+      check-id: /sign-up/check-id
+      check-nickname: /sign-up/check-nickname
+      sign-up: /sign-up
+      login: /login
+      refresh: /login/refresh
+      update-pw: /users/password
+      find-profile: /users/profile
+      update-profile: /users/profile
+      register-partner: /users/partner
+      resign: /users/resign
+
+    restaurant:
+      save: /restaurants
+      update: /restaurants/{restaurantId}
+      delete: /restaurants/{restaurantId}
+      request-delete: /restaurants/{restaurantId}/request
+      search-auto: /restaurants/search/autocomplete
+      search-name: /restaurants/search/name
+      search-address: /restaurants/search/address
+      find: /restaurants/{restaurantId}
+      find-by-partner: /restaurants/partner
+      menu:
+        add: /restaurants/{restaurantId}/menus
+        update: /restaurants/{restaurantId}/menus/{menuId}
+        remove: /restaurants/{restaurantId}/menus/{menuId}
+
+    reservation:
+      reserve: /reservations
+      cancel: /reservations/{reservationId}/cancel
+      approve: /reservations/{reservationId}/approve
+      refuse: /reservations/{reservationId}/refuse
+      visit: /reservations/{reservationId}/visit
+      find-list-client: /reservations/client
+      find-list-manager: /reservations/manager
+      find: /reservations/{reservationId}
+
+    review:
+      save: /restaurants/{restaurantId}/reviews
+      update: /restaurants/{restaurantId}/reviews/{reviewId}
+      delete: /restaurants/{restaurantId}/reviews/{reviewId}

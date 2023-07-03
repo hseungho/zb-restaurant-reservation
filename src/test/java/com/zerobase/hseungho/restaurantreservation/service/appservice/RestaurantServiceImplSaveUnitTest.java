@@ -53,10 +53,10 @@ public class RestaurantServiceImplSaveUnitTest {
     private final Long menuPrice1 = 10000L;
     private final String menuName2 = "메뉴2";
     private final Long menuPrice2 = 20000L;
-    private final int openHour = 10;
+    private final int openHour = 0;
     private final int openMinute = 0;
-    private final int closeHour = 22;
-    private final int closeMinute = 0;
+    private final int closeHour = 23;
+    private final int closeMinute = 59;
     private final int countOfTables = 10;
     private final int maxPerReservation = 4;
     private final String contactNumber = "021231234";

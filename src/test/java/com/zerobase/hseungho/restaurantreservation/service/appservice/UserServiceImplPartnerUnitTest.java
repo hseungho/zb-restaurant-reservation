@@ -2,6 +2,7 @@ package com.zerobase.hseungho.restaurantreservation.service.appservice;
 
 import com.zerobase.hseungho.restaurantreservation.global.exception.impl.BadRequestException;
 import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
+import com.zerobase.hseungho.restaurantreservation.service.domain.user.User;
 import com.zerobase.hseungho.restaurantreservation.service.dto.user.UserDto;
 import com.zerobase.hseungho.restaurantreservation.service.repository.UserRepository;
 import com.zerobase.hseungho.restaurantreservation.service.type.UserType;
@@ -13,7 +14,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.Authentication;
+
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceImplPartnerUnitTest {
@@ -24,14 +29,13 @@ public class UserServiceImplPartnerUnitTest {
     @Mock
     private UserRepository userRepository;
 
-    @Mock
-    private Authentication authentication;
-
     @Test
     @DisplayName("파트너 등록 성공")
     void test_registerPartner_success() {
         // given
-        TestSecurityHolder.setSecurityHolderUser(UserType.ROLE_CUSTOMER);
+        User user = TestSecurityHolder.setSecurityHolderUser(UserType.ROLE_CUSTOMER);
+        given(userRepository.findById(anyString()))
+                .willReturn(Optional.of(user));
         // when
         UserDto userDto = userService.registerPartner();
         // then
@@ -43,7 +47,9 @@ public class UserServiceImplPartnerUnitTest {
     @DisplayName("파트너 등록 실패 - 이미 파트너 유저")
     void test_registerPartner_failure_cause_already_partner() {
         // given
-        TestSecurityHolder.setSecurityHolderUser(UserType.ROLE_PARTNER);
+        User user = TestSecurityHolder.setSecurityHolderUser(UserType.ROLE_PARTNER);
+        given(userRepository.findById(anyString()))
+                .willReturn(Optional.of(user));
         // when
         BadRequestException ex = Assertions.assertThrows(
                 BadRequestException.class,

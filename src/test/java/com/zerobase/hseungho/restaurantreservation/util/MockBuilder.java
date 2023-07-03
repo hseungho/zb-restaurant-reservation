@@ -25,6 +25,7 @@ public class MockBuilder {
                 .password(MOCK_PASSWORD)
                 .nickname(MOCK_NICKNAME)
                 .type(type)
+                .reviews(new ArrayList<>())
                 .build();
     }
 
@@ -36,10 +37,10 @@ public class MockBuilder {
     public static final Long MOCK_MENUPRICE_1 = 10000L;
     public static final String MOCK_MENUNAME_2 = "메뉴2";
     public static final Long MOCK_MENUPRICE_2 = 20000L;
-    public static final int MOCK_OPEN_HOUR = 10;
+    public static final int MOCK_OPEN_HOUR = 0;
     public static final int MOCK_OPEN_MINUTE = 0;
-    public static final int MOCK_CLOSE_HOUR = 22;
-    public static final int MOCK_CLOSE_MINUTE = 0;
+    public static final int MOCK_CLOSE_HOUR = 23;
+    public static final int MOCK_CLOSE_MINUTE = 59;
     public static final int MOCK_COUNT_OF_TABLES = 10;
     public static final int MOCK_MAX_PER_RESERVATION = 4;
     public static final String MOCK_CONTACT_NUMBER = "021231234";
@@ -108,6 +109,7 @@ public class MockBuilder {
                 .status(status)
                 .client(client)
                 .restaurant(restaurant)
+                .reviews(new ArrayList<>())
                 .build();
     }
 
@@ -115,7 +117,7 @@ public class MockBuilder {
     public static final Double MOCK_REVIEW_RATING = 4.5;
     public static final String MOCK_REVIEW_CONTENT = "리뷰내용입니다.";
     public static final String MOCK_REVIEW_IMAGE_SRC = "리뷰이미지주소";
-    public static Review mockReview(User author, Restaurant restaurant) {
+    public static Review mockReview(User author, Restaurant restaurant, Reservation reservation) {
         return Review.builder()
                 .id(MOCK_REVIEW_ID)
                 .rating(MOCK_REVIEW_RATING)
@@ -123,6 +125,7 @@ public class MockBuilder {
                 .imageSrc(MOCK_REVIEW_IMAGE_SRC)
                 .author(author)
                 .restaurant(restaurant)
+                .reservation(reservation)
                 .build();
     }
 

@@ -48,6 +48,10 @@ public class RestaurantServiceImpl implements RestaurantService {
     private final KakaoWebClientComponent kakaoWebClientComponent;
     private final AwsS3ImageManager imageManager;
 
+    /**
+     * 서버 Boot 시, DB에 저장되어 있는 모든 매장 정보를 조회하여, <br>
+     * 자동완성을 위한 Trie 객체에 매장 이름을 저장하는 PostConstruct 메소드.
+     */
     @PostConstruct
     private void initTrie() {
         List<Restaurant> restaurants = this.restaurantRepository.findAll();
@@ -114,8 +118,12 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         validateUpdateRestaurantRequest(SecurityHolder.getUser(), restaurant, request);
 
-        CoordinateDto coordinate = kakaoWebClientComponent.getCoordinateByAddress(request.getAddress());
-        request.setCoordinate(coordinate.getX(), coordinate.getY());
+        if (request.getAddress().equals(restaurant.getAddressVO().getAddress())) {
+            request.setCoordinate(restaurant.getAddressVO().getX(), restaurant.getAddressVO().getY());
+        } else {
+            CoordinateDto coordinate = kakaoWebClientComponent.getCoordinateByAddress(request.getAddress());
+            request.setCoordinate(coordinate.getX(), coordinate.getY());
+        }
 
         restaurant.update(request);
 
@@ -218,7 +226,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     private void validateUpdateMenuRequest(User user, Restaurant restaurant, UpdateMenu.Request request) {
-        if (!ValidUtils.hasTexts(request.getName()) || !ValidUtils.isMin(0, request.getPrice())) {
+        if (!ValidUtils.hasTexts(request.getName()) || ValidUtils.isLessThan(0, request.getPrice())) {
             // 메뉴 수정에 필요한 모든 정보를 입력해주세요.
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_UPDATE_MENU_BLANK);
         }
@@ -236,7 +244,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         if (CollectionUtils.isEmpty(request.getMenus())
             || !ValidUtils.hasTexts(request.getMenus().stream()
                     .map(AddMenus.Request.MenuRequest::getName).toArray(String[]::new))
-            || !ValidUtils.isMin(0L, request.getMenus().stream()
+            || ValidUtils.isLessThan(0L, request.getMenus().stream()
                     .mapToLong(AddMenus.Request.MenuRequest::getPrice).toArray())) {
             // 메뉴 추가를 위해 필요한 모든 정보를 입력해주세요.
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_ADD_MENUS_BLANK);
@@ -289,7 +297,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         if (!ValidUtils.hasTexts(request.getName(), request.getAddress(), request.getDescription(), request.getContactNumber())
             || !ValidUtils.isExactHour(request.getOpenTime().getHour(), request.getCloseTime().getHour())
             || !ValidUtils.isExactMinute(request.getOpenTime().getMinute(), request.getCloseTime().getMinute())
-            || !ValidUtils.isMin(1, request.getCountOfTables())) {
+            || ValidUtils.isLessThan(1, request.getCountOfTables())) {
             // 정보 수정의 파라미터를 올바르게 요청해주세요.
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_UPDATE_RESTAURANT_BLANK);
         }
@@ -304,11 +312,22 @@ public class RestaurantServiceImpl implements RestaurantService {
             double x = Double.parseDouble(userX);
             double y = Double.parseDouble(userY);
             return new CoordinateDto(x, y);
-        } catch (NumberFormatException e) {
+        } catch (NullPointerException | NumberFormatException e) {
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_SEARCH_RESTAURANT_INVALID_VALUE);
         }
     }
 
+    /**
+     * 매장 정보를 DB에 저장하는 메소드이다. <br>
+     * 요청 정보를 검증하고, kakao API로 해당 주소의 좌표를 요청 정보에 추가한 뒤, <br>
+     * 요청 정보를 이용하여 매장 인스턴스를 초기화하여 DB에 저장한다. <br>
+     * <br>
+     * 매장 정보 중 x 좌표와 y 좌표의 값이 null이 되면 안되기 때문에, kakao API 호출에 대한 로직도 <br>
+     * 하나의 트랜잭션으로 여긴다. <br>
+     * <br>
+     * @param request 매장 정보 저장 요청 정보
+     * @return 매장 Entity 클래스
+     */
     @Transactional
     protected Restaurant saveRestaurantEntity(SaveRestaurant.Request request) {
         User user = userRepository.findById(SecurityHolder.getIdOfUser())
@@ -335,7 +354,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         if (!ValidUtils.hasTexts(request.getName(), request.getAddress(), request.getContactNumber())
                 || !ValidUtils.isExactHour(request.getOpenTime().getHour(), request.getCloseTime().getHour())
                 || !ValidUtils.isExactMinute(request.getOpenTime().getMinute(), request.getCloseTime().getMinute())
-                || !ValidUtils.isMin(1, request.getCountOfTables())) {
+                || ValidUtils.isLessThan(1, request.getCountOfTables())) {
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_SAVE_RESTAURANT_BLANK);
         }
         if (restaurantRepository.existsByManager(user)) {

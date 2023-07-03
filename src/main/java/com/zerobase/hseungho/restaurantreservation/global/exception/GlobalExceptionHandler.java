@@ -16,13 +16,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BaseException.class)
     public ResponseEntity<ErrorResponse> handleGlobalException(BaseException ex, HttpServletRequest request) {
+        log.error("Path {} occurred REST Exception -> ", request.getRequestURI(), ex);
         return ResponseEntity.status(ex.getHttpStatus())
                 .body(ErrorResponse.errorResponse(ex, request.getRequestURI()));
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex, HttpServletRequest request) {
-        log.error("Occurred AccessDeniedException -> ", ex);
+        log.error("Path {} occurred AccessDeniedException -> ", request.getRequestURI(), ex);
         ErrorCodeType errorCode = ErrorCodeType.FORBIDDEN_ONLY_PARTNER;
         return ResponseEntity.status(errorCode.getHttpStatus())
                 .body(ErrorResponse.errorResponse(errorCode, request.getRequestURI()));
@@ -30,7 +31,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleServerException(Exception ex, HttpServletRequest request) {
-        log.error("Occurred Server Exception -> ", ex);
+        log.error("Path {} occurred Server Exception -> ", request.getRequestURI(), ex);
         ErrorCodeType errorCode = ErrorCodeType.INTERNAL_SERVER_ERROR;
         return ResponseEntity.status(errorCode.getHttpStatus())
                 .body(ErrorResponse.errorResponse(errorCode, request.getRequestURI()));

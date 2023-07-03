@@ -4,13 +4,15 @@ import com.zerobase.hseungho.restaurantreservation.global.exception.impl.Unautho
 import com.zerobase.hseungho.restaurantreservation.global.exception.model.ErrorCodeType;
 import com.zerobase.hseungho.restaurantreservation.service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-@Slf4j
+/**
+ * UserDetailsService 인터페이스를 구현체한 컴포넌트 클래스. <br>
+ * 유저 PK ID로 DB 에서 유저를 조회하여 반환한다.
+ */
 @Component
 @RequiredArgsConstructor
 public class UserAuthenticationComponent implements UserDetailsService {

@@ -79,6 +79,9 @@ public class ReviewServiceImpl implements ReviewService {
             request.getContent(),
             updateImage(review, request, image)
         );
+        // JPA Cascade 설정으로 saveAndFlush 호출이 필요없지만,
+        // 매장의 평점을 재계산하기 위해 매장을 다시 DB 조회시켜 매장의 reviews 리스트를
+        // 초기화하고자 saveAndFlush 함수 호출.
         restaurantRepository.saveAndFlush(restaurant);
         restaurant.calculateRating();
 
@@ -129,7 +132,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     private void validateUpdateRequest(Restaurant restaurant, Review review, UpdateReview.Request request) {
-        if (!ValidUtils.isMin(1.0, request.getRating()) || !ValidUtils.isMax(5.0, request.getRating())) {
+        if (ValidUtils.isLessThan(1.0, request.getRating()) || ValidUtils.isMoreThan(5.0, request.getRating())) {
             // 평점은 1~5점 사이의 점수만 줄 수 있습니다.
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_UPDATE_REVIEW_INVALID_RATING_RANGE);
         }
@@ -156,7 +159,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     private void validateSaveRequest(Restaurant restaurant, Reservation reservation, User user, SaveReview.Request request) {
-        if (!ValidUtils.isMin(1.0, request.getRating()) || !ValidUtils.isMax(5.0, request.getRating())) {
+        if (ValidUtils.isLessThan(1.0, request.getRating()) || ValidUtils.isMoreThan(5.0, request.getRating())) {
             // 평점은 1~5점 사이의 점수만 줄 수 있습니다.
             throw new BadRequestException(ErrorCodeType.BAD_REQUEST_SAVE_REVIEW_INVALID_RATING_RANGE);
         }

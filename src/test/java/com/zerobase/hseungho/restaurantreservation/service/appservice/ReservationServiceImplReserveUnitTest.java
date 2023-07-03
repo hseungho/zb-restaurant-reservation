@@ -51,8 +51,6 @@ public class ReservationServiceImplReserveUnitTest {
 
         User user = TestSecurityHolder.setSecurityHolderUser(UserType.ROLE_CUSTOMER);
         Restaurant restaurant = MockBuilder.mockRestaurant(MockBuilder.mockUser(UserType.ROLE_PARTNER));
-        given(userRepository.findById(anyString()))
-                .willReturn(Optional.of(user));
         given(restaurantRepository.findById(anyLong()))
                 .willReturn(Optional.of(restaurant));
         given(reservationRepository.countByRestaurantAndReservedAt(any(), any()))
